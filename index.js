@@ -6,7 +6,7 @@ const Joi = require('joi');
 
 const server = new Hapi.Server();
 server.connection({
-    host: '127.0.0.1',
+    host: 'localhost',
     port: 8080,
     routes: {cors: true}
 });
