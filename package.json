@@ -1,0 +1,14 @@
+{
+  "name": "thingy-api-blue",
+  "version": "1.0.0",
+  "description": "thingy-api-blue",
+  "main": "index.js",
+  "author": "ASE Team Blue",
+  "dependencies": {
+    "hapi": "^14.2.0",
+    "hapi-swagger": "^6.2.2",
+    "inert": "^4.0.1",
+    "joi": "^9.0.4",
+    "vision": "^4.1.0"
+  }
+}
