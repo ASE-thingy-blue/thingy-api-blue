@@ -28,21 +28,30 @@ server.register([
     }
 ]);
 
+server.views({
+    engines: {
+        html: require('ejs')
+    },
+    relativeTo: __dirname,
+    path: __dirname + '/templates'
+});
+
 server.route({
     method: 'GET',
     path: '/',
     handler: function (request, reply) {
-        reply("Hello World!").code(200);
-    },
-    config: {
-        tags: ['api'],
-        description: 'List all todos',
-        plugins: {'hapi-swagger': {responses: {
-            200: {
-                description: 'Success',
-                schema: Joi.string
-            }
-        }}}
+        reply.view('index');
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/static/{param*}',
+    handler: {
+        directory: {
+            path: 'web-client',
+            listing: true
+        }
     }
 });
 

@@ -1,0 +1,48 @@
+body {
+    padding-top: 60px;
+    padding-bottom: 60px;
+    background-color: #f5f5f5;
+    overflow-y: scroll;
+}
+
+/*** START of Footer ***/
+footer {
+    position: fixed;
+    height: 50px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+footer .footer-content {
+    margin-top: 15px;
+}
+/*** END of Footer ***/
+
+/* Flat Design */
+input, button, select, .btn, .modal-dialog, .modal-content, .alert, textarea, .panel, .nav-pills li a, .well, .navbar {
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    border-radius: 0 !important;
+}
+
+.row-fluid {
+    margin-bottom: 15px;
+    min-height: 30px;
+}
+
+form label {
+    margin-top: 15px;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+/* Custom max-height for colapsible menu */
+.navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse {
+    max-height: 370px !important;
+}
+
+.nav.navbar-nav a{
+    cursor: pointer;
+}
