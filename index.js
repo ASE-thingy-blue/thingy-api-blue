@@ -41,6 +41,20 @@ server.route({
     path: '/',
     handler: function (request, reply) {
         reply.view('index');
+    },
+    config: {
+        tags: ['api'],
+        description:
+            'gets the index',
+        plugins: {
+            'hapi-swagger': {
+                responses: {
+                    200: {
+                        description: 'Success'
+                    }
+                }
+            }
+        }
     }
 });
 
