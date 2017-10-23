@@ -5,13 +5,15 @@ const HapiSwagger = require('hapi-swagger');
 const Joi = require('joi');
 const Mongoose = require('mongoose');
 
-var dbUrl = 'mongodb://localhost/thingy-api-blue';
+var dbUrl = 'mongodb://localhost:27017/thingy-api-blue';
 //check if we are in docker compose or not
 process.argv.forEach(function (t) {
     if(t === '-prod'){
-        dbUrl = 'mongodb://mongo/thingy-api-blue';
+        dbUrl = 'mongodb://mongo:27017/thingy-api-blue';
     }
 });
+
+console.log("db url used: " +dbUrl);
 
 //how many times we tried to connect to the db
 var attempts = 0;
