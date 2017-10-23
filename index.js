@@ -5,6 +5,15 @@ const HapiSwagger = require('hapi-swagger');
 const Joi = require('joi');
 const Mongoose = require('mongoose');
 
+var dbUrl = 'mongodb://localhost/thingy-api-blue';
+//check if we are in docker compose or not
+process.argv.forEach(function (t) {
+    if(t === '-prod'){
+        dbUrl = 'mongodb://mongo/thingy-api-blue';
+    }
+});
+
+//how many times we tried to connect to the db
 var attempts = 0;
 var mongoOptions = {useMongoClient: true,
     reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
@@ -21,8 +30,7 @@ var createDbCallback = function(err) {
     attempts++;
     console.log("attempts: " + attempts);
     setTimeout(function(){
-        //TODO change to mongodb://mongo/thingy-api-blue when the api is in a container and started with compose
-        Mongoose.connect('mongodb://localhost/thingy-api-blue', mongoOptions, function (error) {
+        Mongoose.connect(dbUrl, mongoOptions, function (error) {
             createDbCallback(error)
         });
     }, 2000);
@@ -31,7 +39,7 @@ var createDbCallback = function(err) {
 //try to make a connection
 createDbCallback("first");
 
-//name of the db thingy-api-blue
+//the db connection
 var db = Mongoose.connection;
 
 const server = new Hapi.Server();
