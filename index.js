@@ -3,6 +3,36 @@ const Inert = require('inert');
 const Vision = require('vision');
 const HapiSwagger = require('hapi-swagger');
 const Joi = require('joi');
+const Mongoose = require('mongoose');
+
+var attempts = 0;
+var mongoOptions = {useMongoClient: true,
+    reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
+    reconnectInterval: 500 // Reconnect every 500ms
+};
+
+//the wait loop for the db connection
+var createDbCallback = function(err) {
+    if(!err){
+        console.log("Database connection established!");
+        return;
+    }
+    console.log(err);
+    attempts++;
+    console.log("attempts: " + attempts);
+    setTimeout(function(){
+        //TODO change to mongodb://mongo/thingy-api-blue when the api is in a container and started with compose
+        Mongoose.connect('mongodb://localhost/thingy-api-blue', mongoOptions, function (error) {
+            createDbCallback(error)
+        });
+    }, 2000);
+};
+
+//try to make a connection
+createDbCallback("first");
+
+//name of the db thingy-api-blue
+var db = Mongoose.connection;
 
 const server = new Hapi.Server();
 server.connection({
