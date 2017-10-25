@@ -121,7 +121,6 @@ server.route({
     path: '/thingy/{thingy_id}/setup',
     handler: function (request, reply) {
         var thingyId = request.params.thingy_id;
-        console.log('setup call from thingy: ' + thingyId);
 
         //TODO: get from Server Config by Thingy ID
         var setup = {
@@ -159,8 +158,8 @@ server.route({
     path: '/thingy/{thingy_id}/actuators/led',
     handler: function (request, reply) {
         var thingyId = request.params.thingy_id;
-        //console.log('actuators/led call from thingy: ' + thingyId);
 
+        //TODO: get from Server Config by Thingy ID
         var led = {
             color : 8,
             intensity : 20,
@@ -186,6 +185,7 @@ server.route({
         var thingyId = request.params.thingy_id;
         var sensorId = request.params.sensor_id;
 
+        //TODO: Store Data by Thingy and Sensor
         console.log('tingy: ' + thingyId + ', sensor: ' + sensorId + ', data:');
         console.log(request.payload);
 
