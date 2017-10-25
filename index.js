@@ -44,6 +44,10 @@ createDbCallback("first");
 //the db connection
 var db = Mongoose.connection;
 
+//URL Param Shemes
+var thingyIdSchema = Joi.string().required().description('The Thingy UUID');
+var sensorIdSchema = Joi.string().required().description('The Thingy Sensor');
+
 const server = new Hapi.Server();
 server.connection({
     host: '0.0.0.0',
@@ -83,7 +87,7 @@ server.route({
         reply.view('index');
     },
     config: {
-        tags: ['api'],
+        tags: ['webclient'],
         description:
             'gets the index',
         plugins: {
@@ -105,6 +109,95 @@ server.route({
         directory: {
             path: 'web-client',
             listing: true
+        }
+    }
+});
+
+/***********************************************************************************************************************
+ *** START THINGY API
+ **********************************************************************************************************************/
+server.route({
+    method: 'GET',
+    path: '/thingy/{thingy_id}/setup',
+    handler: function (request, reply) {
+        var thingyId = request.params.thingy_id;
+        console.log('setup call from thingy: ' + thingyId);
+
+        //TODO: get from Server Config by Thingy ID
+        var setup = {
+            temperature: {
+                interval: 5000
+            },
+            pressure: {
+                interval: 5000
+            },
+            humidity: {
+                interval: 5000
+            },
+            color: {
+                interval: 5000
+            },
+            gas: {
+                mode: 3
+            }
+        };
+
+        reply(setup).code(200);
+    },
+    config: {
+        tags: ['thingy'],
+        validate: {
+            params: {
+                thingy_id: thingyIdSchema
+            }
+        }
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/thingy/{thingy_id}/actuators/led',
+    handler: function (request, reply) {
+        var thingyId = request.params.thingy_id;
+        //console.log('actuators/led call from thingy: ' + thingyId);
+
+        var led = {
+            color : 8,
+            intensity : 20,
+            delay : 1
+        };
+
+        reply(led).code(200);
+    },
+    config: {
+        tags: ['thingy'],
+        validate: {
+            params: {
+                thingy_id: thingyIdSchema
+            }
+        }
+    }
+});
+
+server.route({
+    method: 'POST',
+    path: '/thingy/{thingy_id}/sensors/{sensor_id}',
+    handler: function (request, reply) {
+        var thingyId = request.params.thingy_id;
+        var sensorId = request.params.sensor_id;
+
+        console.log('tingy: ' + thingyId + ', sensor: ' + sensorId + ', data:');
+        console.log(request.payload);
+
+        reply({success:true}).code(200);
+    },
+    config: {
+        tags: ['thingy'],
+        validate: {
+            params: {
+                thingy_id: thingyIdSchema,
+                sensor_id: sensorIdSchema
+            }
         }
     }
 });
