@@ -1,0 +1,16 @@
+# starts the api server and the mongodb
+# start: (in project folder) docker-compose -f production.yml up -d
+# restart service: docker-compose -f production.yml restart ${service_name}  -> e.g. docker-compose -f production.yml restart api
+# stop: docker-compose -f production.yml down
+
+
+version: '3'
+services:
+  api:
+    image: "aseteamblue/thingy-api-blue-docker" #for production
+    ports:
+     - "9000:8080"
+  mongo:
+    image: "mongo"
+    ports:
+     - "27017:27017"

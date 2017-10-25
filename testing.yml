@@ -1,0 +1,18 @@
+# starts the api server and the mongodb
+# start: (in project folder) docker-compose -f testing.yml up -d
+# restart service: docker-compose -f testing.yml restart ${service_name}  -> e.g. docker-compose -f testing.yml restart api
+# stop: docker-compose -f testing.yml down
+
+
+version: '3'
+services:
+  api:
+    build: . #for testing
+    ports:
+     - "9000:8080"
+    volumes:
+      - ".:/usr/src/app/"
+  mongo:
+    image: "mongo"
+    ports:
+     - "27017:27017"
