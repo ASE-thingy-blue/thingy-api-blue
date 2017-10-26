@@ -11,7 +11,8 @@ var Temperature = require('./temperature');
 var measurementSchema = Mongoose.Schema({
     timestamp: {
         type: Date,
-        require: true},
+        default: Date.now
+    },
 
     airQuality: {
         type: Mongoose.Schema.Types.ObjectId,
