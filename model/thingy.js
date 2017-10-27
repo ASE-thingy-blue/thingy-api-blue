@@ -5,16 +5,16 @@
 const Mongoose = require('mongoose');
 
 var thingySchema = Mongoose.Schema({
-    macAddress:  {
+    macAddress: {
         type: String,
-        require: true},
+        require: true
+    },
     description: String,
 
     measurements: [{
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'Measurement'
-    }
-    ]
+    }]
 
 });
 
