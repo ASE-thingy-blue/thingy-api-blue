@@ -43,6 +43,14 @@ createDbCallback("first");
 
 //the db connection
 var db = Mongoose.connection;
+//hook if the db loses connection (mongo container is not reachable)
+db.on('disconnected', function() {
+    console.log('MongoDB disconnected!');
+});
+//hook if we reconnect to the db server
+db.on('reconnected', function () {
+    console.log('MongoDB reconnected!');
+});
 
 //URL Param Shemes
 var thingyIdSchema = Joi.string().required().description('The Thingy UUID');
