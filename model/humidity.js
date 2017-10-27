@@ -3,8 +3,6 @@
  */
 
 const Mongoose = require('mongoose');
-var Unit = require('./unit');
-
 
 var humiditySchema = Mongoose.Schema({
     value: {

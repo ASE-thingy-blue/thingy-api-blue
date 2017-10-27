@@ -3,8 +3,6 @@
  */
 
 const Mongoose = require('mongoose');
-var Terrarium = require('./terrarium');
-
 
 var userSchema = Mongoose.Schema({
     name: {

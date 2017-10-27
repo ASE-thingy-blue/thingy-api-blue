@@ -3,7 +3,6 @@
  */
 
 const Mongoose = require('mongoose');
-var Unit = require('./carbondioxide');
 
 //we dont know yet what kind of VOC we can measure
 var airQualitySchema = Mongoose.Schema({

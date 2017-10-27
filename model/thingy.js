@@ -3,8 +3,6 @@
  */
 
 const Mongoose = require('mongoose');
-var Unit = require('./measurement');
-
 
 var thingySchema = Mongoose.Schema({
     macAddress:  {
@@ -12,10 +10,11 @@ var thingySchema = Mongoose.Schema({
         require: true},
     description: String,
 
-    measurements: {
+    measurements: [{
         type: Mongoose.Schema.Types.ObjectId,
         ref: 'Measurement'
     }
+    ]
 
 });
 

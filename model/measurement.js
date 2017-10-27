@@ -3,10 +3,6 @@
  */
 
 const Mongoose = require('mongoose');
-var AirQuality = require('./airQuality');
-var Humidity = require('./humidity');
-var Temperature = require('./temperature');
-
 
 var measurementSchema = Mongoose.Schema({
     timestamp: {
