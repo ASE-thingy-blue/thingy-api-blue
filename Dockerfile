@@ -6,8 +6,6 @@ ENV appdir /usr/src/app/
 RUN mkdir -p $appdir
 WORKDIR $appdir
 
-ADD . .
-
 RUN npm install
 
 EXPOSE 8080
