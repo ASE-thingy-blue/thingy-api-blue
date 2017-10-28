@@ -4,14 +4,21 @@ const Vision = require('vision');
 const HapiSwagger = require('hapi-swagger');
 const Joi = require('joi');
 const Mongoose = require('mongoose');
+const isDocker = require('is-docker');
 
-var dbUrl = 'mongodb://localhost:27017/thingy-api-blue';
-//check if we are in docker compose or not
-process.argv.forEach(function (t) {
-    if(t === '-prod'){
-        dbUrl = 'mongodb://mongo:27017/thingy-api-blue';
-    }
-});
+var dbUrl;
+
+// Check if the process is running inside a Docker container
+if (isDocker())
+{
+    console.log('Running inside a Docker container');
+    dbUrl = 'mongodb://mongo:27017/thingy-api-blue';
+}
+else
+{
+    console.warning('NOT running inside a Docker container');
+    dbUrl = 'mongodb://localhost:27017/thingy-api-blue';
+}
 
 console.log("db url used: " +dbUrl);
 
