@@ -11,9 +11,10 @@ var User = require("../model/user");
 
 var Unit = require("../model/Unit");
 
-module.exports = function () {
+module.exports = function ()
+{
 
-//creating units
+// Creating units
     var celsius = new Unit({name: "Celsius", short: "C"});
     var percent = new Unit({name: "Percent", short: "%"});
     var gPerQ = new Unit({name: "gram per qubic meter", short: "g/m3"});
@@ -22,37 +23,37 @@ module.exports = function () {
     percent.save();
     gPerQ.save();
 
-//temp
+// Temperature
     var temp = new Temp({value: 25, unit: celsius});
     temp.save();
 
-//hum
+// Humidity
     var hum = new Hum({value: 15, unit: percent});
     hum.save();
 
-//co2
+// Carbondioxide (CO2)
     var co2 = new Carbon({value: 2, unit: gPerQ});
     co2.save();
 
-//airq
+// Air quality
     var airQ = new AirQ({co2: co2});
     airQ.save();
 
-//measure
+// Measurements
     var measure = new Measurement({airQuality: airQ, temperature: temp, humidity: hum});
     measure.save();
 
-//thingy
+// Thingy
     var thingy = new Thingy({macAddress: "123", description: "test thingy"});
     thingy.measurements.push(measure);
     thingy.save();
 
-//terri
+// Terrarium
     var terri = new Terri({name: "test terri"});
     terri.thingies.push(thingy);
     terri.save();
 
-//user
+// User
     var user = new User({name: "Joe Slowinski", mailAddress: "schlangenman@gmail.com"});
     user.terrariums.push(terri);
     user.save();

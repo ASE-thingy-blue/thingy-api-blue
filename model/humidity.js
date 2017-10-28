@@ -4,18 +4,20 @@
 
 const Mongoose = require('mongoose');
 
-var humiditySchema = Mongoose.Schema({
-    value: {
-        type: Number,
-        require: true
-    },
+var humiditySchema = Mongoose.Schema(
+{
+	value :
+	{
+		type : Number,
+		require : true
+	},
 
-    unit: {
-        type: Mongoose.Schema.Types.ObjectId,
-        ref: 'Unit',
-        require: true
-    }
-
+	unit :
+	{
+		type : Mongoose.Schema.Types.ObjectId,
+		ref : 'Unit',
+		require : true
+	}
 });
 
 module.exports = Mongoose.model("Humidity", humiditySchema);

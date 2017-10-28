@@ -4,15 +4,18 @@
 
 const Mongoose = require('mongoose');
 
-var unitSchema = Mongoose.Schema({
-    name: {
-        type: String,
-        require: true
-    },
-    short: {
-        type: String,
-        require: true
-    }
+var unitSchema = Mongoose.Schema(
+{
+	name :
+	{
+		type : String,
+		require : true
+	},
+	short :
+	{
+		type : String,
+		require : true
+	}
 });
 
 

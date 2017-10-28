@@ -4,18 +4,20 @@
 
 const Mongoose = require('mongoose');
 
-var terrariumSchema = Mongoose.Schema({
-    name:  {
-        type: String,
-        require: true},
-    description: String,
+var terrariumSchema = Mongoose.Schema(
+{
+	name :
+	{
+		type : String,
+		require : true
+	},
+	description : String,
 
-    thingies: [{
-        type: Mongoose.Schema.Types.ObjectId,
-        ref: 'Thingy'
-    }]
-
+	thingies : [
+	{
+		type : Mongoose.Schema.Types.ObjectId,
+		ref : 'Thingy'
+	}]
 });
-
 
 module.exports = Mongoose.model("Terrarium", terrariumSchema);
