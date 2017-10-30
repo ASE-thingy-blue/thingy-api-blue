@@ -3,7 +3,6 @@ const Inert = require('inert');
 const Vision = require('vision');
 const HapiSwagger = require('hapi-swagger');
 const Joi = require('joi');
-const Mongoose = require('mongoose');
 
 // Create the DB connection
 require("./model/helper/databaseConnection");
@@ -50,26 +49,19 @@ server.views(
 	path: __dirname + '/templates'
 });
 
-server.route(
-{
+server.route({
 	method: 'GET',
 	path: '/',
-	handler: function (request, reply)
-	{
+	handler: function (request, reply) {
 		reply.view('index');
 	},
-	config:
-	{
-		tags: ['webclient'],
+	config: {
+		tags: ['webclient', 'api'],
 		description: 'gets the index',
-		plugins:
-		{
-			'hapi-swagger':
-			{
-				responses:
-				{
-					200:
-					{
+		plugins: {
+			'hapi-swagger': {
+				responses: {
+					200: {
 						description: 'Success'
 					}
 				}
