@@ -13,7 +13,7 @@ var create = function ()
 	}
 	else
 	{
-		console.warning('NOT running inside a Docker container');
+		console.log('NOT running inside a Docker container');
 		dbUrl = 'mongodb://localhost:27017/thingy-api-blue';
 	}
 

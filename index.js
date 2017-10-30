@@ -186,7 +186,7 @@ server.route(
 		// TODO: Store data by Thingy and sensor
 		console.log('Tingy: ' + thingyId);
 		console.log('Sensor: ' + sensorId);
-		console.log('Data: ' + request.payload);
+		console.log('Data: ' + JSON.stringify(request.payload));
 
 		reply({success:true}).code(200);
 	},
