@@ -4,16 +4,13 @@
 
 const Mongoose = require('mongoose');
 
-var temperatureSchema = Mongoose.Schema(
-{
-	value :
-	{
+var temperatureSchema = Mongoose.Schema({
+	value : {
 		type : Number,
 		require : true
 	},
 
-	unit :
-	{
+	unit : {
 		type : Mongoose.Schema.Types.ObjectId,
 		ref : 'Unit',
 		require : true

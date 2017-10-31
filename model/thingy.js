@@ -4,20 +4,17 @@
 
 const Mongoose = require('mongoose');
 
-var thingySchema = Mongoose.Schema(
-{
-	macAddress :
-	{
-		type : String,
-		require : true
-	},
-	description : String,
+var thingySchema = Mongoose.Schema({
+    macAddress: {
+        type: String,
+        require: true
+    },
+    description: String,
 
-	measurements : [
-	{
-		type : Mongoose.Schema.Types.ObjectId,
-		ref : 'Measurement'
-	}]
+    measurements: [{
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: 'Measurement'
+    }]
 });
 
 module.exports = Mongoose.model("Thingy", thingySchema);

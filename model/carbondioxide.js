@@ -4,20 +4,17 @@
 
 const Mongoose = require('mongoose');
 
-var carbondioxideSchema = Mongoose.Schema(
-{
-	value :
-	{
-		type : Number,
-		require : true
-	},
+var carbondioxideSchema = Mongoose.Schema({
+    value: {
+        type: Number,
+        require: true
+    },
 
-	unit :
-	{
-		type : Mongoose.Schema.Types.ObjectId,
-		ref : 'Unit',
-		require : true
-	}
+    unit: {
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: 'Unit',
+        require: true
+    }
 
 });
 
