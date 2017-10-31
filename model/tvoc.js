@@ -4,7 +4,7 @@
 
 const Mongoose = require('mongoose');
 
-var carbondioxideSchema = Mongoose.Schema({
+var tvocSchema = Mongoose.Schema({
     value: {
         type: Number,
         require: true
@@ -18,4 +18,4 @@ var carbondioxideSchema = Mongoose.Schema({
 
 });
 
-module.exports = Mongoose.model("Carbondioxid", carbondioxideSchema);
+module.exports = Mongoose.model("TVOC", tvocSchema);
