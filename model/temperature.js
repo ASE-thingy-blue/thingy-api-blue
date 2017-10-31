@@ -5,6 +5,11 @@
 const Mongoose = require('mongoose');
 
 var temperatureSchema = Mongoose.Schema({
+    timestamp: {
+        type: Date,
+        default: Date.now
+    },
+
 	value : {
 		type : Number,
 		require : true
@@ -15,6 +20,7 @@ var temperatureSchema = Mongoose.Schema({
 		ref : 'Unit',
 		require : true
 	}
+
 });
 
 module.exports = Mongoose.model("Temperature", temperatureSchema);

@@ -11,10 +11,21 @@ var thingySchema = Mongoose.Schema({
     },
     description: String,
 
-    measurements: [{
+    temperatures: [{
         type: Mongoose.Schema.Types.ObjectId,
-        ref: 'Measurement'
+        ref: 'Temperature'
+    }],
+
+    airQualities: [{
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: 'AirQuality'
+    }],
+
+    humidities: [{
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: 'Humidity'
     }]
+
 });
 
 module.exports = Mongoose.model("Thingy", thingySchema);
