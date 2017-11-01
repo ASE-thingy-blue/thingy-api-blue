@@ -98,7 +98,16 @@ server.route({
     method: 'GET',
     path: '/terrariums',
     handler: function (request, reply) {
-        //get from a user the terrariums.
+        //hardcode to test it
+        User.findOne({name: "Joe Slowinski"})
+            .populate({path: 'terrariums', select: '_id name description'})
+            .exec(function (err, user) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    reply(user).code(200);
+                }
+            });
     },
     config: {
         tags: ['webclient', 'api'],
@@ -119,7 +128,26 @@ server.route({
     method: 'GET',
     path: '/terrariums/values',
     handler: function (request, reply) {
-        //get from a user the terrariums.
+        //hardcode to test it
+        User.findOne({name: "Joe Slowinski"})
+            .populate({
+                path: 'terrariums',
+                populate: {
+                    path: 'thingies',
+                    populate: {
+                        path: 'temperatures humidities airQualities',
+                        populate: {path: 'unit'}
+                        //TODO populate co2 and tvoc
+                    }
+                }
+            })
+            .exec(function (err, user) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    reply(user).code(200);
+                }
+            });
     },
     config: {
         tags: ['webclient', 'api'],
@@ -140,7 +168,26 @@ server.route({
     method: 'GET',
     path: '/terrariums/temperature',
     handler: function (request, reply) {
-        //get from a user the terrariums.
+        //hardcode to test it
+        User.findOne({name: "Joe Slowinski"})
+            .populate({
+                path: 'terrariums',
+                populate: {
+                    path: 'thingies',
+                    select: 'temperatures',
+                    populate: {
+                        path: 'temperatures',
+                        populate: {path: 'unit'}
+                    }
+                }
+            })
+            .exec(function (err, user) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    reply(user).code(200);
+                }
+            });
     },
     config: {
         tags: ['webclient', 'api'],
@@ -161,7 +208,26 @@ server.route({
     method: 'GET',
     path: '/terrariums/humidity',
     handler: function (request, reply) {
-        //get from a user the terrariums.
+        //hardcode to test it
+        User.findOne({name: "Joe Slowinski"})
+            .populate({
+                path: 'terrariums',
+                populate: {
+                    path: 'thingies',
+                    select: 'humidities',
+                    populate: {
+                        path: 'humidities',
+                        populate: {path: 'unit'}
+                    }
+                }
+            })
+            .exec(function (err, user) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    reply(user).code(200);
+                }
+            });
     },
     config: {
         tags: ['webclient', 'api'],
@@ -180,30 +246,30 @@ server.route({
 
 server.route({
     method: 'GET',
-    path: '/terrariums',
-    handler: function (request, reply) {
-        //get from a user the terrariums.
-    },
-    config: {
-        tags: ['webclient', 'api'],
-        description: 'gets all the terrariums of a user',
-        plugins: {
-            'hapi-swagger': {
-                responses: {
-                    200: {
-                        description: 'Success'
-                    }
-                }
-            }
-        }
-    }
-});
-
-server.route({
-    method: 'GET',
     path: '/terrariums/airquality',
     handler: function (request, reply) {
-        //get from a user the terrariums.
+        //hardcode to test it
+        User.findOne({name: "Joe Slowinski"})
+            .populate({
+                path: 'terrariums',
+                populate: {
+                    path: 'thingies',
+                    select: 'airQualities',
+                    populate: {
+                        path: 'airQualities',
+                        populate: {path: 'co2 tvoc',
+                            populate: {path: 'unit'}
+                        }
+                    }
+                }
+            })
+            .exec(function (err, user) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    reply(user).code(200);
+                }
+            });
     },
     config: {
         tags: ['webclient', 'api'],
@@ -577,6 +643,6 @@ server.route({
     }
 });
 
-server.start(function (err){
+server.start(function (err) {
     console.log('Server running at: ', server.info.uri);
 });
