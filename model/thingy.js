@@ -4,20 +4,28 @@
 
 const Mongoose = require('mongoose');
 
-var thingySchema = Mongoose.Schema(
-{
-	macAddress :
-	{
-		type : String,
-		require : true
-	},
-	description : String,
+var thingySchema = Mongoose.Schema({
+    macAddress: {
+        type: String,
+        require: true
+    },
+    description: String,
 
-	measurements : [
-	{
-		type : Mongoose.Schema.Types.ObjectId,
-		ref : 'Measurement'
-	}]
+    temperatures: [{
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: 'Temperature'
+    }],
+
+    airQualities: [{
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: 'AirQuality'
+    }],
+
+    humidities: [{
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: 'Humidity'
+    }]
+
 });
 
 module.exports = Mongoose.model("Thingy", thingySchema);
