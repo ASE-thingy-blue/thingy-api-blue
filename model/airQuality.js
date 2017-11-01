@@ -18,7 +18,7 @@ var airQualitySchema = Mongoose.Schema({
 
     tvoc: {
         type: Mongoose.Schema.Types.ObjectId,
-        ref: 'tvoc',
+        ref: 'TVOC',
         require: true
     }
 

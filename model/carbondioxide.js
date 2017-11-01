@@ -18,4 +18,4 @@ var carbondioxideSchema = Mongoose.Schema({
 
 });
 
-module.exports = Mongoose.model("Carbondioxid", carbondioxideSchema);
+module.exports = Mongoose.model("Carbondioxide", carbondioxideSchema);
