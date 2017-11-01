@@ -535,12 +535,12 @@ server.route({
                 match: {_id: { $eq: request.params.terrarium_id}},
                 populate: {
                     path: 'thingies',
-                    select: 'airQualities',
+                    match: {_id: { $eq: request.params.thingy_id}},
                     populate: {
-                        path: 'airQualities',
+                        path: 'temperatures humidities airQualities',
                         populate: {
-                            path: 'co2 tvoc',
-                            populate: { path: 'unit' }
+                            path: 'unit co2 tvoc'
+                            //TODO populate co2 and tvoc
                         }
                     }
                 }
@@ -549,7 +549,7 @@ server.route({
                 if(err){
                     reply({'error': 'User not found'});
                 } else {
-                    reply({'airqualities': user.terrariums[0].get('thingies')}).code(200);
+                    reply({'values': user.terrariums[0].get('thingies')}).code(200);
                 }
             });
     },
@@ -582,11 +582,43 @@ server.route({
     method: 'GET',
     path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/temperature',
     handler: function (request, reply) {
-        //get from a user the terrariums.
+        User.findOne({name: "Joe Slowinski"})
+            .populate({
+                path: 'terrariums',
+                match: {_id: { $eq: request.params.terrarium_id}},
+                populate: {
+                    path: 'thingies',
+                    match: {_id: { $eq: request.params.thingy_id}},
+                    select: 'temperatures',
+                    populate: {
+                        path: 'temperatures',
+                        populate: {
+                            path: 'unit'
+                        }
+                    }
+                }
+            })
+            .exec(function(err, user){
+                if(err){
+                    reply({'error': 'User not found'});
+                } else {
+                    reply(user.terrariums[0].get('thingies')).code(200);
+                }
+            });
     },
     config: {
         tags: ['webclient', 'api'],
         description: 'gets the temperature that get measured in a certain terrarium with a certain thingy',
+        validate:{
+            params:{
+                terrarium_id: Joi.string()
+                    .required()
+                    .description('Id of the Terrarium i want the temperature of'),
+                thingy_id: Joi.string()
+                    .required()
+                    .description('Id of the Thingy i want the temperature of')
+            }
+        },
         plugins: {
             'hapi-swagger': {
                 responses: {
@@ -603,11 +635,43 @@ server.route({
     method: 'GET',
     path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/humidity',
     handler: function (request, reply) {
-        //get from a user the terrariums.
+        User.findOne({name: "Joe Slowinski"})
+            .populate({
+                path: 'terrariums',
+                match: {_id: { $eq: request.params.terrarium_id}},
+                populate: {
+                    path: 'thingies',
+                    match: {_id: { $eq: request.params.thingy_id}},
+                    select: 'humidity',
+                    populate: {
+                        path: 'humidity',
+                        populate: {
+                            path: 'unit'
+                        }
+                    }
+                }
+            })
+            .exec(function(err, user){
+                if(err){
+                    reply({'error': 'User not found'});
+                } else {
+                    reply(user.terrariums[0].get('thingies')).code(200);
+                }
+            });
     },
     config: {
         tags: ['webclient', 'api'],
         description: 'gets the humidity that get measured in a certain terrarium with a certain thingy',
+        validate:{
+            params:{
+                terrarium_id: Joi.string()
+                    .required()
+                    .description('Id of the Terrarium i want the humidity of'),
+                thingy_id: Joi.string()
+                    .required()
+                    .description('Id of the Thingy i want the humidity of')
+            }
+        },
         plugins: {
             'hapi-swagger': {
                 responses: {
@@ -624,11 +688,46 @@ server.route({
     method: 'GET',
     path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/airquality',
     handler: function (request, reply) {
-        //get from a user the terrariums.
+        User.findOne({name: "Joe Slowinski"})
+            .populate({
+                path: 'terrariums',
+                match: {_id: { $eq: request.params.terrarium_id}},
+                populate: {
+                    path: 'thingies',
+                    match: {_id: { $eq: request.params.thingy_id}},
+                    select: 'airQuality',
+                    populate: {
+                        path: 'airQuality',
+                        populate: {
+                            path: 'co2 tvoc',
+                            populate: {
+                                path: 'unit'
+                            }
+                        }
+                    }
+                }
+            })
+            .exec(function(err, user){
+                if(err){
+                    reply({'error': 'User not found'});
+                } else {
+                    reply(user.terrariums[0].get('thingies')).code(200);
+                }
+            });
     },
     config: {
         tags: ['webclient', 'api'],
         description: 'gets the airquality that get measured in a certain terrarium with a certain thingy',
+        validate:{
+            params:{
+                terrarium_id: Joi.string()
+                    .required()
+                    .description('Id of the Terrarium i want the airquality of'),
+                thingy_id: Joi.string()
+                    .required()
+                    .description('Id of the Thingy i want the airquality of')
+            }
+        },
         plugins: {
             'hapi-swagger': {
                 responses: {
