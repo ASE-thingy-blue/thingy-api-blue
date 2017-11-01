@@ -539,7 +539,7 @@ server.route({
                     populate: {
                         path: 'temperatures humidities airQualities',
                         populate: {
-                            path: 'unit co2 tvoc'
+                            path: 'unit'
                             //TODO populate co2 and tvoc
                         }
                     }
@@ -642,9 +642,9 @@ server.route({
                 populate: {
                     path: 'thingies',
                     match: {_id: { $eq: request.params.thingy_id}},
-                    select: 'humidity',
+                    select: 'humidities',
                     populate: {
-                        path: 'humidity',
+                        path: 'humidities',
                         populate: {
                             path: 'unit'
                         }
@@ -695,9 +695,9 @@ server.route({
                 populate: {
                     path: 'thingies',
                     match: {_id: { $eq: request.params.thingy_id}},
-                    select: 'airQuality',
+                    select: 'airQualities',
                     populate: {
-                        path: 'airQuality',
+                        path: 'airQualities',
                         populate: {
                             path: 'co2 tvoc',
                             populate: {
