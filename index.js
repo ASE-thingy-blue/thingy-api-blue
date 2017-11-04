@@ -5,16 +5,18 @@ const HapiSwagger = require('hapi-swagger');
 const Joi = require('joi');
 const Mongoose = require('mongoose');
 
-//require db models
-var Terri = require("./model/Terrarium");
-var Thingy = require("./model/Thingy");
-var Temp = require("./model/Temperature");
-var Hum = require("./model/Humidity");
-var AirQ = require("./model/AirQuality");
-var Tvoc = require("./model/tvoc");
-var Carbon = require("./model/carbondioxide");
-var User = require("./model/user");
-var Unit = require("./model/Unit");
+//load model
+require('./model/makeModel');
+
+var Terri = Mongoose.model('Terrarium');
+var Thingy = Mongoose.model('Thingy');
+var Temp = Mongoose.model('Temperature');
+var Hum = Mongoose.model('Humidity');
+var AirQ = Mongoose.model('AirQuality');
+var Tvoc = Mongoose.model('TVOC');
+var Carbon = Mongoose.model('Carbondioxide');
+var User = Mongoose.model('User');
+var Unit = Mongoose.model('Unit');
 
 // Create the DB connection
 require("./model/helper/databaseConnection");
@@ -100,7 +102,7 @@ server.route({
     handler: function (request, reply) {
         //hardcode to test it
         User.findOne({name: "Joe Slowinski"})
-            .populate({path: 'terrariums', select: '_id name description'})
+            .select('terrariums._id terrariums.name terrariums.description')
             .exec(function (err, user) {
                 if (err) {
                     console.log(err);
@@ -129,23 +131,21 @@ server.route({
     path: '/terrariums/values',
     handler: function (request, reply) {
         //hardcode to test it
+        //if no querystring
         User.findOne({name: "Joe Slowinski"})
-            .populate({
-                path: 'terrariums',
-                populate: {
-                    path: 'thingies',
-                    populate: {
-                        path: 'temperatures humidities airQualities',
-                        populate: {path: 'unit'}
-                        //TODO populate co2 and tvoc
-                    }
-                }
-            })
             .exec(function (err, user) {
                 if (err) {
                     console.log(err);
                 } else {
-                    reply(user).code(200);
+                    user.terrariums.forEach( function (t) {
+                        t.thingies.forEach(function (thingy) {
+                            thingy.humidities = thingy.humidities[thingy.humidities.length-1];
+                            thingy.temperatures = thingy.temperatures[thingy.temperatures.length-1];
+                            thingy.airQualities = thingy.airQualities[thingy.airQualities.length-1];
+                        })
+                    });
+
+                    reply(user.terrariums).code(200);
                 }
             });
     },
@@ -170,22 +170,18 @@ server.route({
     handler: function (request, reply) {
         //hardcode to test it
         User.findOne({name: "Joe Slowinski"})
-            .populate({
-                path: 'terrariums',
-                populate: {
-                    path: 'thingies',
-                    select: 'temperatures',
-                    populate: {
-                        path: 'temperatures',
-                        populate: {path: 'unit'}
-                    }
-                }
-            })
+            .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities')
             .exec(function (err, user) {
                 if (err) {
                     console.log(err);
                 } else {
-                    reply(user).code(200);
+                    user.terrariums.forEach( function (t) {
+                        t.thingies.forEach(function (thingy) {
+                            thingy.temperatures = thingy.temperatures[thingy.temperatures.length-1]
+                        })
+                    });
+
+                    reply(user.terrariums).code(200);
                 }
             });
     },
@@ -210,22 +206,18 @@ server.route({
     handler: function (request, reply) {
         //hardcode to test it
         User.findOne({name: "Joe Slowinski"})
-            .populate({
-                path: 'terrariums',
-                populate: {
-                    path: 'thingies',
-                    select: 'humidities',
-                    populate: {
-                        path: 'humidities',
-                        populate: {path: 'unit'}
-                    }
-                }
-            })
+            .select('-terrariums.thingies.temperatures -terrariums.thingies.airQualities')
             .exec(function (err, user) {
                 if (err) {
                     console.log(err);
                 } else {
-                    reply(user).code(200);
+                    user.terrariums.forEach( function (t) {
+                        t.thingies.forEach(function (thingy) {
+                            thingy.humidities = thingy.humidities[thingy.humidities.length-1]
+                        })
+                    });
+
+                    reply(user.terrariums).code(200);
                 }
             });
     },
@@ -250,24 +242,18 @@ server.route({
     handler: function (request, reply) {
         //hardcode to test it
         User.findOne({name: "Joe Slowinski"})
-            .populate({
-                path: 'terrariums',
-                populate: {
-                    path: 'thingies',
-                    select: 'airQualities',
-                    populate: {
-                        path: 'airQualities',
-                        populate: {path: 'co2 tvoc',
-                            populate: {path: 'unit'}
-                        }
-                    }
-                }
-            })
+            .select('-terrariums.thingies.humidities -terrariums.thingies.temperatures')
             .exec(function (err, user) {
                 if (err) {
                     console.log(err);
                 } else {
-                    reply(user).code(200);
+                    user.terrariums.forEach( function (t) {
+                        t.thingies.forEach(function (thingy) {
+                            thingy.airQualities = thingy.airQualities[thingy.airQualities.length-1]
+                        })
+                    });
+
+                    reply(user.terrariums).code(200);
                 }
             });
     },
@@ -294,18 +280,17 @@ server.route({
     path: '/terrarium/{terrarium_id}/thingies',
     handler: function (request, reply) {
         User.findOne({name: "Joe Slowinski"})
-            .populate({
-                path: 'terrariums',
-                match: {_id: { $eq: request.params.terrarium_id}}
-            })
+            .select('terrariums._id ' +
+                'terrariums.name ' +
+                'terrariums.description ' +
+                'terrariums.thingies._id ' +
+                'terrariums.thingies.macAddress ' +
+                'terrariums.thingies.description')
             .exec(function(err, user){
             if(err){
                 reply({'error': 'User not found'});
             } else {
-                reply({
-                   'thingies': user.terrariums[0].get('thingies'),
-                    'terrarium': user.terrariums[0]
-                }).code(200);
+                reply(user.terrariums.id(request.params.terrarium_id)).code(200);
             }
         });
     },
@@ -336,23 +321,18 @@ server.route({
     path: '/terrarium/{terrarium_id}/values',
     handler: function (request, reply) {
         User.findOne({name: "Joe Slowinski"})
-            .populate({
-                path: 'terrariums',
-                match: {_id: { $eq: request.params.terrarium_id}},
-                populate: {
-                    path: 'thingies',
-                    populate: {
-                        path: 'temperatures humidities airQualities',
-                        populate: { path: 'unit' }
-                        //TODO populate co2 and tvoc
-                    }
-                }
-            })
             .exec(function(err, user){
                 if(err){
                     reply({'error': 'User not found'});
                 } else {
-                    reply({'values': user.terrariums[0].get('thingies')}).code(200);
+                    user.terrariums.forEach( function (t) {
+                        t.thingies.forEach(function (thingy) {
+                            thingy.humidities = thingy.humidities[thingy.humidities.length-1];
+                            thingy.temperatures = thingy.temperatures[thingy.temperatures.length-1];
+                            thingy.airQualities = thingy.airQualities[thingy.airQualities.length-1];
+                        })
+                    });
+                    reply(user.terrariums.id(request.params.terrarium_id)).code(200);
                 }
             });
     },
@@ -383,23 +363,18 @@ server.route({
     path: '/terrarium/{terrarium_id}/temperatures',
     handler: function (request, reply) {
         User.findOne({name: "Joe Slowinski"})
-            .populate({
-                path: 'terrariums',
-                match: {_id: { $eq: request.params.terrarium_id}},
-                populate: {
-                    path: 'thingies',
-                    select: 'temperatures',
-                    populate: {
-                        path: 'temperatures',
-                        populate: { path: 'unit' }
-                    }
-                }
-            })
-            .exec(function(err, user){
-                if(err){
-                    reply({'error': 'User not found'});
+            .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities')
+            .exec(function (err, user) {
+                if (err) {
+                    console.log(err);
                 } else {
-                    reply({'temperatures': user.terrariums[0].get('thingies')}).code(200);
+                    user.terrariums.forEach( function (t) {
+                        t.thingies.forEach(function (thingy) {
+                            thingy.temperatures = thingy.temperatures[thingy.temperatures.length-1]
+                        })
+                    });
+
+                    reply(user.terrariums.id(request.params.terrarium_id)).code(200);
                 }
             });
     },
@@ -430,23 +405,18 @@ server.route({
     path: '/terrarium/{terrarium_id}/humidities',
     handler: function (request, reply) {
         User.findOne({name: "Joe Slowinski"})
-            .populate({
-                path: 'terrariums',
-                match: {_id: { $eq: request.params.terrarium_id}},
-                populate: {
-                    path: 'thingies',
-                    select: 'humidities',
-                    populate: {
-                        path: 'humidities',
-                        populate: { path: 'unit' }
-                    }
-                }
-            })
-            .exec(function(err, user){
-                if(err){
-                    reply({'error': 'User not found'});
+            .select('-terrariums.thingies.temperatures -terrariums.thingies.airQualities')
+            .exec(function (err, user) {
+                if (err) {
+                    console.log(err);
                 } else {
-                    reply({'humidities': user.terrariums[0].get('thingies')}).code(200);
+                    user.terrariums.forEach( function (t) {
+                        t.thingies.forEach(function (thingy) {
+                            thingy.humidities = thingy.humidities[thingy.humidities.length-1]
+                        })
+                    });
+
+                    reply(user.terrariums.id(request.params.terrarium_id)).code(200);
                 }
             });
     },
@@ -477,26 +447,18 @@ server.route({
     path: '/terrarium/{terrarium_id}/airqualities',
     handler: function (request, reply) {
         User.findOne({name: "Joe Slowinski"})
-            .populate({
-                path: 'terrariums',
-                match: {_id: { $eq: request.params.terrarium_id}},
-                populate: {
-                    path: 'thingies',
-                    select: 'airQualities',
-                    populate: {
-                        path: 'airQualities',
-                        populate: {
-                            path: 'co2 tvoc',
-                            populate: { path: 'unit' }
-                        }
-                    }
-                }
-            })
-            .exec(function(err, user){
-                if(err){
-                    reply({'error': 'User not found'});
+            .select('-terrariums.thingies.temperatures -terrariums.thingies.humidities')
+            .exec(function (err, user) {
+                if (err) {
+                    console.log(err);
                 } else {
-                    reply({'airqualities': user.terrariums[0].get('thingies')}).code(200);
+                    user.terrariums.forEach( function (t) {
+                        t.thingies.forEach(function (thingy) {
+                            thingy.airQualities = thingy.airQualities[thingy.airQualities.length-1]
+                        })
+                    });
+
+                    reply(user.terrariums.id(request.params.terrarium_id)).code(200);
                 }
             });
     },
@@ -530,26 +492,19 @@ server.route({
     path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/values',
     handler: function (request, reply) {
         User.findOne({name: "Joe Slowinski"})
-            .populate({
-                path: 'terrariums',
-                match: {_id: { $eq: request.params.terrarium_id}},
-                populate: {
-                    path: 'thingies',
-                    match: {_id: { $eq: request.params.thingy_id}},
-                    populate: {
-                        path: 'temperatures humidities airQualities',
-                        populate: {
-                            path: 'unit'
-                            //TODO populate co2 and tvoc
-                        }
-                    }
-                }
-            })
             .exec(function(err, user){
                 if(err){
                     reply({'error': 'User not found'});
                 } else {
-                    reply({'values': user.terrariums[0].get('thingies')}).code(200);
+                    user.terrariums.forEach( function (t) {
+                        t.thingies.forEach(function (thingy) {
+                            thingy.humidities = thingy.humidities[thingy.humidities.length-1];
+                            thingy.temperatures = thingy.temperatures[thingy.temperatures.length-1];
+                            thingy.airQualities = thingy.airQualities[thingy.airQualities.length-1];
+                        })
+                    });
+                    reply(user.terrariums.id(request.params.terrarium_id)
+                        .thingies.id(request.params.thingy_id)).code(200);
                 }
             });
     },
@@ -583,26 +538,18 @@ server.route({
     path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/temperature',
     handler: function (request, reply) {
         User.findOne({name: "Joe Slowinski"})
-            .populate({
-                path: 'terrariums',
-                match: {_id: { $eq: request.params.terrarium_id}},
-                populate: {
-                    path: 'thingies',
-                    match: {_id: { $eq: request.params.thingy_id}},
-                    select: 'temperatures',
-                    populate: {
-                        path: 'temperatures',
-                        populate: {
-                            path: 'unit'
-                        }
-                    }
-                }
-            })
+            .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities')
             .exec(function(err, user){
                 if(err){
                     reply({'error': 'User not found'});
                 } else {
-                    reply(user.terrariums[0].get('thingies')).code(200);
+                    user.terrariums.forEach( function (t) {
+                        t.thingies.forEach(function (thingy) {
+                            thingy.temperatures = thingy.temperatures[thingy.temperatures.length-1];
+                        })
+                    });
+                    reply(user.terrariums.id(request.params.terrarium_id)
+                        .thingies.id(request.params.thingy_id)).code(200);
                 }
             });
     },
@@ -636,26 +583,18 @@ server.route({
     path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/humidity',
     handler: function (request, reply) {
         User.findOne({name: "Joe Slowinski"})
-            .populate({
-                path: 'terrariums',
-                match: {_id: { $eq: request.params.terrarium_id}},
-                populate: {
-                    path: 'thingies',
-                    match: {_id: { $eq: request.params.thingy_id}},
-                    select: 'humidities',
-                    populate: {
-                        path: 'humidities',
-                        populate: {
-                            path: 'unit'
-                        }
-                    }
-                }
-            })
+            .select('-terrariums.thingies.temperatures -terrariums.thingies.airQualities')
             .exec(function(err, user){
                 if(err){
                     reply({'error': 'User not found'});
                 } else {
-                    reply(user.terrariums[0].get('thingies')).code(200);
+                    user.terrariums.forEach( function (t) {
+                        t.thingies.forEach(function (thingy) {
+                            thingy.humidities = thingy.humidities[thingy.humidities.length-1];
+                        })
+                    });
+                    reply(user.terrariums.id(request.params.terrarium_id)
+                        .thingies.id(request.params.thingy_id)).code(200);
                 }
             });
     },
@@ -689,29 +628,18 @@ server.route({
     path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/airquality',
     handler: function (request, reply) {
         User.findOne({name: "Joe Slowinski"})
-            .populate({
-                path: 'terrariums',
-                match: {_id: { $eq: request.params.terrarium_id}},
-                populate: {
-                    path: 'thingies',
-                    match: {_id: { $eq: request.params.thingy_id}},
-                    select: 'airQualities',
-                    populate: {
-                        path: 'airQualities',
-                        populate: {
-                            path: 'co2 tvoc',
-                            populate: {
-                                path: 'unit'
-                            }
-                        }
-                    }
-                }
-            })
+            .select('-terrariums.thingies.humidities -terrariums.thingies.temperatures')
             .exec(function(err, user){
                 if(err){
                     reply({'error': 'User not found'});
                 } else {
-                    reply(user.terrariums[0].get('thingies')).code(200);
+                    user.terrariums.forEach( function (t) {
+                        t.thingies.forEach(function (thingy) {
+                            thingy.airQualities = thingy.airQualities[thingy.airQualities.length-1];
+                        })
+                    });
+                    reply(user.terrariums.id(request.params.terrarium_id)
+                        .thingies.id(request.params.thingy_id)).code(200);
                 }
             });
     },
@@ -781,6 +709,26 @@ server.route({
     }
 });
 
+server.route({
+    method: 'PUT',
+    path: '/thingy/{thingy_id}',
+    handler: function (request, reply) {
+        var thingyId = request.params.thingy_id;
+
+        console.log('/thingy/{thingy_id}/register');
+
+        reply({success:true}).code(200);
+    },
+    config: {
+        tags: ['thingy'],
+        validate: {
+            params: {
+                thingy_id: thingyIdSchema
+            }
+        }
+    }
+});
+
 server.route(
     {
         method: 'GET',
@@ -820,6 +768,7 @@ server.route({
                     "error": "This Thingy is not in our database",
                     "thingy": thingyId
                 }).code(404);
+                //stop execution
             }
 
             var data = request.payload;
