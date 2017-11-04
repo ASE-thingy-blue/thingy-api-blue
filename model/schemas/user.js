@@ -11,8 +11,7 @@ var userSchema = Mongoose.Schema({
     },
 
     mailAddress: {
-        type: String,
-        require: true
+        type: String
     },
 
     password: String, // TODO: Not known yet how to do that

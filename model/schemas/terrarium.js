@@ -10,6 +10,7 @@ var terrariumSchema = Mongoose.Schema({
             require: true
         },
         description: String,
+        callbackAddress: String,
 
         thingies: [require("./thingy")]
     });
