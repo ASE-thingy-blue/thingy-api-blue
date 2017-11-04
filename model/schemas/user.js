@@ -18,10 +18,7 @@ var userSchema = Mongoose.Schema({
     password: String, // TODO: Not known yet how to do that
     comment: String,
 
-    terrariums: [{
-        type: Mongoose.Schema.Types.ObjectId,
-        ref: 'Terrarium'
-    }]
+    terrariums: [require('./terrarium')]
 });
 
-module.exports = Mongoose.model("User", userSchema);
+module.exports = userSchema;

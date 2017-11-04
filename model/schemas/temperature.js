@@ -15,12 +15,8 @@ var temperatureSchema = Mongoose.Schema({
 		require : true
 	},
 
-	unit : {
-		type : Mongoose.Schema.Types.ObjectId,
-		ref : 'Unit',
-		require : true
-	}
+	unit : require('./unit')
 
 });
 
-module.exports = Mongoose.model("Temperature", temperatureSchema);
+module.exports = temperatureSchema;

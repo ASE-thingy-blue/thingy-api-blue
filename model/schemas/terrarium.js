@@ -11,10 +11,7 @@ var terrariumSchema = Mongoose.Schema({
         },
         description: String,
 
-        thingies: [{
-            type: Mongoose.Schema.Types.ObjectId,
-            ref: 'Thingy'
-        }]
+        thingies: [require("./thingy")]
     });
 
-module.exports = Mongoose.model("Terrarium", terrariumSchema);
+module.exports = terrariumSchema;
