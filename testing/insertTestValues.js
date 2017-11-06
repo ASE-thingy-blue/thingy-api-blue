@@ -226,3 +226,5 @@ var user = new User({name: "Joe Slowinski", mailAddress: "schlangenman@gmail.com
 user.terrariums.push(terri1);
 user.terrariums.push(terri2);
 user.save();
+
+process.exit();
