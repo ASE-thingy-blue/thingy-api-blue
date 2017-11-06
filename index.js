@@ -137,13 +137,15 @@ server.route({
                 if (err) {
                     console.log(err);
                 } else {
-                    user.terrariums.forEach(function (t) {
-                        t.thingies.forEach(function (thingy) {
-                            thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
-                            thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
-                            thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
-                        })
-                    });
+                    if (!request.query.past) {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
+                                thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
+                                thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
+                            })
+                        });
+                    }
 
                     reply(user.terrariums).code(200);
                 }
@@ -154,9 +156,10 @@ server.route({
         description: 'gets all the values from all the thingies in all the terrariums of a user',
         validate: {
             query: {
-                from: Joi.date()
+                past: Joi.boolean()
+                /*from: Joi.date()
                     .description('Value from a certain date'),
-                to: Joi.date().description('Value to a certain date')
+                to: Joi.date().description('Value to a certain date')*/
             }
         },
         plugins: {
@@ -182,11 +185,13 @@ server.route({
                 if (err) {
                     console.log(err);
                 } else {
-                    user.terrariums.forEach(function (t) {
-                        t.thingies.forEach(function (thingy) {
-                            thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1]
-                        })
-                    });
+                    if (!request.query.past) {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1]
+                            })
+                        });
+                    }
 
                     reply(user.terrariums).code(200);
                 }
@@ -197,9 +202,10 @@ server.route({
         description: 'gets all the temperature values from all the thingies in all the terrariums of a user',
         validate: {
             query: {
-                from: Joi.date()
+                past: Joi.boolean()
+                /*from: Joi.date()
                     .description('Value from a certain date'),
-                to: Joi.date().description('Value to a certain date')
+                to: Joi.date().description('Value to a certain date')*/
             }
         },
         plugins: {
@@ -225,11 +231,14 @@ server.route({
                 if (err) {
                     console.log(err);
                 } else {
-                    user.terrariums.forEach(function (t) {
-                        t.thingies.forEach(function (thingy) {
-                            thingy.humidities = thingy.humidities[thingy.humidities.length - 1]
-                        })
-                    });
+                    if (!request.query.past) {
+
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                thingy.humidities = thingy.humidities[thingy.humidities.length - 1]
+                            })
+                        });
+                    }
 
                     reply(user.terrariums).code(200);
                 }
@@ -240,9 +249,10 @@ server.route({
         description: 'gets all the humidity values from all the thingies in all the terrariums of a user',
         validate: {
             query: {
-                from: Joi.date()
+                past: Joi.boolean()
+                /*from: Joi.date()
                     .description('Value from a certain date'),
-                to: Joi.date().description('Value to a certain date')
+                to: Joi.date().description('Value to a certain date')*/
             }
         },
         plugins: {
@@ -268,11 +278,13 @@ server.route({
                 if (err) {
                     console.log(err);
                 } else {
-                    user.terrariums.forEach(function (t) {
-                        t.thingies.forEach(function (thingy) {
-                            thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1]
-                        })
-                    });
+                    if (!request.query.past) {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1]
+                            })
+                        });
+                    }
 
                     reply(user.terrariums).code(200);
                 }
@@ -283,9 +295,10 @@ server.route({
         description: 'gets all the airquality values from all the thingies in all the terrariums of a user',
         validate: {
             query: {
-                from: Joi.date()
+                past: Joi.boolean()
+                /*from: Joi.date()
                     .description('Value from a certain date'),
-                to: Joi.date().description('Value to a certain date')
+                to: Joi.date().description('Value to a certain date')*/
             }
         },
         plugins: {
@@ -330,11 +343,6 @@ server.route({
                 terrarium_id: Joi.string()
                     .required()
                     .description('Id of the Terrarium i want the Thingies of')
-            },
-            query: {
-                from: Joi.date()
-                    .description('Value from a certain date'),
-                to: Joi.date().description('Value to a certain date')
             }
         },
         plugins: {
@@ -358,13 +366,16 @@ server.route({
                 if (err) {
                     reply({'error': 'User not found'});
                 } else {
-                    user.terrariums.forEach(function (t) {
-                        t.thingies.forEach(function (thingy) {
-                            thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
-                            thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
-                            thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
-                        })
-                    });
+                    if (!request.query.past) {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
+                                thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
+                                thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
+                            })
+                        });
+                    }
+
                     reply(user.terrariums.id(request.params.terrarium_id)).code(200);
                 }
             });
@@ -379,9 +390,10 @@ server.route({
                     .description('Id of the Terrarium i want the values of')
             },
             query: {
-                from: Joi.date()
+                past: Joi.boolean()
+                /*from: Joi.date()
                     .description('Value from a certain date'),
-                to: Joi.date().description('Value to a certain date')
+                to: Joi.date().description('Value to a certain date')*/
             }
         },
         plugins: {
@@ -406,12 +418,13 @@ server.route({
                 if (err) {
                     console.log(err);
                 } else {
-                    user.terrariums.forEach(function (t) {
-                        t.thingies.forEach(function (thingy) {
-                            thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1]
-                        })
-                    });
-
+                    if(!request.query.past) {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1]
+                            })
+                        });
+                    }
                     reply(user.terrariums.id(request.params.terrarium_id)).code(200);
                 }
             });
@@ -426,9 +439,10 @@ server.route({
                     .description('Id of the Terrarium i want the temperatures of')
             },
             query: {
-                from: Joi.date()
+                past: Joi.boolean()
+                /*from: Joi.date()
                     .description('Value from a certain date'),
-                to: Joi.date().description('Value to a certain date')
+                to: Joi.date().description('Value to a certain date')*/
             }
         },
         plugins: {
@@ -453,11 +467,13 @@ server.route({
                 if (err) {
                     console.log(err);
                 } else {
-                    user.terrariums.forEach(function (t) {
-                        t.thingies.forEach(function (thingy) {
-                            thingy.humidities = thingy.humidities[thingy.humidities.length - 1]
-                        })
-                    });
+                    if(!request.query.past) {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                thingy.humidities = thingy.humidities[thingy.humidities.length - 1]
+                            })
+                        });
+                    }
 
                     reply(user.terrariums.id(request.params.terrarium_id)).code(200);
                 }
@@ -473,9 +489,10 @@ server.route({
                     .description('Id of the Terrarium i want the humidities of')
             },
             query: {
-                from: Joi.date()
+                past: Joi.boolean()
+                /*from: Joi.date()
                     .description('Value from a certain date'),
-                to: Joi.date().description('Value to a certain date')
+                to: Joi.date().description('Value to a certain date')*/
             }
         },
         plugins: {
@@ -500,12 +517,13 @@ server.route({
                 if (err) {
                     console.log(err);
                 } else {
-                    user.terrariums.forEach(function (t) {
-                        t.thingies.forEach(function (thingy) {
-                            thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1]
-                        })
-                    });
-
+                    if(!request.query.past) {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1]
+                            })
+                        });
+                    }
                     reply(user.terrariums.id(request.params.terrarium_id)).code(200);
                 }
             });
@@ -520,9 +538,10 @@ server.route({
                     .description('Id of the Terrarium i want the airqualities of')
             },
             query: {
-                from: Joi.date()
+                past: Joi.boolean()
+                /*from: Joi.date()
                     .description('Value from a certain date'),
-                to: Joi.date().description('Value to a certain date')
+                to: Joi.date().description('Value to a certain date')*/
             }
         },
         plugins: {
@@ -549,13 +568,15 @@ server.route({
                 if (err) {
                     reply({'error': 'User not found'});
                 } else {
-                    user.terrariums.forEach(function (t) {
-                        t.thingies.forEach(function (thingy) {
-                            thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
-                            thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
-                            thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
-                        })
-                    });
+                    if(!request.query.past) {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
+                                thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
+                                thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
+                            })
+                        });
+                    }
                     reply(user.terrariums.id(request.params.terrarium_id)
                         .thingies.id(request.params.thingy_id)).code(200);
                 }
@@ -574,9 +595,10 @@ server.route({
                     .description('Id of the Thingy i want the values of')
             },
             query: {
-                from: Joi.date()
+                past: Joi.boolean()
+                /*from: Joi.date()
                     .description('Value from a certain date'),
-                to: Joi.date().description('Value to a certain date')
+                to: Joi.date().description('Value to a certain date')*/
             }
         },
         plugins: {
@@ -601,11 +623,14 @@ server.route({
                 if (err) {
                     reply({'error': 'User not found'});
                 } else {
-                    user.terrariums.forEach(function (t) {
-                        t.thingies.forEach(function (thingy) {
-                            thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
-                        })
-                    });
+                    if(!request.query.past) {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
+                            })
+                        });
+                    }
+
                     reply(user.terrariums.id(request.params.terrarium_id)
                         .thingies.id(request.params.thingy_id)).code(200);
                 }
@@ -624,9 +649,10 @@ server.route({
                     .description('Id of the Thingy i want the temperature of')
             },
             query: {
-                from: Joi.date()
+                past: Joi.boolean()
+                /*from: Joi.date()
                     .description('Value from a certain date'),
-                to: Joi.date().description('Value to a certain date')
+                to: Joi.date().description('Value to a certain date')*/
             }
         },
         plugins: {
@@ -651,11 +677,14 @@ server.route({
                 if (err) {
                     reply({'error': 'User not found'});
                 } else {
-                    user.terrariums.forEach(function (t) {
-                        t.thingies.forEach(function (thingy) {
-                            thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
-                        })
-                    });
+                    if(!request.query.past) {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
+                            })
+                        });
+                    }
+
                     reply(user.terrariums.id(request.params.terrarium_id)
                         .thingies.id(request.params.thingy_id)).code(200);
                 }
@@ -674,9 +703,10 @@ server.route({
                     .description('Id of the Thingy i want the humidity of')
             },
             query: {
-                from: Joi.date()
+                past: Joi.boolean()
+                /*from: Joi.date()
                     .description('Value from a certain date'),
-                to: Joi.date().description('Value to a certain date')
+                to: Joi.date().description('Value to a certain date')*/
             }
         },
         plugins: {
@@ -701,15 +731,14 @@ server.route({
                 if (err) {
                     reply({'error': 'User not found'});
                 } else {
-                    user.terrariums.forEach(function (t) {
-                        t.thingies.forEach(function (thingy) {
-                            thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
-                        })
-                    });
-
-                    if ("from" in request.query && "to" in request.query) {
-
+                    if(!request.query.past) {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
+                            })
+                        });
                     }
+
                     reply(user.terrariums.id(request.params.terrarium_id)
                         .thingies.id(request.params.thingy_id)).code(200);
                 }
@@ -729,9 +758,10 @@ server.route({
                     .description('Id of the Thingy i want the airquality of')
             },
             query: {
-                from: Joi.date()
+                past: Joi.boolean()
+                /*from: Joi.date()
                     .description('Value from a certain date'),
-                to: Joi.date().description('Value to a certain date')
+                to: Joi.date().description('Value to a certain date')*/
             }
         },
         plugins: {
