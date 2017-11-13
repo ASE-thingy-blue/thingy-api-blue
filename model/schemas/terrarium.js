@@ -10,11 +10,9 @@ var terrariumSchema = Mongoose.Schema({
             require: true
         },
         description: String,
+        callbackAddress: String,
 
-        thingies: [{
-            type: Mongoose.Schema.Types.ObjectId,
-            ref: 'Thingy'
-        }]
+        thingies: [require("./thingy")]
     });
 
-module.exports = Mongoose.model("Terrarium", terrariumSchema);
+module.exports = terrariumSchema;

@@ -15,4 +15,4 @@ var unitSchema = Mongoose.Schema({
     }
 });
 
-module.exports = Mongoose.model("Unit", unitSchema);
+module.exports = unitSchema;
