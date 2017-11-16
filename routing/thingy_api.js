@@ -264,5 +264,6 @@ var createThingyAPI = (server) => {
             }
         }
     });
-
 }
+
+module.exports = createThingyAPI;
