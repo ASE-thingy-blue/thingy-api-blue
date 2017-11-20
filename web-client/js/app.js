@@ -62,13 +62,18 @@ var termonWebClient = angular.module('termonWebClient', ['ui.router', 'ngAnimate
         testUrl: 'https://test.termon.pillo-srv.ch',
         prodUrl: 'https://termon.pillo-srv.ch',
     })
-    .run(['$rootScope', '$transitions', 'dataService', 'API_ENDPOINT', function($rootScope, $transitions, dataService, API_ENDPOINT) {
+    .run(['$rootScope', '$transitions', '$location', 'API_ENDPOINT', function($rootScope, $transitions, $location, API_ENDPOINT) {
 
         //Change for Production
         var env = 'dev'; //one of ['dev', 'test', 'prod']
+        var url = $location.protocol()+ '://' + $location.host();
+        if ($location.port() !== 80 || $location.port() !== 443) {
+            url = url + ':' + $location.port()
+        }
 
         $rootScope.apiEndpoint = function() {
-            return API_ENDPOINT[env+'Url']
+            return url;
+            //return API_ENDPOINT[env+'Url']
         };
 
         //Redirect unauthenticated User to Login page
@@ -87,11 +92,6 @@ var termonWebClient = angular.module('termonWebClient', ['ui.router', 'ngAnimate
                 // User isn't authenticated. Redirect to login state.
                 return transition.router.stateService.target('private.home');
             }
-        });
-
-        // Initialisierung
-        dataService.initialize(function(data) {
-            console.log('init-done');
         });
 
     }]);
