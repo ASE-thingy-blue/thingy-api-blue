@@ -57,28 +57,17 @@ var termonWebClient = angular.module('termonWebClient', ['ui.router', 'ngAnimate
     .constant('AUTH_EVENTS', {
         notAuthenticated: 'auth-not-authenticated'
     })
-    .constant('API_ENDPOINT', {
-        devUrl: 'http://127.0.0.1:8080',
-        testUrl: 'https://test.termon.pillo-srv.ch',
-        prodUrl: 'https://termon.pillo-srv.ch',
-    })
-    .run(['$rootScope', '$transitions', '$location', 'API_ENDPOINT', function($rootScope, $transitions, $location, API_ENDPOINT) {
+    .run(['$rootScope', '$transitions', '$location', function($rootScope, $transitions, $location) {
 
         //Change for Production
-        var env = 'dev'; //one of ['dev', 'test', 'prod']
-        var url = $location.protocol()+ '://' + $location.host();
+        $rootScope.url = $location.protocol()+ '://' + $location.host();
         if ($location.port() !== 80 || $location.port() !== 443) {
-            url = url + ':' + $location.port()
+            $rootScope.url = $rootScope.url + ':' + $location.port()
         }
-
-        $rootScope.apiEndpoint = function() {
-            return url;
-            //return API_ENDPOINT[env+'Url']
-        };
 
         //Redirect unauthenticated User to Login page
         $transitions.onStart({ to: 'private.**' }, function(transition) {
-            var auth = transition.injector().get('authService');
+            let auth = transition.injector().get('authService');
             if (!auth.isAuthenticated()) {
                 // User isn't authenticated. Redirect to login state.
                 return transition.router.stateService.target('public.login');

@@ -37,7 +37,7 @@ termonWebClient.factory('authService', ['$rootScope', '$q', '$http', function($r
 
     var register = function(user) {
         return $q(function(resolve, reject) {
-            $http.post($rootScope.apiEndpoint() + '/signup', user).then(function(result) {
+            $http.post($rootScope.url + '/signup', user).then(function(result) {
                 if (result.data.success) {
                     resolve(result.data.message);
                 } else {
@@ -51,7 +51,7 @@ termonWebClient.factory('authService', ['$rootScope', '$q', '$http', function($r
 
     var login = function(user) {
         return $q(function(resolve, reject) {
-            $http.post($rootScope.apiEndpoint() + '/authenticate', user).then(function(result) {
+            $http.post($rootScope.url + '/authenticate', user).then(function(result) {
                 if (result.data.success) {
                     storeUserCredentials(result.data.token);
                     resolve(result.data.message);

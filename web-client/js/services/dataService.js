@@ -6,7 +6,7 @@
 termonWebClient.factory('dataService', ['$rootScope', '$q', '$http', '$filter', function($rootScope, $q, $http, $filter) {
 
     const dataService = {};
-    dataService.api = $rootScope.apiEndpoint();
+    dataService.api = $rootScope.url;
 
     dataService.get = function(getUri, searchParams) {
         return $q(function(resolve, reject) {
