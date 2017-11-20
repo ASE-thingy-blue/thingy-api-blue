@@ -13,52 +13,11 @@
     <link rel="stylesheet" href="/static/css/custom.css" type="text/css" />
 
 </head>
-<body ng-app="termonWebClient">
+<body ng-app="termonWebClient" ng-controller="authCtrl">
 
-    <header id="fixedheader" class="navbar navbar-fixed-top" ng-controller="navigationCtrl">
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsed-navbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#/home">Termon</a>
-            </div>
-
-            
-            <div class="collapse navbar-collapse" id="collapsed-navbar">
-                <div class="container">
-                    <ul class="nav navbar-nav">
-                        <li ng-repeat="nav in navigation" ng-class="{'active': isActive(nav)}">
-                            <a ng-click="navigate(nav)"><i class="fa {{nav.icon}}"></i> {{nav.name}}</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
-</header>
-
-<div id="main">
-    <div class="container">
-        <div ng-view></div>
-    </div>
-</div>
-
-<footer>
-    <div class="navbar navbar-default">
-        <div class="container">
-            <div class="footer-content row">
-                <div class="col-lg-4">
-                    &copy; by Termon
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
+<!-- Content -->
+<div data-ui-view></div>
+<!-- Content -->
 
 <!-- jQuery -->
 <script src="/static/lib/jquery/jquery-3.2.1.min.js"></script>
@@ -77,17 +36,28 @@
 <script src="/static/lib/angular/angular-route.min.js"></script>
 <script src="/static/lib/angular/angular-sanitize.min.js"></script>
 <script src="/static/lib/angular/angular-touch.min.js"></script>
+<script src="/static/lib/angular/angular-ui-router.min.js"></script>
 
 <!-- AngularJS APP -->
 <script src="/static/js/app.js"></script>
 
 <!-- AngularJS Services -->
+<script src="/static/js/services/authService.js"></script>
 <script src="/static/js/services/dataService.js"></script>
+
+<!-- AngularJS Interceptors -->
+<script src="/static/js/interceptors/authInterceptor.js"></script>
 
 <!-- AngularJS Directives -->
 
 <!-- AngularJS Controllers -->
+<script src="/static/js/controller/authCtrl.js"></script>
+<script src="/static/js/controller/loginCtrl.js"></script>
+<script src="/static/js/controller/registerCtrl.js"></script>
+<script src="/static/js/controller/pNavigationCtrl.js"></script>
+<!-- AngularJS Controllers -->
 <script src="/static/js/controller/homeCtrl.js"></script>
+<script src="/static/js/controller/logoutCtrl.js"></script>
 <script src="/static/js/controller/navigationCtrl.js"></script>
 <!-- endbuild -->
 

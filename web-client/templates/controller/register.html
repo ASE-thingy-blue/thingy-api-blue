@@ -1,0 +1,33 @@
+<div class="maincontent">
+
+    <div class="row">
+
+        <div class="col-md-offset-4 col-md-4">
+            <div class="form-login">
+                <form method="POST">
+                    <h4>Register for Termon Web Client</h4>
+
+                    <div ng-show="registerError" class="alert alert-danger">
+                        {{registerError}}
+                    </div>
+
+                    <input type="text" name="username" class="form-control" placeholder="Username" ng-model="user.name" required>
+                    <br />
+                    <input type="email" name="email" class="form-control" placeholder="E-Mail Address" ng-model="user.email" required>
+                    <br />
+                    <input type="password" name="password" class="form-control" placeholder="Password" ng-model="user.password" required>
+                    <br />
+                    <input type="password" name="repassword" class="form-control" placeholder="Repeate Password" ng-model="user.repassword" required>
+                    <br />
+                    <div class="wrapper">
+                        <span class="group-btn">
+                            <button type="submit" class="btn btn-primary btn-md" ng-click="register()"><i class="fa fa-fw fa-plus"></i>Register</button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,29 @@
+<div class="maincontent">
+
+    <div class="row">
+
+        <div class="col-md-offset-4 col-md-4">
+            <div class="form-login">
+                <form method="POST">
+                    <h4>Please sign in</h4>
+
+                    <div ng-show="loginError" class="alert alert-danger">
+                        {{loginError}}
+                    </div>
+
+                    <input type="text" name="username" class="form-control" placeholder="Username" ng-model="user.name" required autofocus>
+                    <br />
+                    <input type="password" name="password" class="form-control" placeholder="Password" ng-model="user.password" required>
+                    <br />
+                    <div class="wrapper">
+                        <span class="group-btn">
+                            <button type="submit" class="btn btn-primary btn-md" ng-click="login()"><i class="fa fa-fw fa-sign-in"></i>Login</button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+
+</div>

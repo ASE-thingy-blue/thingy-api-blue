@@ -18,6 +18,35 @@ footer .footer-content {
 }
 /*** END of Footer ***/
 
+/*** START of Login Form ***/
+.form-login {
+    background-color: #EDEDED;
+    margin-top: 50px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-color:#d2d2d2;
+    border-width: 5px;
+    box-shadow:0 1px 0 #cfcfcf;
+}
+h4 {
+    border:0 solid #fff;
+    border-bottom-width:1px;
+    padding-bottom:10px;
+    text-align: center;
+}
+h4.left {
+    text-align: left;
+}
+h5 {
+    font-weight: bold;
+}
+.wrapper {
+    text-align: center;
+}
+/*** END of Login Form ***/
+
 /* Flat Design */
 input, button, select, .btn, .modal-dialog, .modal-content, .alert, textarea, .panel, .nav-pills li a, .well, .navbar {
     -webkit-border-radius: 0 !important;
@@ -46,3 +75,4 @@ form label {
 .nav.navbar-nav a{
     cursor: pointer;
 }
+
