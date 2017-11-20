@@ -18,10 +18,8 @@ termonWebClient.controller('registerCtrl', ['$scope', 'authService', '$state', f
         $scope.registerError = undefined;
         authService.register($scope.user).then(function(msg) {
             $state.go('public.login');
-            console.log('Register success: ' + msg);
         }, function(errMsg) {
             $scope.registerError = 'Registration failed: ' + errMsg;
-            console.log('Register failed: ' + errMsg);
         });
     };
     

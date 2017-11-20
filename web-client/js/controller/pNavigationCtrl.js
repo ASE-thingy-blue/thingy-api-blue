@@ -3,28 +3,30 @@
 /**
  * Controller - pNavigationCtrl
  */
-termonWebClient.controller('pNavigationCtrl', ['$rootScope', '$scope', '$location', function ($rootScope, $scope, $location) {
+termonWebClient.controller('pNavigationCtrl', ['$rootScope', '$scope', '$state', function ($rootScope, $scope, $state) {
 
     $scope.navigation = [
         {
             name : 'Login',
             path : '/login',
+            state : 'public.login',
             icon : 'fa-sign-in'
         }, {
             name : 'Register',
             path : '/register',
+            state : 'public.register',
             icon : 'fa-plus'
         }
     ];
 
     $scope.isActive = function(nav) {
-        let url = $location.url();
-        return nav.path === url;
+        let state = $state.current.name;
+        return nav.state === state;
     };
 
     $scope.navigate = function(nav) {
         $('#collapsed-navbar').collapse('hide');
-        $location.path(nav.path);
+        $state.go(nav.state);
     };
 
 }]);

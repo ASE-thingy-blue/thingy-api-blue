@@ -3,32 +3,45 @@
 /**
  * Controller - navigationCtrl
  */
-termonWebClient.controller('navigationCtrl', ['$rootScope', '$scope', '$location', function ($rootScope, $scope, $location) {
+termonWebClient.controller('navigationCtrl', ['$rootScope', '$scope', '$state', function ($rootScope, $scope, $state) {
 
     $scope.navigation = [
         {
             name : 'Home',
             path : '/home',
+            state : 'private.home',
             icon : 'fa-home'
         }, {
-            name : 'Test',
-            path : '/test',
+            name : 'Terrariums',
+            path : '/terrariums',
+            state : 'private.terrariums',
+            icon : 'fa-th'
+        }, {
+            name : 'Thingies',
+            path : '/thingies',
+            state : 'private.thingies',
+            icon : 'fa-th-large'
+        }, {
+            name : 'Settings',
+            path : '/settings',
+            state : 'private.settings',
             icon : 'fa-gear'
         }, {
             name : 'Logout',
             path : '/logout',
-            icon : 'fa-sign-out '
+            state : 'private.logout',
+            icon : 'fa-sign-out'
         }
     ];
 
     $scope.isActive = function(nav) {
-        let url = $location.url();
-        return nav.path === url;
+        let state = $state.current.name;
+        return nav.state === state;
     };
 
     $scope.navigate = function(nav) {
         $('#collapsed-navbar').collapse('hide');
-        $location.path(nav.path);
+        $state.go(nav.state);
     };
 
 }]);

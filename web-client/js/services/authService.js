@@ -3,8 +3,8 @@
 /**
  * Service - authService
  */
-termonWebClient.factory('authService', ['$q', '$http', 'API_ENDPOINT', function($q, $http, API_ENDPOINT) {
-    var LOCAL_TOKEN_KEY = 'yourTokenKey';
+termonWebClient.factory('authService', ['$rootScope', '$q', '$http', function($rootScope, $q, $http) {
+    var LOCAL_TOKEN_KEY = 'termon-client-token-key';
     var isAuthenticated = false;
     var authToken;
 
@@ -37,7 +37,7 @@ termonWebClient.factory('authService', ['$q', '$http', 'API_ENDPOINT', function(
 
     var register = function(user) {
         return $q(function(resolve, reject) {
-            $http.post(API_ENDPOINT.url + '/signup', user).then(function(result) {
+            $http.post($rootScope.apiEndpoint() + '/signup', user).then(function(result) {
                 if (result.data.success) {
                     resolve(result.data.message);
                 } else {
@@ -49,7 +49,7 @@ termonWebClient.factory('authService', ['$q', '$http', 'API_ENDPOINT', function(
 
     var login = function(user) {
         return $q(function(resolve, reject) {
-            $http.post(API_ENDPOINT.url + '/authenticate', user).then(function(result) {
+            $http.post($rootScope.apiEndpoint() + '/authenticate', user).then(function(result) {
                 if (result.data.success) {
                     storeUserCredentials(result.data.token);
                     resolve(result.data.message);
