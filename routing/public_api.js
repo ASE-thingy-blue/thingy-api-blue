@@ -920,7 +920,8 @@ var createPublicAPI = (server)=>{
         method: 'POST',
         path: '/authenticate',
         handler: function (request, reply) {
-            reply({'success':true, 'message':"ok", 'token':"irgendwas"}).code(200);
+            let timestamp = "" + Math.floor(Date.now());
+            reply({'success':true, 'message':"ok", 'token':timestamp}).code(200);
         }
     });
 }
