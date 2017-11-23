@@ -26,7 +26,7 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets all the terrariums of a user',
+            description: 'Gets all terrariums of a user',
             plugins: {
                 'hapi-swagger': {
                     responses: {
@@ -66,7 +66,7 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets all the values from all the thingies in all the terrariums of a user',
+            description: 'Gets all values from all Thingies in all terrariums of a user',
             validate: {
                 query: {
                     past: Joi.boolean()
@@ -104,7 +104,7 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets the configuration from all the thingies in all the terrariums of a user',
+            description: 'Gets the configuration from all Thingies in all the terrariums of a user',
             validate: {
                 
             },
@@ -137,7 +137,7 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets all the threshold violations from all the thingies in all the terrariums of a user',
+            description: 'Gets all threshold violations from all Thingies in all terrariums of a user',
             validate: {
                 
             },
@@ -178,7 +178,7 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets all the temperature values from all the thingies in all the terrariums of a user',
+            description: 'Gets all temperature values from all Thingies in all terrariums of a user',
             validate: {
                 query: {
                     past: Joi.boolean()
@@ -225,7 +225,7 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets all the humidity values from all the thingies in all the terrariums of a user',
+            description: 'Gets all humidity values from all Thingies in all terrariums of a user',
             validate: {
                 query: {
                     past: Joi.boolean()
@@ -271,7 +271,7 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets all the airquality values from all the thingies in all the terrariums of a user',
+            description: 'Gets all airquality values from all Thingies in all terrariums of a user',
             validate: {
                 query: {
                     past: Joi.boolean()
@@ -308,7 +308,7 @@ var createPublicAPI = (server)=>{
                     'terrariums.thingies.description')
                 .exec(function (err, user) {
                     if (err) {
-                        reply({'error': 'User not found'});
+                        reply({'Error': 'User not found'}).code(404);
                     } else {
                         reply(user.terrariums.id(request.params.terrarium_id)).code(200);
                     }
@@ -316,12 +316,12 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets all the thingies of a certain terrarium',
+            description: 'Gets all Thingies of a certain terrarium',
             validate: {
                 params: {
                     terrarium_id: Joi.string()
                         .required()
-                        .description('Id of the Terrarium i want the Thingies of')
+                        .description('ID of the terrarium I want the Thingies from')
                 }
             },
             plugins: {
@@ -343,7 +343,7 @@ var createPublicAPI = (server)=>{
             User.findOne({name: "Joe Slowinski"}).select("-terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations")
                 .exec(function (err, user) {
                     if (err) {
-                        reply({'error': 'User not found'});
+                        reply({'Error': 'User not found'}).code(404);
                     } else {
                         if (!request.query.past) {
                             user.terrariums.forEach(function (t) {
@@ -361,12 +361,12 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets all the values  from all the thingies form a certain terrarium',
+            description: 'Gets all values from all Thingies form a certain terrarium',
             validate: {
                 params: {
                     terrarium_id: Joi.string()
                         .required()
-                        .description('Id of the Terrarium i want the values of')
+                        .description('ID of the terrarium I want the values from')
                 },
                 query: {
                     past: Joi.boolean()
@@ -410,12 +410,12 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets all the temperatures values from all the thingies form a certain terrarium',
+            description: 'Gets all temperatures values from all Thingies form a certain terrarium',
             validate: {
                 params: {
                     terrarium_id: Joi.string()
                         .required()
-                        .description('Id of the Terrarium i want the temperatures of')
+                        .description('ID of the terrarium I want the temperature from')
                 },
                 query: {
                     past: Joi.boolean()
@@ -452,12 +452,12 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets the configurations from all the thingies form a certain terrarium',
+            description: 'Gets the configurations from all Thingies form a certain terrarium',
             validate: {
                 params: {
                     terrarium_id: Joi.string()
                         .required()
-                        .description('Id of the Terrarium i want the configurations of')
+                        .description('ID of the terrarium I want the configurations from')
                 },
                 query: {
                     
@@ -491,12 +491,12 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets the threshold violations from all the thingies form a certain terrarium',
+            description: 'Gets the threshold violations from all Thingies form a certain terrarium',
             validate: {
                 params: {
                     terrarium_id: Joi.string()
                         .required()
-                        .description('Id of the Terrarium i want the threshold violations of')
+                        .description('ID of the terrarium I want the threshold violations from')
                 },
                 query: {
                     
@@ -538,12 +538,12 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets all the humidity values from all the thingies form a certain terrarium',
+            description: 'Gets all humidity values from all Thingies form a certain terrarium',
             validate: {
                 params: {
                     terrarium_id: Joi.string()
                         .required()
-                        .description('Id of the Terrarium i want the humidities of')
+                        .description('ID of the terrarium I want the humidity from')
                 },
                 query: {
                     past: Joi.boolean()
@@ -587,12 +587,12 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets all the airquality values from all the thingies form a certain terrarium',
+            description: 'Gets all airquality values from all Thingies form a certain terrarium',
             validate: {
                 params: {
                     terrarium_id: Joi.string()
                         .required()
-                        .description('Id of the Terrarium i want the airqualities of')
+                        .description('ID of the terrarium I want the airquality from')
                 },
                 query: {
                     past: Joi.boolean()
@@ -623,7 +623,7 @@ var createPublicAPI = (server)=>{
             User.findOne({name: "Joe Slowinski"}).select("-terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations")
                 .exec(function (err, user) {
                     if (err) {
-                        reply({'error': 'User not found'});
+                        reply({'Error': 'User not found'}).code(404);
                     } else {
                         if (!request.query.past) {
                             user.terrariums.forEach(function (t) {
@@ -641,15 +641,15 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets all the values that get measured in a certain terrarium with a certain thingy',
+            description: 'Gets all values that are measured in a certain terrarium with a certain Thingy',
             validate: {
                 params: {
                     terrarium_id: Joi.string()
                         .required()
-                        .description('Id of the Terrarium i want the values of'),
+                        .description('ID of the terrarium I want the values from'),
                     thingy_id: Joi.string()
                         .required()
-                        .description('Id of the Thingy i want the values of')
+                        .description('ID of the Thingy I want the values from')
                 },
                 query: {
                     past: Joi.boolean()
@@ -678,7 +678,7 @@ var createPublicAPI = (server)=>{
                 .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.temperatures -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
                     if (err) {
-                        reply({'error': 'User not found'});
+                        reply({'Error': 'User not found'}).code(404);
                     } else {
                         reply(user.terrariums.id(request.params.terrarium_id)
                             .thingies.id(request.params.thingy_id)).code(200);
@@ -687,7 +687,7 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets the configuration of a certain thingy',
+            description: 'Gets the configuration of a certain Thingy',
             validate: {
                 params: {
                     terrarium_id: Joi.string()
@@ -718,7 +718,7 @@ var createPublicAPI = (server)=>{
                 .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.temperatures -terrariums.thingies.targetConfiguration')
                 .exec(function (err, user) {
                     if (err) {
-                        reply({'error': 'User not found'});
+                        reply({'Error': 'User not found'}).code(404);
                     } else {
                         reply(user.terrariums.id(request.params.terrarium_id)
                             .thingies.id(request.params.thingy_id)).code(200);
@@ -727,7 +727,7 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets the threshold violations of a certain thingy',
+            description: 'Gets the threshold violations of a certain Thingy',
             validate: {
                 params: {
                     terrarium_id: Joi.string()
@@ -758,7 +758,7 @@ var createPublicAPI = (server)=>{
                 .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
                     if (err) {
-                        reply({'error': 'User not found'});
+                        reply({'Error': 'User not found'}).code(404);
                     } else {
                         if (!request.query.past) {
                             user.terrariums.forEach(function (t) {
@@ -775,15 +775,15 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets the temperature that get measured in a certain terrarium with a certain thingy',
+            description: 'Gets the temperature that is measured in a certain terrarium with a certain Thingy',
             validate: {
                 params: {
                     terrarium_id: Joi.string()
                         .required()
-                        .description('Id of the Terrarium i want the temperature of'),
+                        .description('ID of the terrarium I want the temperature from'),
                     thingy_id: Joi.string()
                         .required()
-                        .description('Id of the Thingy i want the temperature of')
+                        .description('ID of the Thingy I want the temperature from')
                 },
                 query: {
                     past: Joi.boolean()
@@ -812,7 +812,7 @@ var createPublicAPI = (server)=>{
                 .select('-terrariums.thingies.temperatures -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
                     if (err) {
-                        reply({'error': 'User not found'});
+                        reply({'Error': 'User not found'}).code(404);
                     } else {
                         if (!request.query.past) {
                             user.terrariums.forEach(function (t) {
@@ -829,15 +829,15 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets the humidity that get measured in a certain terrarium with a certain thingy',
+            description: 'Gets the humidity that is measured in a certain terrarium with a certain Thingy',
             validate: {
                 params: {
                     terrarium_id: Joi.string()
                         .required()
-                        .description('Id of the Terrarium i want the humidity of'),
+                        .description('ID of the terrarium I want the humidity from'),
                     thingy_id: Joi.string()
                         .required()
-                        .description('Id of the Thingy i want the humidity of')
+                        .description('ID of the Thingy I want the humidity from')
                 },
                 query: {
                     past: Joi.boolean()
@@ -866,7 +866,7 @@ var createPublicAPI = (server)=>{
                 .select('-terrariums.thingies.humidities -terrariums.thingies.temperatures -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
                     if (err) {
-                        reply({'error': 'User not found'});
+                        reply({'Error': 'User not found'}).code(404);
                     } else {
                         if (!request.query.past) {
                             user.terrariums.forEach(function (t) {
@@ -884,15 +884,15 @@ var createPublicAPI = (server)=>{
         },
         config: {
             tags: ['webclient', 'api'],
-            description: 'gets the airquality that get measured in a certain terrarium with a certain thingy',
+            description: 'Gets the airquality that is measured in a certain terrarium with a certain Thingy',
             validate: {
                 params: {
                     terrarium_id: Joi.string()
                         .required()
-                        .description('Id of the Terrarium i want the airquality of'),
+                        .description('ID of the terrarium I want the airquality from'),
                     thingy_id: Joi.string()
                         .required()
-                        .description('Id of the Thingy i want the airquality of')
+                        .description('ID of the Thingy I want the airquality from')
                 },
                 query: {
                     past: Joi.boolean()

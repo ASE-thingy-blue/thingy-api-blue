@@ -24,7 +24,7 @@ let getOrCreateUnit = (name, short, reply) => {
     var result;
     Unit.find({name: name}, function (err, unit) {
     if (err) {
-	reply({"error": "Unit not in database"}).code(404);
+	reply({"Error": "Unit not in database"}).code(404);
     } else {
         if (unit === null) {
             var newUnit = new Unit({name: name, short: short});
@@ -86,7 +86,7 @@ var createThingyAPI = (server) => {
 
             User.findOne({name: data.user}, function (err, user) {
                 if (err) {
-                    reply({'error': 'Database error'}).code(500)
+                    reply({'Error': 'Database error'}).code(500)
                 } else {
                     if (user === null) {
                         console.log('create new user');
@@ -104,7 +104,7 @@ var createThingyAPI = (server) => {
                     } else {
                         Thingy.findOne({_id: thingyId}, function (err, thingy) {
                             if (thingy === null) {
-                                console.log('create new thingy');
+                                console.log('Create a new Thingy');
                                 var newThingy = new Thingy({macAddress: data.thingy, callbackAddress: data.cb});
                                 var terri = new Terri({name: "My first terrarium"});
 
@@ -169,7 +169,7 @@ var createThingyAPI = (server) => {
             Thingy.findOne({macAddress: thingyId}, function (err, thingy) {
                 if (err) {
                     reply({
-                        "error": "This Thingy is not in our database",
+                        "Error": "This Thingy is not in our database",
                         "thingy": thingyId
                     }).code(404);
                     // stop execution
