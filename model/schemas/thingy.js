@@ -5,19 +5,20 @@
 const Mongoose = require('mongoose');
 
 var thingySchema = Mongoose.Schema({
-    macAddress: {
-        type: String,
-        require: true
+    macAddress : {
+	type : String,
+	require : true
     },
-    description: String,
+    description : String,
 
-    temperatures: [require("./temperature")],
+    temperatures : [ require("./temperature") ],
 
-    airQualities: [require("./airQuality")],
+    airQualities : [ require("./airQuality") ],
 
-    humidities: [require("./humidity")],
-    
-    targetConfiguration: require('./targetConfiguration')
+    humidities : [ require("./humidity") ],
+
+    targetConfiguration : require('./targetConfiguration'),
+    thresholdViolations : [ require('./thresholdViolation') ]
 
 });
 

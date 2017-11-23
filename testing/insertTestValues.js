@@ -19,6 +19,7 @@ var User = Mongoose.model('User');
 var Unit = Mongoose.model('Unit');
 var TargetValues = Mongoose.model('TargetValues');
 var TargetConfiguration = Mongoose.model('TargetConfiguration');
+var Threshold = Mongoose.model('Threshold');
 
 require("../model/helper/databaseConnection");
 
@@ -180,11 +181,19 @@ target5.save();
 target6.save();
 target7.save();
 
-// Configuration Values
+// Thresholds
+var threshold1 = new Threshold({title: "bad", severity: "warning", ascending: false, arm: target2, disarm: target3});
+var threshold2 = new Threshold({title: "bad", severity: "warning", ascending: true, arm:target4, disarm:target5});
+var threshold3 = new Threshold({title: "very bad", severity: "severe", ascending: true, arm:target6, disarm:target7});
+threshold1.save();
+threshold2.save();
+threshold3.save();
+
+// TargetConfiguration
 var config1 = new TargetConfiguration({ideal: target1});
-config1.thresholds.push({title: "bad", severity: "warning", ascending: false, arm: target2, disarm: target3});
-config1.thresholds.push({title: "bad", severity: "warning", ascending: true, arm:target4, disarm:target5});
-config1.thresholds.push({title: "very bad", severity: "severe", ascending: true, arm:target6, disarm:target7});
+config1.thresholds.push(threshold1);
+config1.thresholds.push(threshold2);
+config1.thresholds.push(threshold3);
 config1.save();
 
 // Thingy

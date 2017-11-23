@@ -7,14 +7,7 @@ var targetConfigurationSchema = Mongoose.Schema({
 
     ideal : require('./targetValues'),
 
-    thresholds : [ {
-	title : String,
-	severity : String,
-	ascending : Boolean,
-	
-	arm : require('./targetValues'),
-	disarm : require('./targetValues')
-    } ]
+    thresholds : [ require('./threshold') ]
 
 });
 
