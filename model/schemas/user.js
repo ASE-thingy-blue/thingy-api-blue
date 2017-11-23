@@ -17,7 +17,8 @@ var userSchema = Mongoose.Schema({
     password: String, // TODO: Not known yet how to do that
     comment: String,
 
-    terrariums: [require('./terrarium')]
+    terrariums: [require('./terrarium')],
+    profiles: [require('./targetConfiguration')]
 });
 
 module.exports = userSchema;

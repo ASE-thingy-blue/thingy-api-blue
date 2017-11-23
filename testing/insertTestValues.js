@@ -190,7 +190,7 @@ threshold2.save();
 threshold3.save();
 
 // TargetConfiguration
-var config1 = new TargetConfiguration({ideal: target1});
+var config1 = new TargetConfiguration({title: "default", ideal: target1});
 config1.thresholds.push(threshold1);
 config1.thresholds.push(threshold2);
 config1.thresholds.push(threshold3);
@@ -260,4 +260,5 @@ terri2.save();
 var user = new User({name: "Joe Slowinski", mailAddress: "schlangenman@gmail.com"});
 user.terrariums.push(terri1);
 user.terrariums.push(terri2);
+user.profiles.push(config1);
 user.save();

@@ -5,6 +5,9 @@ const Mongoose = require('mongoose');
  */
 var targetConfigurationSchema = Mongoose.Schema({
 
+    // title is required to store configuration as a profile (profiles are stored in the user)
+    title: String,
+    
     ideal : require('./targetValues'),
 
     thresholds : [ require('./threshold') ]
