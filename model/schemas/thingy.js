@@ -15,7 +15,9 @@ var thingySchema = Mongoose.Schema({
 
     airQualities: [require("./airQuality")],
 
-    humidities: [require("./humidity")]
+    humidities: [require("./humidity")],
+    
+    targetConfiguration: require('./targetConfiguration')
 
 });
 

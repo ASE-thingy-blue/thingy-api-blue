@@ -1,6 +1,6 @@
 const Mongoose = require('mongoose');
 
-var init = function () {
+var init = function() {
     Mongoose.model('User', require('./schemas/user'));
     Mongoose.model('Terrarium', require('./schemas/terrarium'));
     Mongoose.model('Thingy', require('./schemas/thingy'));
@@ -10,6 +10,9 @@ var init = function () {
     Mongoose.model('Carbondioxide', require('./schemas/carbondioxide'));
     Mongoose.model('TVOC', require('./schemas/tvoc'));
     Mongoose.model('Unit', require('./schemas/unit'));
+    Mongoose.model('TargetValues', require('./schemas/targetValues'));
+    Mongoose.model('TargetConfiguration',
+	    require('./schemas/targetConfiguration'));
 };
 
 module.exports = init();

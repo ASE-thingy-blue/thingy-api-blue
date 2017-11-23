@@ -5,7 +5,7 @@
 
 const Mongoose = require('mongoose');
 
-//load model
+// load model
 require('../model/makeModel');
 
 var Terri = Mongoose.model('Terrarium');
@@ -17,6 +17,8 @@ var Tvoc = Mongoose.model('TVOC');
 var Carbon = Mongoose.model('Carbondioxide');
 var User = Mongoose.model('User');
 var Unit = Mongoose.model('Unit');
+var TargetValues = Mongoose.model('TargetValues');
+var TargetConfiguration = Mongoose.model('TargetConfiguration');
 
 require("../model/helper/databaseConnection");
 
@@ -109,7 +111,7 @@ co210.save();
 co211.save();
 co212.save();
 
-//tvoc
+// tvoc
 var tvoc1 = new Tvoc({value: 2, unit: mgPerQ});
 var tvoc2 = new Tvoc({value: 2, unit: mgPerQ});
 var tvoc3 = new Tvoc({value: 2, unit: mgPerQ});
@@ -161,8 +163,26 @@ airQ10.save();
 airQ11.save();
 airQ12.save();
 
+// Target Values
+var target1 = new TargetValues({temperature: {value: 30, unit: celsius}, humidity:{value:40, unit:percent}, co2:{value:2, unit:gPerQ}, tvoc:{value:3, unit:mgPerQ}});
+var target2 = new TargetValues({temperature: {value: 25, unit: celsius}, humidity:{value:35, unit:percent}, co2:{value:1, unit:gPerQ}, tvoc:{value:2, unit:mgPerQ}});
+var target3 = new TargetValues({temperature: {value: 35, unit: celsius}, humidity:{value:45, unit:percent}, co2:{value:3, unit:gPerQ}, tvoc:{value:4, unit:mgPerQ}});
+var target4 = new TargetValues({temperature: {value: 20, unit: celsius}, humidity:{value:30, unit:percent}, co2:{value:1, unit:gPerQ}, tvoc:{value:1, unit:mgPerQ}});
+var target5 = new TargetValues({temperature: {value: 40, unit: celsius}, humidity:{value:50, unit:percent}, co2:{value:4, unit:gPerQ}, tvoc:{value:4, unit:mgPerQ}});
+target1.save();
+target2.save();
+target3.save();
+target4.save();
+target5.save();
+
+// Configuration Values
+var config1 = new TargetConfiguration({ideal: target1});
+config1.ranges.push({title: "bad", severity: "warning", min:target2, max:target3});
+config1.ranges.push({title: "very bad", severity: "severe", min:target4, max:target5});
+config1.save();
+
 // Thingy
-var thingy1 = new Thingy({macAddress: "123", description: "test thingy1"});
+var thingy1 = new Thingy({macAddress: "123", description: "test thingy1", targetConfiguration: config1});
 thingy1.temperatures.push(temp1);
 thingy1.temperatures.push(temp2);
 thingy1.temperatures.push(temp3);
