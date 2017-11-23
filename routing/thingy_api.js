@@ -1,6 +1,8 @@
 const Mongoose = require('mongoose');
 const Joi = require('joi');
 
+const triggerTools = require('../backend/triggerTools')
+
 var Terri = Mongoose.model('Terrarium');
 var Thingy = Mongoose.model('Thingy');
 var Temp = Mongoose.model('Temperature');
@@ -178,6 +180,7 @@ var createThingyAPI = (server) => {
                         newHmu.save();
 
                         thingy.humidities.push(newHmu);
+                        triggerTools.updateThresholds(thingy);
                         thingy.save();
                         break;
                     case 'temperature':
@@ -204,6 +207,7 @@ var createThingyAPI = (server) => {
 
                         newTemp.save();
                         thingy.temperatures.push(newTemp);
+                        triggerTools.updateThresholds(thingy);
                         thingy.save();
                         break;
                     case 'gas':
@@ -246,6 +250,7 @@ var createThingyAPI = (server) => {
                         newAirQ.save();
 
                         thingy.airQualities.push(newAirQ);
+                        triggerTools.updateThresholds(thingy);
                         thingy.save();
                         break;
                 }
