@@ -93,7 +93,7 @@ var createPublicAPI = (server)=>{
         handler: function (request, reply) {
             //hardcode to test it
             User.findOne({name: "Joe Slowinski"})
-                .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities')
+                .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
                     if (err) {
                         console.log(err);
@@ -139,7 +139,7 @@ var createPublicAPI = (server)=>{
         handler: function (request, reply) {
             //hardcode to test it
             User.findOne({name: "Joe Slowinski"})
-                .select('-terrariums.thingies.temperatures -terrariums.thingies.airQualities')
+                .select('-terrariums.thingies.temperatures -terrariums.thingies.airQualities  -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
                     if (err) {
                         console.log(err);
@@ -186,7 +186,7 @@ var createPublicAPI = (server)=>{
         handler: function (request, reply) {
             //hardcode to test it
             User.findOne({name: "Joe Slowinski"})
-                .select('-terrariums.thingies.humidities -terrariums.thingies.temperatures')
+                .select('-terrariums.thingies.humidities -terrariums.thingies.temperatures -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
                     if (err) {
                         console.log(err);
@@ -326,7 +326,7 @@ var createPublicAPI = (server)=>{
         path: '/terrarium/{terrarium_id}/temperatures',
         handler: function (request, reply) {
             User.findOne({name: "Joe Slowinski"})
-                .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities')
+                .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
                     if (err) {
                         console.log(err);
@@ -375,7 +375,7 @@ var createPublicAPI = (server)=>{
         path: '/terrarium/{terrarium_id}/humidities',
         handler: function (request, reply) {
             User.findOne({name: "Joe Slowinski"})
-                .select('-terrariums.thingies.temperatures -terrariums.thingies.airQualities')
+                .select('-terrariums.thingies.temperatures -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
                     if (err) {
                         console.log(err);
@@ -425,7 +425,7 @@ var createPublicAPI = (server)=>{
         path: '/terrarium/{terrarium_id}/airqualities',
         handler: function (request, reply) {
             User.findOne({name: "Joe Slowinski"})
-                .select('-terrariums.thingies.temperatures -terrariums.thingies.humidities')
+                .select('-terrariums.thingies.temperatures -terrariums.thingies.humidities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
                     if (err) {
                         console.log(err);
@@ -531,7 +531,7 @@ var createPublicAPI = (server)=>{
         path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/temperature',
         handler: function (request, reply) {
             User.findOne({name: "Joe Slowinski"})
-                .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities')
+                .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
                     if (err) {
                         reply({'error': 'User not found'});
@@ -585,7 +585,7 @@ var createPublicAPI = (server)=>{
         path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/humidity',
         handler: function (request, reply) {
             User.findOne({name: "Joe Slowinski"})
-                .select('-terrariums.thingies.temperatures -terrariums.thingies.airQualities')
+                .select('-terrariums.thingies.temperatures -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
                     if (err) {
                         reply({'error': 'User not found'});
@@ -639,7 +639,7 @@ var createPublicAPI = (server)=>{
         path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/airquality',
         handler: function (request, reply) {
             User.findOne({name: "Joe Slowinski"})
-                .select('-terrariums.thingies.humidities -terrariums.thingies.temperatures')
+                .select('-terrariums.thingies.humidities -terrariums.thingies.temperatures -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
                     if (err) {
                         reply({'error': 'User not found'});
