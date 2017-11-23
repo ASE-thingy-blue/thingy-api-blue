@@ -45,7 +45,7 @@ var createPublicAPI = (server)=>{
         handler: function (request, reply) {
             //hardcode to test it
             //if no querystring
-            User.findOne({name: "Joe Slowinski"})
+            User.findOne({name: "Joe Slowinski"}).select('-terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
                     if (err) {
                         console.log(err);
@@ -74,6 +74,72 @@ var createPublicAPI = (server)=>{
                         .description('Value from a certain date'),
                     to: Joi.date().description('Value to a certain date')*/
                 }
+            },
+            plugins: {
+                'hapi-swagger': {
+                    responses: {
+                        200: {
+                            description: 'Success'
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/terrariums/configurations',
+        handler: function (request, reply) {
+            //hardcode to test it
+            //if no querystring
+            User.findOne({name: "Joe Slowinski"}).select('-terrariums.thingies.humidities -terrariums.thingies.temperatures -terrariums.thingies.airQualities -terrariums.thingies.thresholdViolations')
+                .exec(function (err, user) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        reply(user.terrariums).code(200);
+                    }
+                });
+        },
+        config: {
+            tags: ['webclient', 'api'],
+            description: 'gets the configuration from all the thingies in all the terrariums of a user',
+            validate: {
+                
+            },
+            plugins: {
+                'hapi-swagger': {
+                    responses: {
+                        200: {
+                            description: 'Success'
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    server.route({
+        method: 'GET',
+        path: '/terrariums/violations',
+        handler: function (request, reply) {
+            //hardcode to test it
+            //if no querystring
+            User.findOne({name: "Joe Slowinski"}).select('-terrariums.thingies.humidities -terrariums.thingies.temperatures -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration')
+                .exec(function (err, user) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        reply(user.terrariums).code(200);
+                    }
+                });
+        },
+        config: {
+            tags: ['webclient', 'api'],
+            description: 'gets all the threshold violations from all the thingies in all the terrariums of a user',
+            validate: {
+                
             },
             plugins: {
                 'hapi-swagger': {
@@ -274,7 +340,7 @@ var createPublicAPI = (server)=>{
         method: 'GET',
         path: '/terrarium/{terrarium_id}/values',
         handler: function (request, reply) {
-            User.findOne({name: "Joe Slowinski"})
+            User.findOne({name: "Joe Slowinski"}).select("-terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations")
                 .exec(function (err, user) {
                     if (err) {
                         reply({'error': 'User not found'});
@@ -356,6 +422,84 @@ var createPublicAPI = (server)=>{
                     /*from: Joi.date()
                         .description('Value from a certain date'),
                     to: Joi.date().description('Value to a certain date')*/
+                }
+            },
+            plugins: {
+                'hapi-swagger': {
+                    responses: {
+                        200: {
+                            description: 'Success'
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    server.route({
+        method: 'GET',
+        path: '/terrarium/{terrarium_id}/configurations',
+        handler: function (request, reply) {
+            User.findOne({name: "Joe Slowinski"})
+                .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.temperatures -terrariums.thingies.thresholdViolations')
+                .exec(function (err, user) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        reply(user.terrariums.id(request.params.terrarium_id)).code(200);
+                    }
+                });
+        },
+        config: {
+            tags: ['webclient', 'api'],
+            description: 'gets the configurations from all the thingies form a certain terrarium',
+            validate: {
+                params: {
+                    terrarium_id: Joi.string()
+                        .required()
+                        .description('Id of the Terrarium i want the configurations of')
+                },
+                query: {
+                    
+                }
+            },
+            plugins: {
+                'hapi-swagger': {
+                    responses: {
+                        200: {
+                            description: 'Success'
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    server.route({
+        method: 'GET',
+        path: '/terrarium/{terrarium_id}/violations',
+        handler: function (request, reply) {
+            User.findOne({name: "Joe Slowinski"})
+                .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.temperatures -terrariums.thingies.targetConfiguration')
+                .exec(function (err, user) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        reply(user.terrariums.id(request.params.terrarium_id)).code(200);
+                    }
+                });
+        },
+        config: {
+            tags: ['webclient', 'api'],
+            description: 'gets the threshold violations from all the thingies form a certain terrarium',
+            validate: {
+                params: {
+                    terrarium_id: Joi.string()
+                        .required()
+                        .description('Id of the Terrarium i want the threshold violations of')
+                },
+                query: {
+                    
                 }
             },
             plugins: {
@@ -476,7 +620,7 @@ var createPublicAPI = (server)=>{
         method: 'GET',
         path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/values',
         handler: function (request, reply) {
-            User.findOne({name: "Joe Slowinski"})
+            User.findOne({name: "Joe Slowinski"}).select("-terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations")
                 .exec(function (err, user) {
                     if (err) {
                         reply({'error': 'User not found'});
@@ -526,6 +670,86 @@ var createPublicAPI = (server)=>{
         }
     });
 
+    server.route({
+        method: 'GET',
+        path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/configuration',
+        handler: function (request, reply) {
+            User.findOne({name: "Joe Slowinski"})
+                .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.temperatures -terrariums.thingies.thresholdViolations')
+                .exec(function (err, user) {
+                    if (err) {
+                        reply({'error': 'User not found'});
+                    } else {
+                        reply(user.terrariums.id(request.params.terrarium_id)
+                            .thingies.id(request.params.thingy_id)).code(200);
+                    }
+                });
+        },
+        config: {
+            tags: ['webclient', 'api'],
+            description: 'gets the configuration of a certain thingy',
+            validate: {
+                params: {
+                    terrarium_id: Joi.string()
+                        .required()
+                        .description('Id of the Terrarium i want the thingy configuration of'),
+                    thingy_id: Joi.string()
+                        .required()
+                        .description('Id of the Thingy i want the configuration of')
+                },
+            },
+            plugins: {
+                'hapi-swagger': {
+                    responses: {
+                        200: {
+                            description: 'Success'
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    server.route({
+        method: 'GET',
+        path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/violations',
+        handler: function (request, reply) {
+            User.findOne({name: "Joe Slowinski"})
+                .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.temperatures -terrariums.thingies.targetConfiguration')
+                .exec(function (err, user) {
+                    if (err) {
+                        reply({'error': 'User not found'});
+                    } else {
+                        reply(user.terrariums.id(request.params.terrarium_id)
+                            .thingies.id(request.params.thingy_id)).code(200);
+                    }
+                });
+        },
+        config: {
+            tags: ['webclient', 'api'],
+            description: 'gets the threshold violations of a certain thingy',
+            validate: {
+                params: {
+                    terrarium_id: Joi.string()
+                        .required()
+                        .description('Id of the Terrarium i want the threshold violations of'),
+                    thingy_id: Joi.string()
+                        .required()
+                        .description('Id of the Thingy i want the threshold violations of')
+                },
+            },
+            plugins: {
+                'hapi-swagger': {
+                    responses: {
+                        200: {
+                            description: 'Success'
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
     server.route({
         method: 'GET',
         path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/temperature',
