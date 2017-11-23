@@ -17,6 +17,28 @@ var Unit = Mongoose.model('Unit');
 var thingyIdSchema = Joi.string().required().description('The Thingy UUID');
 var sensorIdSchema = Joi.string().required().description('The Thingy Sensor');
 
+/*
+ * Reads a unit from the db by name or creates it if it does not exist
+ */
+let getOrCreateUnit = (name, short, reply) => {
+    var result;
+    Unit.find({name: name}, function (err, unit) {
+    if (err) {
+	reply({"error": "Unit not in database"}).code(404);
+    } else {
+        if (unit === null) {
+            var newUnit = new Unit({name: name, short: short});
+            newUnit.save();
+            result = newUnit;
+        } else {
+            result = unit;
+        }
+    }
+    return result;
+});
+
+}
+
 var createThingyAPI = (server) => {
     server.route({
         method: 'GET',
@@ -150,27 +172,14 @@ var createThingyAPI = (server) => {
                         "error": "This Thingy is not in our database",
                         "thingy": thingyId
                     }).code(404);
-                    //stop execution
+                    // stop execution
                 }
 
                 var data = request.payload;
 
                 switch (sensorId) {
                     case 'humidity':
-                        var unit_percent;
-                        Unit.find({name: "Percent"}, function (err, unit) {
-                            if (err) {
-                                reply({"error": "Unit not in database"}).code(404);
-                            } else {
-                                if (unit === null) {
-                                    var newUnit = new Unit({name: "Percent", short: "%"});
-                                    newUnit.save();
-                                    unit_percent = newUnit;
-                                } else {
-                                    unit_percent = unit;
-                                }
-                            }
-                        });
+                        var unit_percent = getOrCreateUnit("Percent", "%", reply);
 
                         var newHmu = new Hum({
                             value: data.humidity,
@@ -184,20 +193,7 @@ var createThingyAPI = (server) => {
                         thingy.save();
                         break;
                     case 'temperature':
-                        var unit_cels;
-                        Unit.find({name: "Celsius"}, function (err, unit) {
-                            if (err) {
-                                reply({"error": "Unit not in database"}).code(404);
-                            } else {
-                                if (unit === null) {
-                                    var newUnit = new Unit({name: "Celsius", short: "C"});
-                                    newUnit.save();
-                                    unit_cels = newUnit;
-                                } else {
-                                    unit_cels = unit;
-                                }
-                            }
-                        });
+                        var unit_cels = getOrCreateUnit("Celsius", "C", reply);
 
                         var newTemp = new Temp({
                             value: data.temperature,
@@ -211,35 +207,9 @@ var createThingyAPI = (server) => {
                         thingy.save();
                         break;
                     case 'gas':
-                        var unit1_db;
-                        var unit2_db;
-                        Unit.find({name: "gram per qubic meter"}, function (err, unit) {
-                            if (err) {
-                                reply({"error": "Unit not in database"}).code(404);
-                            } else {
-                                if (unit === null) {
-                                    var newUnit = new Unit({name: "gram per qubic meter", short: "g/qm"});
-                                    newUnit.save();
-                                    unit1_db = newUnit;
-                                } else {
-                                    unit1_db = unit;
-                                }
-                            }
-                        });
-                        Unit.find({name: "microgram per qubic meter"}, function (err, unit) {
-                            if (err) {
-                                reply({"error": "Unit not in database"}).code(404);
-                            } else {
-                                if (unit === null) {
-                                    var newUnit = new Unit({name: "microgram per qubic meter", short: "mg/qm"});
-                                    newUnit.save();
-                                    unit2_db = newUnit;
-                                } else {
-                                    unit2_db = unit;
-                                }
-                            }
-                        });
-
+                        var unit1_db = getOrCreateUnit("gram per cubic meter", "g/m3", reply);
+                        var unit2_db = getOrCreateUnit("microgram per cubic meter", "mg/m3", reply);
+                        
                         var carb = new Carbon({value: data.gas.eco2, unit: unit1_db});
                         var tvoc = new Tvoc({value: data.gas.tvoc, unit: unit2_db});
 
