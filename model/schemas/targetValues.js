@@ -2,7 +2,7 @@ const Mongoose = require('mongoose');
 
 /**
  * Models a single target value set. this is used for ideal values as well as
- * min/max for ranges
+ * arming-/disarming points for thresholds
  */
 var targetValuesSchema = Mongoose.Schema({
 

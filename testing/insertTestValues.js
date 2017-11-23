@@ -166,19 +166,25 @@ airQ12.save();
 // Target Values
 var target1 = new TargetValues({temperature: {value: 30, unit: celsius}, humidity:{value:40, unit:percent}, co2:{value:2, unit:gPerQ}, tvoc:{value:3, unit:mgPerQ}});
 var target2 = new TargetValues({temperature: {value: 25, unit: celsius}, humidity:{value:35, unit:percent}, co2:{value:1, unit:gPerQ}, tvoc:{value:2, unit:mgPerQ}});
-var target3 = new TargetValues({temperature: {value: 35, unit: celsius}, humidity:{value:45, unit:percent}, co2:{value:3, unit:gPerQ}, tvoc:{value:4, unit:mgPerQ}});
-var target4 = new TargetValues({temperature: {value: 20, unit: celsius}, humidity:{value:30, unit:percent}, co2:{value:1, unit:gPerQ}, tvoc:{value:1, unit:mgPerQ}});
-var target5 = new TargetValues({temperature: {value: 40, unit: celsius}, humidity:{value:50, unit:percent}, co2:{value:4, unit:gPerQ}, tvoc:{value:4, unit:mgPerQ}});
+var target3 = new TargetValues({temperature: {value: 28, unit: celsius}, humidity:{value:36, unit:percent}, co2:{value:1, unit:gPerQ}, tvoc:{value:2, unit:mgPerQ}});
+var target4 = new TargetValues({temperature: {value: 35, unit: celsius}, humidity:{value:45, unit:percent}, co2:{value:3, unit:gPerQ}, tvoc:{value:5, unit:mgPerQ}});
+var target5 = new TargetValues({temperature: {value: 33, unit: celsius}, humidity:{value:42, unit:percent}, co2:{value:3, unit:gPerQ}, tvoc:{value:4, unit:mgPerQ}});
+var target6 = new TargetValues({temperature: {value: 40, unit: celsius}, humidity:{value:50, unit:percent}, co2:{value:10, unit:gPerQ}, tvoc:{value:10, unit:mgPerQ}});
+var target7 = new TargetValues({temperature: {value: 38, unit: celsius}, humidity:{value:47, unit:percent}, co2:{value:6, unit:gPerQ}, tvoc:{value:7, unit:mgPerQ}});
+
 target1.save();
 target2.save();
 target3.save();
 target4.save();
 target5.save();
+target6.save();
+target7.save();
 
 // Configuration Values
 var config1 = new TargetConfiguration({ideal: target1});
-config1.ranges.push({title: "bad", severity: "warning", min:target2, max:target3});
-config1.ranges.push({title: "very bad", severity: "severe", min:target4, max:target5});
+config1.thresholds.push({title: "bad", severity: "warning", ascending: false, arm: target2, disarm: target3});
+config1.thresholds.push({title: "bad", severity: "warning", ascending: true, arm:target4, disarm:target5});
+config1.thresholds.push({title: "very bad", severity: "severe", ascending: true, arm:target6, disarm:target7});
 config1.save();
 
 // Thingy

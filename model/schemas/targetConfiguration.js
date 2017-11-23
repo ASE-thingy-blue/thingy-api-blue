@@ -1,17 +1,19 @@
 const Mongoose = require('mongoose');
 
 /**
- * Models a set of ideal values and a list of ranges. is applied once per thingy
+ * Models a set of ideal values and a list thresholds
  */
 var targetConfigurationSchema = Mongoose.Schema({
 
     ideal : require('./targetValues'),
 
-    ranges : [ {
+    thresholds : [ {
 	title : String,
 	severity : String,
-	min : require('./targetValues'),
-	max : require('./targetValues')
+	ascending : Boolean,
+	
+	arm : require('./targetValues'),
+	disarm : require('./targetValues')
     } ]
 
 });
