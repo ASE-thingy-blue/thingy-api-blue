@@ -19,3 +19,7 @@ bower_components
 node_modules/
 jspm_packages/
 package-lock.json
+
+#eclipse meta
+/.project
+/.settings
