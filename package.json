@@ -9,6 +9,7 @@
   },
   "author": "ASE Team Blue",
   "dependencies": {
+    "bluebird": "^3.5.1",
     "ejs": "^2.5.7",
     "hapi": "^16.6.2",
     "hapi-swagger": "^8.0.0",

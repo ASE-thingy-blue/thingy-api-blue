@@ -1,7 +1,8 @@
 const Mongoose = require("mongoose");
 const isDocker = require('is-docker');
+var fs = require('fs');
 
-var create = function ()
+var create = function()
 {
 	var dbUrl;
 
@@ -19,37 +20,52 @@ var create = function ()
 
 	console.log("DB URL used: " + dbUrl);
 
-	// How many times we tried to connect to the DB
-	var attempts = 0;
 	var mongoOptions =
 	{
 		useMongoClient: true,
 		reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
-		reconnectInterval: 500 // Reconnect every 500ms
+		reconnectInterval: 500, // Reconnect every 500ms
 	};
 
 	// The wait loop for the DB connection
-	var createDbCallback = function(err)
+	function createConnection(dbUrl, mongoOptions)
 	{
-		if(!err)
-		{
-			console.log("Database connection established!");
-			return;
-		}
-		console.log(err);
-		attempts++;
-		console.log("attempts: " + attempts);
-		setTimeout(function()
-		{
-			Mongoose.connect(dbUrl, mongoOptions, function (error)
-			{
-				createDbCallback(error)
-			});
-		}, 2000);
-	};
+		var db = Mongoose.connect(dbUrl, mongoOptions);
 
-	// Try to make a connection
-	createDbCallback("first");
+		db.on('error', function(err)
+		{
+			// If first connect fails because mongod is down, try again later.
+			// This is only needed for first connect, not for runtime reconnects.
+			// See: https://github.com/Automattic/mongoose/issues/5169
+			if (err.message && err.message.match(/failed to connect to server .* on first connect/))
+			{
+				console.error(new Date(), String(err));
+
+				// Wait for a bit, then try to connect again
+				setTimeout(function()
+				{
+					console.log("Retrying first connect ...");
+					db.openUri(dbUrl).catch(() => {});
+					// Why the empty catch?
+					// Well, errors thrown by db.open() will also be passed to .on('error'),
+					// so we can handle them there, no need to log anything in the catch here.
+					// But we still need this empty catch to avoid unhandled rejections.
+				}, 20000);
+			}
+			else
+			{
+				// Some other error occurred. Log it.
+				console.error(new Date(), String(err));
+			}
+		});
+
+		db.once('open', function()
+		{
+			console.log("Connection to DB established.");
+		});
+	}
+
+	createConnection(dbUrl, mongoOptions);
 
 	// The DB connection
 	var db = Mongoose.connection;
@@ -71,9 +87,29 @@ var create = function ()
 	});
 
 	// Hook if we reconnect to the DB server
-	db.on('reconnected', function ()
+	db.on('reconnected', function()
 	{
 		console.log('MongoDB reconnected!');
+	});
+
+	// If the Node process ends, close the Mongoose connection
+	db.on('SIGINT', function()
+	{
+		mongoose.connection.close(function()
+		{
+			console.warn('Mongoose disconnected on app interruption');
+			process.exit(0);
+		});
+	});
+
+	// If the Node process ends, close the Mongoose connection
+	db.on('SIGTERM', function()
+	{
+		mongoose.connection.close(function()
+		{
+			console.warn('Mongoose disconnected on app termination');
+			process.exit(0);
+		});
 	});
 };
 
