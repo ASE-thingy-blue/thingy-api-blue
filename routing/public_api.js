@@ -205,7 +205,7 @@ var createPublicAPI = (server)=>{
         handler: function (request, reply) {
             //hardcode to test it
             User.findOne({name: "Joe Slowinski"})
-                .select('-terrariums.thingies.temperatures -terrariums.thingies.airQualities  -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
+                .select('-terrariums.thingies.temperatures -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
                     if (err) {
                         console.log(err);
@@ -692,10 +692,10 @@ var createPublicAPI = (server)=>{
                 params: {
                     terrarium_id: Joi.string()
                         .required()
-                        .description('Id of the Terrarium i want the thingy configuration of'),
+                        .description('ID of the terrarium I want the Thingy configuration from'),
                     thingy_id: Joi.string()
                         .required()
-                        .description('Id of the Thingy i want the configuration of')
+                        .description('ID of the Thingy I want the configuration from')
                 },
             },
             plugins: {
@@ -732,10 +732,10 @@ var createPublicAPI = (server)=>{
                 params: {
                     terrarium_id: Joi.string()
                         .required()
-                        .description('Id of the Terrarium i want the threshold violations of'),
+                        .description('ID of the terrarium I want the threshold violations from'),
                     thingy_id: Joi.string()
                         .required()
-                        .description('Id of the Thingy i want the threshold violations of')
+                        .description('ID of the Thingy I want the threshold violations from')
                 },
             },
             plugins: {
