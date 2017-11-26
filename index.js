@@ -2,19 +2,18 @@ const Hapi = require('hapi');
 const Inert = require('inert');
 const Vision = require('vision');
 const HapiSwagger = require('hapi-swagger');
-const Joi = require('joi');
 const Mongoose = require('mongoose');
 
-//load model
+// Load model
 require('./model/makeModel');
+var User = Mongoose.model('User');
 
 // Create the DB connection
 require("./model/helper/databaseConnection");
 
-
 const server = new Hapi.Server();
 server.connection({
-    host: '0.0.0.0',
+    address: '0.0.0.0', // Listen to all available network interfaces
     port: 8080,
     routes: {cors: true}
 });
@@ -80,7 +79,63 @@ server.route({
     }
 });
 
-//register public api paths
+server.route({
+    method: 'POST',
+    path: '/authenticate',
+    handler: function (request, reply)
+    {
+        User.findOne({name: request.payload.name}, function(err, user)
+        {
+            if (err) throw err;
+
+            if (!user)
+            {
+                return reply({success: false, message: 'Authentication failed. Incorrect username.'}).code(401);
+            }
+            // Check if password matches
+            user.verifyPassword(request.payload.password, function (isValidPassword)
+            {
+                if (isValidPassword)
+                {
+                    reply({success: true}).code(200);
+                }
+                else
+                {
+                    return reply({success: false, message: 'Authentication failed. Incorrect password.'}).code(401);
+                }
+            });
+        });
+    }
+});
+
+server.route({
+    method: 'POST',
+    path: '/signup',
+    handler: function(request, reply) {
+        if (!request.payload.name || !request.payload.password) {
+          reply({success: false, message: 'Please provide username and password.'}).code(400);
+        } else {
+            if (request.payload.password !== request.payload.repassword)
+            {
+                return reply({success: false, message: 'Passwords do not match.'}).code(400);
+            }
+            var newUser = new User({
+                name: request.payload.name,
+                mailAddress: request.payload.email,
+                password: request.payload.password
+            });
+            // Save the user
+            newUser.save(function(err) {
+                if (err) {
+                    return reply({success: false, message: 'Error creating new user.'}).code(400);
+                }
+                reply({success: true, message: 'Successfully created new user.'}).code(201);
+            });
+        }
+    }
+});
+
+// Register public API paths
 require('./routing/public_api')(server);
 
 /***********************************************************************************************************************

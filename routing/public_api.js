@@ -912,18 +912,6 @@ var createPublicAPI = (server)=>{
             }
         }
     });
-    
-    /**
-     * Test Authentication skips checks
-     */
-    server.route({
-        method: 'POST',
-        path: '/authenticate',
-        handler: function (request, reply) {
-            let timestamp = "" + Math.floor(Date.now());
-            reply({'success':true, 'message':"ok", 'token':timestamp}).code(200);
-        }
-    });
 }
 
 module.exports = createPublicAPI;
