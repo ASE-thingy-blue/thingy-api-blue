@@ -257,7 +257,7 @@ terri2.thingies.push(thingy4);
 promises.push(terri2.save());
 
 // User
-var user = new User({name: "Joe Slowinski", mailAddress: "schlangenman@gmail.com"});
+var user = new User({name: "Joe Slowinski", mailAddress: "schlangenman@gmail.com", password: "testpw"});
 user.terrariums.push(terri1);
 user.terrariums.push(terri2);
 user.profiles.push(config1);
