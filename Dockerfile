@@ -8,6 +8,11 @@ ENV appdir /usr/src/app/
 RUN mkdir -p $appdir
 WORKDIR $appdir
 
+RUN apt-get update
+RUN apt-get build-essential -y
+RUN apt-get clean
+
+RUN npm install -g node-gyp
 RUN npm install
 
 EXPOSE 8080
