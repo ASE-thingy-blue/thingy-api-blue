@@ -45,23 +45,66 @@ var createPublicAPI = (server)=>{
         handler: function (request, reply) {
             //hardcode to test it
             //if no querystring
-            User.findOne({name: "Joe Slowinski"}).select('-terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
+            User.findOne({name: "Joe Slowinski"})
+                .select('-terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
+                    var from = request.query.from;
+                    var to = request.query.to;
+                    var limit = request.query.limit;
+
                     if (err) {
                         console.log(err);
-                    } else {
-                        if (!request.query.past) {
-                            user.terrariums.forEach(function (t) {
-                                t.thingies.forEach(function (thingy) {
-                                    thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
-                                    thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
-                                    thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
-                                })
-                            });
-                        }
-
-                        reply(user.terrariums).code(200);
+                        return reply({"error": "User not found"}).code(404);
                     }
+
+                    if (from && to) {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                var hums = [];
+                                var temps = [];
+                                var airQs = [];
+
+                                thingy.humidities.forEach(function (hum) {
+                                    if(hum.timestamp >= from && hum.timestamp <= to){
+                                        hums.push(hum)
+                                    }
+                                });
+
+                                thingy.temperatures.forEach(function (temp) {
+                                    if(temp.timestamp >= from && temp.timestamp <= to){
+                                        temps.push(temp)
+                                    }
+                                });
+
+                                thingy.airQualities.forEach(function (airQ) {
+                                    if(airQ.timestamp >= from && airQ.timestamp <= to){
+                                        airQs.push(airQ)
+                                    }
+                                });
+
+                                thingy.humidities = hums;
+                                thingy.temperatures = temps;
+                                thingy.airQualities = airQs;
+
+                                if(limit){
+                                    thingy.humidities.splice(limit, thingy.humidities.length - limit);
+                                    thingy.temperatures.splice(limit, thingy.temperatures.length-limit);
+                                    thingy.airQualities.splice(limit, thingy.airQualities.length-limit);
+                                }
+                            });
+                        });
+
+                    } else {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
+                                thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
+                                thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
+                            })
+                        });
+                    }
+
+                    reply(user.terrariums).code(200);
                 });
         },
         config: {
@@ -69,10 +112,9 @@ var createPublicAPI = (server)=>{
             description: 'Gets all values from all Thingies in all terrariums of a user',
             validate: {
                 query: {
-                    past: Joi.boolean()
-                    /*from: Joi.date()
-                        .description('Value from a certain date'),
-                    to: Joi.date().description('Value to a certain date')*/
+                    limit: Joi.number().description('Amount of results'),
+                    from: Joi.date().description('Value from a certain date'),
+                    to: Joi.date().description('Value to a certain date')
                 }
             },
             plugins: {
@@ -161,19 +203,43 @@ var createPublicAPI = (server)=>{
             User.findOne({name: "Joe Slowinski"})
                 .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
+                    var from = request.query.from;
+                    var to = request.query.to;
+                    var limit = request.query.limit;
+
                     if (err) {
                         console.log(err);
-                    } else {
-                        if (!request.query.past) {
-                            user.terrariums.forEach(function (t) {
-                                t.thingies.forEach(function (thingy) {
-                                    thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1]
-                                })
-                            });
-                        }
-
-                        reply(user.terrariums).code(200);
+                        return reply({"error": "User not found"}).code(404);
                     }
+
+                    if (from && to) {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                var temps = [];
+
+                                thingy.temperatures.forEach(function (temp) {
+                                    if(temp.timestamp >= from && temp.timestamp <= to){
+                                        temps.push(temp)
+                                    }
+                                });
+
+                                thingy.temperatures = temps;
+
+                                if(limit){
+                                    thingy.temperatures.splice(limit, thingy.temperatures.length-limit);
+                                }
+                            });
+                        });
+
+                    } else {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
+                            })
+                        });
+                    }
+
+                    reply(user.terrariums).code(200);
                 });
         },
         config: {
@@ -181,10 +247,9 @@ var createPublicAPI = (server)=>{
             description: 'Gets all temperature values from all Thingies in all terrariums of a user',
             validate: {
                 query: {
-                    past: Joi.boolean()
-                    /*from: Joi.date()
-                        .description('Value from a certain date'),
-                    to: Joi.date().description('Value to a certain date')*/
+                    limit: Joi.number().description('Amount of results'),
+                    from: Joi.date().description('Value from a certain date'),
+                    to: Joi.date().description('Value to a certain date')
                 }
             },
             plugins: {
@@ -207,20 +272,43 @@ var createPublicAPI = (server)=>{
             User.findOne({name: "Joe Slowinski"})
                 .select('-terrariums.thingies.temperatures -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
+                    var from = request.query.from;
+                    var to = request.query.to;
+                    var limit = request.query.limit;
+
                     if (err) {
                         console.log(err);
-                    } else {
-                        if (!request.query.past) {
-
-                            user.terrariums.forEach(function (t) {
-                                t.thingies.forEach(function (thingy) {
-                                    thingy.humidities = thingy.humidities[thingy.humidities.length - 1]
-                                })
-                            });
-                        }
-
-                        reply(user.terrariums).code(200);
+                        return reply({"error": "User not found"}).code(404);
                     }
+
+                    if (from && to) {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                var hums = [];
+
+                                thingy.humidities.forEach(function (hum) {
+                                    if(hum.timestamp >= from && hum.timestamp <= to){
+                                        hums.push(hum)
+                                    }
+                                });
+
+                                thingy.humidities = hums;
+
+                                if(limit){
+                                    thingy.humidities.splice(limit, thingy.humidities.length - limit);
+                                }
+                            });
+                        });
+
+                    } else {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
+                            })
+                        });
+                    }
+
+                    reply(user.terrariums).code(200);
                 });
         },
         config: {
@@ -228,10 +316,9 @@ var createPublicAPI = (server)=>{
             description: 'Gets all humidity values from all Thingies in all terrariums of a user',
             validate: {
                 query: {
-                    past: Joi.boolean()
-                    /*from: Joi.date()
-                        .description('Value from a certain date'),
-                    to: Joi.date().description('Value to a certain date')*/
+                    limit: Joi.number().description('Amount of results'),
+                    from: Joi.date().description('Value from a certain date'),
+                    to: Joi.date().description('Value to a certain date')
                 }
             },
             plugins: {
@@ -254,19 +341,43 @@ var createPublicAPI = (server)=>{
             User.findOne({name: "Joe Slowinski"})
                 .select('-terrariums.thingies.humidities -terrariums.thingies.temperatures -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
+                    var from = request.query.from;
+                    var to = request.query.to;
+                    var limit = request.query.limit;
+
                     if (err) {
                         console.log(err);
-                    } else {
-                        if (!request.query.past) {
-                            user.terrariums.forEach(function (t) {
-                                t.thingies.forEach(function (thingy) {
-                                    thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1]
-                                })
-                            });
-                        }
-
-                        reply(user.terrariums).code(200);
+                        return reply({"error": "User not found"}).code(404);
                     }
+
+                    if (from && to) {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                var airQs = [];
+
+                                thingy.airQualities.forEach(function (airQ) {
+                                    if(airQ.timestamp >= from && airQ.timestamp <= to){
+                                        airQs.push(airQ)
+                                    }
+                                });
+
+                                thingy.airQualities = airQs;
+
+                                if(limit){
+                                    thingy.airQualities.splice(limit, thingy.airQualities.length - limit);
+                                }
+                            });
+                        });
+
+                    } else {
+                        user.terrariums.forEach(function (t) {
+                            t.thingies.forEach(function (thingy) {
+                                thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
+                            })
+                        });
+                    }
+
+                    reply(user.terrariums).code(200);
                 });
         },
         config: {
@@ -274,10 +385,9 @@ var createPublicAPI = (server)=>{
             description: 'Gets all airquality values from all Thingies in all terrariums of a user',
             validate: {
                 query: {
-                    past: Joi.boolean()
-                    /*from: Joi.date()
-                        .description('Value from a certain date'),
-                    to: Joi.date().description('Value to a certain date')*/
+                    limit: Joi.number().description('Amount of results'),
+                    from: Joi.date().description('Value from a certain date'),
+                    to: Joi.date().description('Value to a certain date')
                 }
             },
             plugins: {
@@ -342,21 +452,60 @@ var createPublicAPI = (server)=>{
         handler: function (request, reply) {
             User.findOne({name: "Joe Slowinski"}).select("-terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations")
                 .exec(function (err, user) {
-                    if (err) {
-                        reply({'Error': 'User not found'}).code(404);
-                    } else {
-                        if (!request.query.past) {
-                            user.terrariums.forEach(function (t) {
-                                t.thingies.forEach(function (thingy) {
-                                    thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
-                                    thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
-                                    thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
-                                })
-                            });
-                        }
+                    var from = request.query.from;
+                    var to = request.query.to;
+                    var limit = request.query.limit;
+                    var terra = user.terrariums.id(request.params.terrarium_id);
 
-                        reply(user.terrariums.id(request.params.terrarium_id)).code(200);
+                    if (err) {
+                        console.log(err);
+                        return reply({"error": "User not found"}).code(404);
                     }
+
+                    if (from && to) {
+                        terra.thingies.forEach(function (thingy) {
+                            var hums = [];
+                            var temps = [];
+                            var airQs = [];
+
+                            thingy.airQualities.forEach(function (airQ) {
+                                if(airQ.timestamp >= from && airQ.timestamp <= to){
+                                    airQs.push(airQ)
+                                }
+                            });
+
+                            thingy.temperatures.forEach(function (temp) {
+                                if(temp.timestamp >= from && temp.timestamp <= to){
+                                    temps.push(temp)
+                                }
+                            });
+
+                            thingy.humidities.forEach(function (hum) {
+                                if(hum.timestamp >= from && hum.timestamp <= to){
+                                    hums.push(hum)
+                                }
+                            });
+
+                            thingy.humidities = hums;
+                            thingy.temperatures = temps;
+                            thingy.airQualities = airQs;
+
+                            if(limit){
+                                thingy.airQualities.splice(limit, thingy.airQualities.length - limit);
+                                thingy.humidities.splice(limit, thingy.humidities.length - limit);
+                                thingy.temperatures.splice(limit, thingy.temperatures.length - limit);
+                            }
+                        });
+
+                    } else {
+                        terra.thingies.forEach(function (thingy) {
+                            thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
+                            thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
+                            thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
+                        })
+                    }
+
+                    reply(terra).code(200);
                 });
         },
         config: {
@@ -369,10 +518,9 @@ var createPublicAPI = (server)=>{
                         .description('ID of the terrarium I want the values from')
                 },
                 query: {
-                    past: Joi.boolean()
-                    /*from: Joi.date()
-                        .description('Value from a certain date'),
-                    to: Joi.date().description('Value to a certain date')*/
+                    limit: Joi.number().description('Amount of results'),
+                    from: Joi.date().description('Value from a certain date'),
+                    to: Joi.date().description('Value to a certain date')
                 }
             },
             plugins: {
@@ -394,18 +542,40 @@ var createPublicAPI = (server)=>{
             User.findOne({name: "Joe Slowinski"})
                 .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
+                    var from = request.query.from;
+                    var to = request.query.to;
+                    var limit = request.query.limit;
+                    var terra = user.terrariums.id(request.params.terrarium_id);
+
                     if (err) {
                         console.log(err);
-                    } else {
-                        if (!request.query.past) {
-                            user.terrariums.forEach(function (t) {
-                                t.thingies.forEach(function (thingy) {
-                                    thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1]
-                                })
-                            });
-                        }
-                        reply(user.terrariums.id(request.params.terrarium_id)).code(200);
+                        return reply({"error": "User not found"}).code(404);
                     }
+
+                    if (from && to) {
+                        terra.thingies.forEach(function (thingy) {
+                            var temps = [];
+
+                            thingy.temperatures.forEach(function (temp) {
+                                if(temp.timestamp >= from && temp.timestamp <= to){
+                                    temps.push(temp)
+                                }
+                            });
+
+                            thingy.temperatures = temps;
+
+                            if(limit){
+                                thingy.temperatures.splice(limit, thingy.temperatures.length - limit);
+                            }
+                        });
+
+                    } else {
+                        terra.thingies.forEach(function (thingy) {
+                            thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
+                        })
+                    }
+
+                    reply(terra).code(200);
                 });
         },
         config: {
@@ -418,10 +588,9 @@ var createPublicAPI = (server)=>{
                         .description('ID of the terrarium I want the temperature from')
                 },
                 query: {
-                    past: Joi.boolean()
-                    /*from: Joi.date()
-                        .description('Value from a certain date'),
-                    to: Joi.date().description('Value to a certain date')*/
+                    limit: Joi.number().description('Amount of results'),
+                    from: Joi.date().description('Value from a certain date'),
+                    to: Joi.date().description('Value to a certain date')
                 }
             },
             plugins: {
@@ -521,19 +690,40 @@ var createPublicAPI = (server)=>{
             User.findOne({name: "Joe Slowinski"})
                 .select('-terrariums.thingies.temperatures -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
+                    var from = request.query.from;
+                    var to = request.query.to;
+                    var limit = request.query.limit;
+                    var terra = user.terrariums.id(request.params.terrarium_id);
+
                     if (err) {
                         console.log(err);
-                    } else {
-                        if (!request.query.past) {
-                            user.terrariums.forEach(function (t) {
-                                t.thingies.forEach(function (thingy) {
-                                    thingy.humidities = thingy.humidities[thingy.humidities.length - 1]
-                                })
-                            });
-                        }
-
-                        reply(user.terrariums.id(request.params.terrarium_id)).code(200);
+                        return reply({"error": "User not found"}).code(404);
                     }
+
+                    if (from && to) {
+                        terra.thingies.forEach(function (thingy) {
+                            var hums = [];
+
+                            thingy.humidities.forEach(function (hum) {
+                                if(hum.timestamp >= from && hum.timestamp <= to){
+                                    hums.push(hum)
+                                }
+                            });
+
+                            thingy.humidities = hums;
+
+                            if(limit){
+                                thingy.humidities.splice(limit, thingy.humidities.length - limit);
+                            }
+                        });
+
+                    } else {
+                        terra.thingies.forEach(function (thingy) {
+                            thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
+                        })
+                    }
+
+                    reply(terra).code(200);
                 });
         },
         config: {
@@ -546,10 +736,9 @@ var createPublicAPI = (server)=>{
                         .description('ID of the terrarium I want the humidity from')
                 },
                 query: {
-                    past: Joi.boolean()
-                    /*from: Joi.date()
-                        .description('Value from a certain date'),
-                    to: Joi.date().description('Value to a certain date')*/
+                    limit: Joi.number().description('Amount of results'),
+                    from: Joi.date().description('Value from a certain date'),
+                    to: Joi.date().description('Value to a certain date')
                 }
             },
             plugins: {
@@ -571,18 +760,40 @@ var createPublicAPI = (server)=>{
             User.findOne({name: "Joe Slowinski"})
                 .select('-terrariums.thingies.temperatures -terrariums.thingies.humidities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
+                    var from = request.query.from;
+                    var to = request.query.to;
+                    var limit = request.query.limit;
+                    var terra = user.terrariums.id(request.params.terrarium_id);
+
                     if (err) {
                         console.log(err);
-                    } else {
-                        if (!request.query.past) {
-                            user.terrariums.forEach(function (t) {
-                                t.thingies.forEach(function (thingy) {
-                                    thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1]
-                                })
-                            });
-                        }
-                        reply(user.terrariums.id(request.params.terrarium_id)).code(200);
+                        return reply({"error": "User not found"}).code(404);
                     }
+
+                    if (from && to) {
+                        terra.thingies.forEach(function (thingy) {
+                            var airQs = [];
+
+                            thingy.airQualities.forEach(function (airQ) {
+                                if(airQ.timestamp >= from && airQ.timestamp <= to){
+                                    airQs.push(airQ)
+                                }
+                            });
+
+                            thingy.airQualities = airQs;
+
+                            if(limit){
+                                thingy.airQualities.splice(limit, thingy.airQualities.length - limit);
+                            }
+                        });
+
+                    } else {
+                        terra.thingies.forEach(function (thingy) {
+                            thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
+                        })
+                    }
+
+                    reply(terra).code(200);
                 });
         },
         config: {
@@ -595,10 +806,9 @@ var createPublicAPI = (server)=>{
                         .description('ID of the terrarium I want the airquality from')
                 },
                 query: {
-                    past: Joi.boolean()
-                    /*from: Joi.date()
-                        .description('Value from a certain date'),
-                    to: Joi.date().description('Value to a certain date')*/
+                    limit: Joi.number().description('Amount of results'),
+                    from: Joi.date().description('Value from a certain date'),
+                    to: Joi.date().description('Value to a certain date')
                 }
             },
             plugins: {
@@ -622,21 +832,56 @@ var createPublicAPI = (server)=>{
         handler: function (request, reply) {
             User.findOne({name: "Joe Slowinski"}).select("-terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations")
                 .exec(function (err, user) {
+                    var from = request.query.from;
+                    var to = request.query.to;
+                    var limit = request.query.limit;
+                    var thingy = user.terrariums.id(request.params.terrarium_id).thingies.id(request.params.thingy_id);
+
                     if (err) {
-                        reply({'Error': 'User not found'}).code(404);
-                    } else {
-                        if (!request.query.past) {
-                            user.terrariums.forEach(function (t) {
-                                t.thingies.forEach(function (thingy) {
-                                    thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
-                                    thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
-                                    thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
-                                })
-                            });
-                        }
-                        reply(user.terrariums.id(request.params.terrarium_id)
-                            .thingies.id(request.params.thingy_id)).code(200);
+                        console.log(err);
+                        return reply({"error": "User not found"}).code(404);
                     }
+
+                    if (from && to) {
+                        var airQs = [];
+                        var hums = [];
+                        var temps = [];
+
+                        thingy.airQualities.forEach(function (airQ) {
+                            if(airQ.timestamp >= from && airQ.timestamp <= to){
+                                airQs.push(airQ)
+                            }
+                        });
+
+                        thingy.temperatures.forEach(function (temp) {
+                            if(temp.timestamp >= from && temp.timestamp <= to){
+                                temps.push(temp)
+                            }
+                        });
+
+                        thingy.humidities.forEach(function (hum) {
+                            if(hum.timestamp >= from && hum.timestamp <= to){
+                                hums.push(hum)
+                            }
+                        });
+
+                        thingy.airQualities = airQs;
+                        thingy.temperatures = temps;
+                        thingy.humidities = hums;
+
+                        if(limit){
+                            thingy.airQualities.splice(limit, thingy.airQualities.length - limit);
+                            thingy.temperatures.splice(limit, thingy.temperatures.length - limit);
+                            thingy.humidities.splice(limit, thingy.humidities.length - limit);
+                        }
+
+                    } else {
+                        thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
+                        thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
+                        thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
+                    }
+
+                    reply(thingy).code(200);
                 });
         },
         config: {
@@ -652,10 +897,9 @@ var createPublicAPI = (server)=>{
                         .description('ID of the Thingy I want the values from')
                 },
                 query: {
-                    past: Joi.boolean()
-                    /*from: Joi.date()
-                        .description('Value from a certain date'),
-                    to: Joi.date().description('Value to a certain date')*/
+                    limit: Joi.number().description('Amount of results'),
+                    from: Joi.date().description('Value from a certain date'),
+                    to: Joi.date().description('Value to a certain date')
                 }
             },
             plugins: {
@@ -757,20 +1001,36 @@ var createPublicAPI = (server)=>{
             User.findOne({name: "Joe Slowinski"})
                 .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
+                    var from = request.query.from;
+                    var to = request.query.to;
+                    var limit = request.query.limit;
+                    var thingy = user.terrariums.id(request.params.terrarium_id).thingies.id(request.params.thingy_id);
+
                     if (err) {
-                        reply({'Error': 'User not found'}).code(404);
-                    } else {
-                        if (!request.query.past) {
-                            user.terrariums.forEach(function (t) {
-                                t.thingies.forEach(function (thingy) {
-                                    thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
-                                })
-                            });
+                        console.log(err);
+                        return reply({"error": "User not found"}).code(404);
+                    }
+
+                    if (from && to) {
+                        var temps = [];
+
+                        thingy.temperatures.forEach(function (temp) {
+                            if(temp.timestamp >= from && temp.timestamp <= to){
+                                temps.push(temp)
+                            }
+                        });
+
+                        thingy.temperatures = temps;
+
+                        if(limit){
+                            thingy.temperatures.splice(limit, thingy.temperatures.length - limit);
                         }
 
-                        reply(user.terrariums.id(request.params.terrarium_id)
-                            .thingies.id(request.params.thingy_id)).code(200);
+                    } else {
+                        thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
                     }
+
+                    reply(thingy).code(200);
                 });
         },
         config: {
@@ -786,10 +1046,9 @@ var createPublicAPI = (server)=>{
                         .description('ID of the Thingy I want the temperature from')
                 },
                 query: {
-                    past: Joi.boolean()
-                    /*from: Joi.date()
-                        .description('Value from a certain date'),
-                    to: Joi.date().description('Value to a certain date')*/
+                    limit: Joi.number().description('Amount of results'),
+                    from: Joi.date().description('Value from a certain date'),
+                    to: Joi.date().description('Value to a certain date')
                 }
             },
             plugins: {
@@ -811,20 +1070,36 @@ var createPublicAPI = (server)=>{
             User.findOne({name: "Joe Slowinski"})
                 .select('-terrariums.thingies.temperatures -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
+                    var from = request.query.from;
+                    var to = request.query.to;
+                    var limit = request.query.limit;
+                    var thingy = user.terrariums.id(request.params.terrarium_id).thingies.id(request.params.thingy_id);
+
                     if (err) {
-                        reply({'Error': 'User not found'}).code(404);
-                    } else {
-                        if (!request.query.past) {
-                            user.terrariums.forEach(function (t) {
-                                t.thingies.forEach(function (thingy) {
-                                    thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
-                                })
-                            });
+                        console.log(err);
+                        return reply({"error": "User not found"}).code(404);
+                    }
+
+                    if (from && to) {
+                        var hums = [];
+
+                        thingy.humidities.forEach(function (hum) {
+                            if(hum.timestamp >= from && hum.timestamp <= to){
+                                hums.push(hum)
+                            }
+                        });
+
+                        thingy.humidities = hums;
+
+                        if(limit){
+                            thingy.humidities.splice(limit, thingy.humidities.length - limit);
                         }
 
-                        reply(user.terrariums.id(request.params.terrarium_id)
-                            .thingies.id(request.params.thingy_id)).code(200);
+                    } else {
+                        thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
                     }
+
+                    reply(thingy).code(200);
                 });
         },
         config: {
@@ -840,10 +1115,9 @@ var createPublicAPI = (server)=>{
                         .description('ID of the Thingy I want the humidity from')
                 },
                 query: {
-                    past: Joi.boolean()
-                    /*from: Joi.date()
-                        .description('Value from a certain date'),
-                    to: Joi.date().description('Value to a certain date')*/
+                    limit: Joi.number().description('Amount of results'),
+                    from: Joi.date().description('Value from a certain date'),
+                    to: Joi.date().description('Value to a certain date')
                 }
             },
             plugins: {
@@ -865,22 +1139,37 @@ var createPublicAPI = (server)=>{
             User.findOne({name: "Joe Slowinski"})
                 .select('-terrariums.thingies.humidities -terrariums.thingies.temperatures -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
+                    var from = request.query.from;
+                    var to = request.query.to;
+                    var limit = request.query.limit;
+                    var thingy = user.terrariums.id(request.params.terrarium_id).thingies.id(request.params.thingy_id);
+
                     if (err) {
-                        reply({'Error': 'User not found'}).code(404);
-                    } else {
-                        if (!request.query.past) {
-                            user.terrariums.forEach(function (t) {
-                                t.thingies.forEach(function (thingy) {
-                                    thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
-                                })
-                            });
+                        console.log(err);
+                        return reply({"error": "User not found"}).code(404);
+                    }
+
+                    if (from && to) {
+                        var airQs = [];
+
+                        thingy.airQualities.forEach(function (airQ) {
+                            if(airQ.timestamp >= from && airQ.timestamp <= to){
+                                airQs.push(airQ)
+                            }
+                        });
+
+                        thingy.airQualities = airQs;
+
+                        if(limit){
+                            thingy.airQualities.splice(limit, thingy.airQualities.length - limit);
                         }
 
-                        reply(user.terrariums.id(request.params.terrarium_id)
-                            .thingies.id(request.params.thingy_id)).code(200);
+                    } else {
+                        thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
                     }
-                });
 
+                    reply(thingy).code(200);
+                });
         },
         config: {
             tags: ['webclient', 'api'],
@@ -895,10 +1184,9 @@ var createPublicAPI = (server)=>{
                         .description('ID of the Thingy I want the airquality from')
                 },
                 query: {
-                    past: Joi.boolean()
-                    /*from: Joi.date()
-                        .description('Value from a certain date'),
-                    to: Joi.date().description('Value to a certain date')*/
+                    limit: Joi.number().description('Amount of results'),
+                    from: Joi.date().description('Value from a certain date'),
+                    to: Joi.date().description('Value to a certain date')
                 }
             },
             plugins: {
