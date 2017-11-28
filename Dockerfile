@@ -8,8 +8,8 @@ ENV appdir /usr/src/app/
 RUN mkdir -p $appdir
 WORKDIR $appdir
 
-RUN apt-get update
-RUN apt-get build-essential -y
+# Combine RUN apt-get update with apt-get install in the same RUN statement to avoid caching issues (https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/)
+RUN apt-get update && apt-get install -y build-essential
 RUN apt-get clean
 
 RUN npm install -g node-gyp
