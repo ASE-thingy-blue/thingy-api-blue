@@ -3,6 +3,9 @@ const Inert = require('inert');
 const Vision = require('vision');
 const HapiSwagger = require('hapi-swagger');
 const Mongoose = require('mongoose');
+const Constants = require('constants');
+
+var fs = require('fs');
 
 // Load model
 require('./model/makeModel');
@@ -11,10 +14,48 @@ var User = Mongoose.model('User');
 // Create the DB connection
 require("./model/helper/databaseConnection");
 
+var tlsoptions = {
+  key: fs.readFileSync('certs/ThingyAPI.epk'),
+  cert: fs.readFileSync('certs/ThingyAPI.cer'),
+
+
+  // This is necessary if the client uses the self-signed certificate.
+  ca: [ fs.readFileSync('certs/ThingyRootCA.cer') ],
+
+  ciphers: "ECDHE-RSA-AES128-GCM-SHA256:\
+            ECDHE-RSA-AES256-GCM-SHA384:\
+            DHE-RSA-AES128-GCM-SHA256:\
+            DHE-RSA-AES256-GCM-SHA384:\
+            ECDHE-RSA-AES128-SHA256:\
+            DHE-RSA-AES128-SHA256:\
+            ECDHE-RSA-AES256-SHA384:\
+            DHE-RSA-AES256-SHA384:\
+            ECDHE-RSA-AES256-SHA256:\
+            DHE-RSA-AES256-SHA256:\
+            HIGH:\
+            !aNULL:\
+            !eNULL:\
+            !EXPORT:\
+            !DES:\
+            !3DES:\
+            !RC4:\
+            !MD5:\
+            !PSK:\
+            !SRP:\
+            !CAMELLIA:\
+            !SHA1:",
+  honorCipherOrder: true,
+  // Disable SSL 2, SSL 3, TLS 1.0 and TLS 1.1
+  secureOptions: Constants.SSL_OP_NO_SSLv2 | Constants.SSL_OP_NO_SSLv3 | Constants.SSL_OP_NO_TLSv1 | Constants.SSL_OP_NO_TLSv1_1,
+  // Force TLS version 2
+  secureProtocol: 'TLSv1_2_server_method'
+};
+
 const server = new Hapi.Server();
 server.connection({
     address: '0.0.0.0', // Listen to all available network interfaces
     port: 8080,
+    tls: tlsoptions,
     routes: {cors: true}
 });
 
@@ -41,7 +82,6 @@ server.views({
     relativeTo: __dirname,
     path: __dirname + '/templates'
 });
-
 
 /***********************************************************************************************************************
  *** START PUBLIC API
@@ -97,7 +137,7 @@ server.route({
             {
                 if (isValidPassword)
                 {
-                    reply({success: true}).code(200);
+                    return reply({success: true}).code(200);
                 }
                 else
                 {
@@ -127,7 +167,7 @@ server.route({
             // Save the user
             newUser.save(function(err) {
                 if (err) {
-                    return reply({success: false, message: 'Error creating new user.'}).code(400);
+                    return reply({success: false, message: 'Error creating new user.'}).code(500);
                 }
                 reply({success: true, message: 'Successfully created new user.'}).code(201);
             });

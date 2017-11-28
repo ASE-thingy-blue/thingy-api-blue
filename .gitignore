@@ -20,6 +20,11 @@ node_modules/
 jspm_packages/
 package-lock.json
 
+certs/
+*.cer
+*.epk
+*.pem
+
 #eclipse meta
 /.project
 /.settings

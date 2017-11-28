@@ -1,9 +1,10 @@
 # This Docker compose file starts the API server and its associated MongoDB.
 # The following commands have to be run from inside the project folder.
-# Start service: docker-compose -f testing.yml up -d
-# Restart service: docker-compose -f testing.yml restart <service name>
+# Omit the service name to execute the command for all services.
 # Possible service names are: api, mongo
-# Stop service: docker-compose -f testing.yml down
+# Start service: docker-compose -f testing.yml up <service name> -d
+# Restart service: docker-compose -f testing.yml restart <service name>
+# Stop service: docker-compose -f testing.yml down <service name>
 
 version: '3'
 services:
@@ -15,5 +16,8 @@ services:
      - ".:/usr/src/app/"
   mongo:
     image: "mongo"
+    command: --sslMode requireSSL --sslDisabledProtocols TLS1_0,TLS1_1 --sslCAFile /mnt/ThingyRootCA.pem --sslPEMKeyFile /mnt/ThingyDB.pem
     ports:
      - "27017:27017"
+    volumes:
+     - "./certs/:/mnt/"

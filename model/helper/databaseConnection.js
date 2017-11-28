@@ -10,12 +10,12 @@ var create = function()
 	if (isDocker())
 	{
 		console.log('Running inside a Docker container');
-		dbUrl = 'mongodb://mongo:27017/thingy-api-blue';
+		dbUrl = 'mongodb://mongo:27017/thingy-api-blue?ssl=true';
 	}
 	else
 	{
 		console.log('NOT running inside a Docker container');
-		dbUrl = 'mongodb://localhost:27017/thingy-api-blue';
+		dbUrl = 'mongodb://127.0.0.1:27017/thingy-api-blue?ssl=true';
 	}
 
 	console.log("DB URL used: " + dbUrl);
@@ -25,6 +25,11 @@ var create = function()
 		useMongoClient: true,
 		reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
 		reconnectInterval: 500, // Reconnect every 500ms
+		sslValidate: true,
+		checkServerIdentity: true,
+		sslCA: [ fs.readFileSync('certs/ThingyRootCA.cer') ],
+		sslCert: fs.readFileSync('certs/ThingyAPI.cer'),
+		sslKey: fs.readFileSync('certs/ThingyAPI.epk')
 	};
 
 	// The wait loop for the DB connection
