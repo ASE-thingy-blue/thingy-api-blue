@@ -18,14 +18,14 @@ var thingyIdSchema = Joi.string().required().description('The Thingy UUID');
 var sensorIdSchema = Joi.string().required().description('The Thingy Sensor');
 
 /*
- * Reads a unit from the db by name or creates it if it does not exist
+ * Reads a unit from the DB by name or creates it if it does not exist
  */
 let getOrCreateUnit = (name, short, reply) => {
     var result;
     Unit.find({name: name}, function (err, unit) {
-    if (err) {
-	reply({"Error": "Unit not in database"}).code(404);
-    } else {
+        if (err) {
+            return reply({"Error": "Unit not in database"}).code(500);
+        }
         if (unit === null) {
             var newUnit = new Unit({name: name, short: short});
             newUnit.save();
@@ -33,14 +33,12 @@ let getOrCreateUnit = (name, short, reply) => {
         } else {
             result = unit;
         }
-    }
-    return result;
-});
-
+        return result;
+    });
 }
 
 var createThingyAPI = (server) => {
-    server.route({
+        server.route({
         method: 'GET',
         path: '/thingy/{thingy_id}/setup',
         handler: function (request, reply) {
@@ -89,7 +87,7 @@ var createThingyAPI = (server) => {
                     reply({'Error': 'Database error'}).code(500)
                 } else {
                     if (user === null) {
-                        console.log('create new user');
+                        console.log('Create new user');
                         var newUser = new User({name: data.user});
                         var terri = new Terri({name: "My first terrarium"});
                         var thingy = new Thingy({macAddress: data.thingy, callbackAddress: data.cb});
@@ -168,11 +166,11 @@ var createThingyAPI = (server) => {
 
             Thingy.findOne({macAddress: thingyId}, function (err, thingy) {
                 if (err) {
-                    reply({
+                    // Stop execution
+                    return reply({
                         "Error": "This Thingy is not in our database",
                         "thingy": thingyId
                     }).code(404);
-                    // stop execution
                 }
 
                 var data = request.payload;
@@ -224,7 +222,6 @@ var createThingyAPI = (server) => {
                         thingy.save();
                         break;
                 }
-
             });
 
             reply({success: true}).code(200);

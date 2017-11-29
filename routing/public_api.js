@@ -5,7 +5,7 @@ var Thingy = Mongoose.model('Thingy');
 var User = Mongoose.model('User');
 var Unit = Mongoose.model('Unit');
 
-var createPublicAPI = (server)=>{
+var createPublicAPI = (server) => {
     /**
      * ALL TERRARIUMS
      */
@@ -18,7 +18,8 @@ var createPublicAPI = (server)=>{
                 .select('terrariums._id terrariums.name terrariums.description')
                 .exec(function (err, user) {
                     if (err) {
-                        console.log(err);
+                        console.error(err);
+                        return reply({"Error": "User not found"}).code(404);
                     } else {
                         reply(user).code(200);
                     }
@@ -53,8 +54,8 @@ var createPublicAPI = (server)=>{
                     var limit = request.query.limit;
 
                     if (err) {
-                        console.log(err);
-                        return reply({"error": "User not found"}).code(404);
+                        console.error(err);
+                        return reply({"Error": "User not found"}).code(404);
                     }
 
                     if (from && to) {
@@ -138,7 +139,8 @@ var createPublicAPI = (server)=>{
             User.findOne({name: "Joe Slowinski"}).select('-terrariums.thingies.humidities -terrariums.thingies.temperatures -terrariums.thingies.airQualities -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
                     if (err) {
-                        console.log(err);
+                        console.error(err);
+                        return reply({'Error': 'User not found'}).code(404);
                     } else {
                         reply(user.terrariums).code(200);
                     }
@@ -171,7 +173,8 @@ var createPublicAPI = (server)=>{
             User.findOne({name: "Joe Slowinski"}).select('-terrariums.thingies.humidities -terrariums.thingies.temperatures -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration')
                 .exec(function (err, user) {
                     if (err) {
-                        console.log(err);
+                        console.error(err);
+                        return reply({'Error': 'User not found'}).code(404);
                     } else {
                         reply(user.terrariums).code(200);
                     }
@@ -208,8 +211,8 @@ var createPublicAPI = (server)=>{
                     var limit = request.query.limit;
 
                     if (err) {
-                        console.log(err);
-                        return reply({"error": "User not found"}).code(404);
+                        console.error(err);
+                        return reply({"Error": "User not found"}).code(404);
                     }
 
                     if (from && to) {
@@ -277,8 +280,8 @@ var createPublicAPI = (server)=>{
                     var limit = request.query.limit;
 
                     if (err) {
-                        console.log(err);
-                        return reply({"error": "User not found"}).code(404);
+                        console.error(err);
+                        return reply({"Error": "User not found"}).code(404);
                     }
 
                     if (from && to) {
@@ -346,8 +349,8 @@ var createPublicAPI = (server)=>{
                     var limit = request.query.limit;
 
                     if (err) {
-                        console.log(err);
-                        return reply({"error": "User not found"}).code(404);
+                        console.error(err);
+                        return reply({"Error": "User not found"}).code(404);
                     }
 
                     if (from && to) {
@@ -418,7 +421,8 @@ var createPublicAPI = (server)=>{
                     'terrariums.thingies.description')
                 .exec(function (err, user) {
                     if (err) {
-                        reply({'Error': 'User not found'}).code(404);
+                        console.error(err);
+                        return reply({'Error': 'User not found'}).code(404);
                     } else {
                         reply(user.terrariums.id(request.params.terrarium_id)).code(200);
                     }
@@ -458,8 +462,8 @@ var createPublicAPI = (server)=>{
                     var terra = user.terrariums.id(request.params.terrarium_id);
 
                     if (err) {
-                        console.log(err);
-                        return reply({"error": "User not found"}).code(404);
+                        console.error(err);
+                        return reply({"Error": "User not found"}).code(404);
                     }
 
                     if (from && to) {
@@ -548,8 +552,8 @@ var createPublicAPI = (server)=>{
                     var terra = user.terrariums.id(request.params.terrarium_id);
 
                     if (err) {
-                        console.log(err);
-                        return reply({"error": "User not found"}).code(404);
+                        console.error(err);
+                        return reply({"Error": "User not found"}).code(404);
                     }
 
                     if (from && to) {
@@ -613,7 +617,8 @@ var createPublicAPI = (server)=>{
                 .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.temperatures -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
                     if (err) {
-                        console.log(err);
+                        console.error(err);
+                        return reply({'Error': 'User not found'}).code(404);
                     } else {
                         reply(user.terrariums.id(request.params.terrarium_id)).code(200);
                     }
@@ -652,7 +657,8 @@ var createPublicAPI = (server)=>{
                 .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.temperatures -terrariums.thingies.targetConfiguration')
                 .exec(function (err, user) {
                     if (err) {
-                        console.log(err);
+                        console.error(err);
+                        return reply({'Error': 'User not found'}).code(404);
                     } else {
                         reply(user.terrariums.id(request.params.terrarium_id)).code(200);
                     }
@@ -696,8 +702,8 @@ var createPublicAPI = (server)=>{
                     var terra = user.terrariums.id(request.params.terrarium_id);
 
                     if (err) {
-                        console.log(err);
-                        return reply({"error": "User not found"}).code(404);
+                        console.error(err);
+                        return reply({"Error": "User not found"}).code(404);
                     }
 
                     if (from && to) {
@@ -766,8 +772,8 @@ var createPublicAPI = (server)=>{
                     var terra = user.terrariums.id(request.params.terrarium_id);
 
                     if (err) {
-                        console.log(err);
-                        return reply({"error": "User not found"}).code(404);
+                        console.error(err);
+                        return reply({"Error": "User not found"}).code(404);
                     }
 
                     if (from && to) {
@@ -838,8 +844,8 @@ var createPublicAPI = (server)=>{
                     var thingy = user.terrariums.id(request.params.terrarium_id).thingies.id(request.params.thingy_id);
 
                     if (err) {
-                        console.log(err);
-                        return reply({"error": "User not found"}).code(404);
+                        console.error(err);
+                        return reply({"Error": "User not found"}).code(404);
                     }
 
                     if (from && to) {
@@ -922,7 +928,8 @@ var createPublicAPI = (server)=>{
                 .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.temperatures -terrariums.thingies.thresholdViolations')
                 .exec(function (err, user) {
                     if (err) {
-                        reply({'Error': 'User not found'}).code(404);
+                        console.error(err);
+                        return reply({'Error': 'User not found'}).code(404);
                     } else {
                         reply(user.terrariums.id(request.params.terrarium_id)
                             .thingies.id(request.params.thingy_id)).code(200);
@@ -962,7 +969,8 @@ var createPublicAPI = (server)=>{
                 .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.temperatures -terrariums.thingies.targetConfiguration')
                 .exec(function (err, user) {
                     if (err) {
-                        reply({'Error': 'User not found'}).code(404);
+                        console.error(err);
+                        return reply({'Error': 'User not found'}).code(404);
                     } else {
                         reply(user.terrariums.id(request.params.terrarium_id)
                             .thingies.id(request.params.thingy_id)).code(200);
@@ -1007,8 +1015,8 @@ var createPublicAPI = (server)=>{
                     var thingy = user.terrariums.id(request.params.terrarium_id).thingies.id(request.params.thingy_id);
 
                     if (err) {
-                        console.log(err);
-                        return reply({"error": "User not found"}).code(404);
+                        console.error(err);
+                        return reply({"Error": "User not found"}).code(404);
                     }
 
                     if (from && to) {
@@ -1076,8 +1084,8 @@ var createPublicAPI = (server)=>{
                     var thingy = user.terrariums.id(request.params.terrarium_id).thingies.id(request.params.thingy_id);
 
                     if (err) {
-                        console.log(err);
-                        return reply({"error": "User not found"}).code(404);
+                        console.error(err);
+                        return reply({"Error": "User not found"}).code(404);
                     }
 
                     if (from && to) {
@@ -1145,8 +1153,8 @@ var createPublicAPI = (server)=>{
                     var thingy = user.terrariums.id(request.params.terrarium_id).thingies.id(request.params.thingy_id);
 
                     if (err) {
-                        console.log(err);
-                        return reply({"error": "User not found"}).code(404);
+                        console.error(err);
+                        return reply({"Error": "User not found"}).code(404);
                     }
 
                     if (from && to) {
