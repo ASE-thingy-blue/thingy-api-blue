@@ -100,7 +100,7 @@ var createThingyAPI = (server) => {
                         newUser.terrariums.push(terri);
                         user = newUser;
                     } else {
-                        Thingy.findOne({_id: thingyId}, function (err, thingy) {
+                        Thingy.findOne({macAddress: thingyId}, function (err, thingy) {
                             if (thingy === null) {
                                 console.log('Create a new Thingy');
                                 var newThingy = new Thingy({macAddress: data.thingy, callbackAddress: data.cb});

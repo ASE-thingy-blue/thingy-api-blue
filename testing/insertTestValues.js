@@ -197,7 +197,7 @@ config1.thresholds.push(threshold3);
 promises.push(config1.save());
 
 // Thingy
-var thingy1 = new Thingy({macAddress: "123", description: "test thingy1", targetConfiguration: config1});
+var thingy1 = new Thingy({macAddress: "d35a51c0de9c", description: "test thingy1", targetConfiguration: config1});
 thingy1.temperatures.push(temp1);
 thingy1.temperatures.push(temp2);
 thingy1.temperatures.push(temp3);
