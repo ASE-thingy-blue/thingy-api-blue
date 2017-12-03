@@ -1,15 +1,21 @@
 <div id="page" class="maincontent">
 
-    <h1>Termon - Terrarium</h1>
+    <h1>Terrariums</h1>
+    <br/>
 
-    <div class="row">
-        <div class="col-lg-12">
+    <div ng-if="!terDetails && !thingyDetails" class="row">
+        <div ng-repeat="terrarium in terrariums" class="col-lg-6">
             <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Hello World!</h3>
+                <div ng-click="showTerDetails(terrarium)" class="panel-heading">
+                    <h3 class="panel-title">{{terrarium.name}}</h3>
                 </div>
                 <div class="panel-body">
-                    <p>Lorem ipsum...</p>
+                    <h3>Thingies</h3>
+                    <ul>
+                        <li ng-repeat="thingy in terrarium.thingies">
+                            <a ng-click="showThingyDetails(terrarium, thingy)">{{thingy.description}} ({{thingy.macAddress}})</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
