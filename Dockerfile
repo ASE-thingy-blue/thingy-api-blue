@@ -12,6 +12,9 @@ WORKDIR $appdir
 RUN apt-get update && apt-get install -y build-essential
 RUN apt-get clean
 
+# Copy required project files (/usr/src/app/ is overwritten by development.yml)
+COPY . .
+
 RUN npm install -g node-gyp
 RUN npm install
 

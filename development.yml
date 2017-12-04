@@ -2,16 +2,18 @@
 # The following commands have to be run from inside the project folder.
 # Omit the service name to execute the command for all services.
 # Possible service names are: api, mongo
-# Start service: docker-compose -f testing.yml up <service name> -d
-# Restart service: docker-compose -f testing.yml restart <service name>
-# Stop service: docker-compose -f testing.yml down <service name>
+# Start service: docker-compose -f development.yml up <service name> -d
+# Restart service: docker-compose -f development.yml restart <service name>
+# Stop service: docker-compose -f development.yml down <service name>
 
 version: '3'
 services:
   api:
     build: .
     ports:
-     - "7443:8080"
+     - "8080:8080"
+    volumes:
+     - ".:/usr/src/app/"
   mongo:
     image: "mongo"
     command: --sslMode requireSSL --sslDisabledProtocols TLS1_0,TLS1_1 --sslCAFile /mnt/ThingyRootCA.pem --sslPEMKeyFile /mnt/ThingyDB.pem
