@@ -1,4 +1,5 @@
 const Mongoose = require('mongoose');
+Mongoose.Promise = require('bluebird');
 const Argon2 = require('argon2');
 
 var userSchema = Mongoose.Schema({
