@@ -1,4 +1,5 @@
 const Mongoose = require('mongoose');
+const mailer = require('./mailer');
 
 let ThresholdViolation = Mongoose.model('ThresholdViolation');
 
@@ -10,6 +11,7 @@ let ThresholdViolation = Mongoose.model('ThresholdViolation');
  */
 let processNewViolation = function(thingy, violations) {
     // TODO: mail and other triggers here
+	//mailer.sendMail("s.hermidas@gmail.com", "Test Subject", "Hello\n\nThis is a Test Mail.\n\nRegards\nTermon API Service", "Hello<br/><br/>This is a Test Mail.<br/><br/>Regards<br/>Termon API Service")
 }
 
 /**
