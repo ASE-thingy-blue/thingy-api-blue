@@ -26,7 +26,7 @@ var create = function()
 		reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
 		reconnectInterval: 500, // Reconnect every 500ms
 		sslValidate: true,
-		checkServerIdentity: false,
+		checkServerIdentity: true,
 		sslCA: [ fs.readFileSync('certs/ThingyRootCA.cer') ],
 		sslCert: fs.readFileSync('certs/ThingyAPI.cer'),
 		sslKey: fs.readFileSync('certs/ThingyAPI.epk')
