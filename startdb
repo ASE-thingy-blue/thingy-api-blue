@@ -1,0 +1,2 @@
+#!/bin/sh
+sudo mongod --sslMode requireSSL --sslDisabledProtocols TLS1_0,TLS1_1 --sslCAFile certs/ThingyRootCA.pem --sslPEMKeyFile certs/ThingyDB.pem
