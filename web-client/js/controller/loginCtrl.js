@@ -18,7 +18,7 @@ termonWebClient.controller('loginCtrl', ['$scope', 'authService', '$state', func
             $state.go('private.home');
         }, function(errMsg) {
             $scope.loginError = 'Login failed: ' + errMsg;
-            console.log('error');
+            console.log('Error: ' + errMsg);
         });
     };
 
