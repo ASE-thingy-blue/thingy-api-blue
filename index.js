@@ -4,8 +4,8 @@ const Vision = require('vision');
 const HapiSwagger = require('hapi-swagger');
 const Mongoose = require('mongoose');
 const Constants = require('constants');
-
-var fs = require('fs');
+const Fs = require('fs');
+const Path = require('path');
 
 // Load model
 require('./model/makeModel');
@@ -15,12 +15,11 @@ var User = Mongoose.model('User');
 require("./model/helper/databaseConnection");
 
 var tlsoptions = {
-  key: fs.readFileSync('certs/ThingyAPI.epk'),
-  cert: fs.readFileSync('certs/ThingyAPI.cer'),
-
+  key: Fs.readFileSync(Path.join('certs', 'ThingyAPI.epk')),
+  cert: Fs.readFileSync(Path.join('certs', 'ThingyAPI.cer')),
 
   // This is necessary if the client uses the self-signed certificate.
-  ca: [ fs.readFileSync('certs/ThingyRootCA.cer') ],
+  ca: [ Fs.readFileSync(Path.join('certs', 'ThingyRootCA.cer')) ],
 
   ciphers: "ECDHE-RSA-AES128-GCM-SHA256:\
             ECDHE-RSA-AES256-GCM-SHA384:\
@@ -52,6 +51,7 @@ var tlsoptions = {
 };
 
 const server = new Hapi.Server();
+
 server.connection({
     address: '0.0.0.0', // Listen to all available network interfaces
     port: 8080,
@@ -80,7 +80,7 @@ server.views({
         html: require('ejs')
     },
     relativeTo: __dirname,
-    path: __dirname + '/templates'
+    path: Path.join(__dirname, 'templates')
 });
 
 /***********************************************************************************************************************

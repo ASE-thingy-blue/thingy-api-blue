@@ -1,6 +1,7 @@
 const Mongoose = require("mongoose");
 const isDocker = require('is-docker');
-var fs = require('fs');
+const Fs = require('fs');
+const Path = require('path');
 
 var create = function()
 {
@@ -27,9 +28,9 @@ var create = function()
 		reconnectInterval: 500, // Reconnect every 500ms
 		sslValidate: true,
 		checkServerIdentity: true,
-		sslCA: [ fs.readFileSync('certs/ThingyRootCA.cer') ],
-		sslCert: fs.readFileSync('certs/ThingyAPI.cer'),
-		sslKey: fs.readFileSync('certs/ThingyAPI.epk')
+		sslCA: [ Fs.readFileSync(Path.join('certs', 'ThingyRootCA.cer')) ],
+		sslCert: Fs.readFileSync(Path.join('certs', 'ThingyAPI.cer')),
+		sslKey: Fs.readFileSync(Path.join('certs', 'ThingyAPI.epk'))
 	};
 
 	// The wait loop for the DB connection
