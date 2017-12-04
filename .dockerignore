@@ -4,3 +4,6 @@ README.md
 Dockerfile
 .dockerignore
 node_modules/
+production.yml
+testing.yml
+development.yml

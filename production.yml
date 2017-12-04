@@ -11,7 +11,9 @@ services:
   api:
     image: "aseteamblue/thingy-api-blue-docker"
     ports:
-     - "9000:8080"
+     - "443:8080"
+    volumes:
+     - "/etc/pki/tls/private/:/usr/src/app/certs/"
   mongo:
     image: "mongo"
     command: --sslMode requireSSL --sslDisabledProtocols TLS1_0,TLS1_1 --sslCAFile /mnt/ThingyRootCA.pem --sslPEMKeyFile /mnt/ThingyDB.pem
