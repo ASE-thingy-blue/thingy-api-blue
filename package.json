@@ -18,6 +18,7 @@
     "inert": "^4.2.1",
     "is-docker": "^1.1.0",
     "joi": "^13.0.1",
+    "jwt-simple": "^0.5.1",
     "mongoose": "^4.12.4",
     "nodemailer": "^4.4.0",
     "vision": "^4.1.1"

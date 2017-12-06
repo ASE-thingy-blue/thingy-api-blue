@@ -4,6 +4,7 @@ const Vision = require('vision');
 const HapiSwagger = require('hapi-swagger');
 const Mongoose = require('mongoose');
 const Constants = require('constants');
+const Jwt = require('jwt-simple');
 const Fs = require('fs');
 const Path = require('path');
 
@@ -13,6 +14,16 @@ var User = Mongoose.model('User');
 
 // Create the DB connection
 require("./model/helper/databaseConnection");
+
+// Quirk to have synchronously loaded modules with require() that use return values loaded asynchronously
+// It is not possible to write:
+// const Session = require('./routing/session');
+// Session is always undefined here because this line will get evaluated before that value is available
+var Session;
+require('./routing/session').then(hashKey =>
+{
+    Session = { 'tokenKey' : hashKey };
+});
 
 var tlsoptions = {
   key: Fs.readFileSync(Path.join('certs', 'ThingyAPI.epk')),
@@ -96,6 +107,7 @@ server.route({
     config: {
         tags: ['webclient'],
         description: 'gets the index',
+        auth: false,
         plugins: {
             'hapi-swagger': {
                 responses: {
@@ -122,6 +134,7 @@ server.route({
 server.route({
     method: 'POST',
     path: '/authenticate',
+    config: { auth: false },
     handler: function (request, reply)
     {
         User.findOne({name: request.payload.name}, function(err, user)
@@ -137,7 +150,12 @@ server.route({
             {
                 if (isValidPassword)
                 {
-                    return reply({success: true}).code(200);
+                    // If user is found and password is correct, create a token
+                    let expires = (Date.now() / 1000) + 60 * 30; // Expire in 30 minutes
+                    let nbf = Date.now() / 1000;
+                    var token = Jwt.encode({nbf: nbf, exp: expires, "userID" : user._id, "userName" : user.name, "mailAddress" : user.mailAddress}, Session.tokenKey);
+                    // Return the information including token as JSON
+                    return reply({success: true, token: `${token}`}).code(200);
                 }
                 else
                 {
@@ -151,6 +169,7 @@ server.route({
 server.route({
     method: 'POST',
     path: '/signup',
+    config: { auth: false },
     handler: function(request, reply) {
         if (!request.payload.name || !request.payload.password) {
           reply({success: false, message: 'Please provide username and password.'}).code(400);
