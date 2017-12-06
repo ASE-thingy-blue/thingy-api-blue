@@ -11,11 +11,28 @@
 
 import test from 'ava';
 import server from '../index';
-/*const {child} = require('child_process');
 
-test.before(
-    child.execSync("node ../testvalues/insertTestValues.js")
-);*/
+let token;
+
+//inject test data to the database
+//and makes the token available as class variable
+test.before(t => {
+    //require('child_process').execSync("node testvalues/insertTestValues.js");
+
+    const request = Object.assign({}, {
+        method: 'POST',
+        url: '/authenticate',
+        payload: {
+            name: "Joe Slowinski",
+            password: "testpw"
+        }
+    });
+
+    return server.inject(request)
+        .then(response => {
+            token = response.result.token;
+        });
+});
 
 //apis that dont need authentication
 test('Test if the home is working', t => {
@@ -33,16 +50,21 @@ test('Test if the home is working', t => {
 
 
 //api with authentication
-test('Test if Joe has two terrariums', t => {
+test('Test authentication', t => {
     const request = Object.assign({}, {
-        method: 'GET',
-        url: '/',
-        payload: {}
+        method: 'POST',
+        url: '/authenticate',
+        payload: {
+            name: "Joe Slowinski",
+            password: "testpw"
+        }
     });
 
     return server.inject(request)
         .then(response => {
-            t.is(response.statusCode, 200, 'status code is 200 so the home is available');
+            token = response.result.token;
+            t.is(response.statusCode, 200) &&
+            t.true(response.result.success);
         });
 });
 
