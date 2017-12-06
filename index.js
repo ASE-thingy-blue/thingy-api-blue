@@ -202,7 +202,10 @@ require('./routing/public_api')(server);
  **********************************************************************************************************************/
 require('./routing/thingy_api')(server);
 
+if (!module.parent) {
+    server.start((err) => {
+        console.log('Server running at: ', server.info.uri);
+    });
+}
 
-server.start((err) => {
-    console.log('Server running at: ', server.info.uri);
-});
+module.exports = server;

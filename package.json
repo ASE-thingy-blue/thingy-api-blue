@@ -22,5 +22,11 @@
     "mongoose": "^4.12.4",
     "nodemailer": "^4.4.0",
     "vision": "^4.1.1"
+  },
+  "scripts": {
+    "test": "ava"
+  },
+  "devDependencies": {
+    "ava": "^0.24.0"
   }
 }
