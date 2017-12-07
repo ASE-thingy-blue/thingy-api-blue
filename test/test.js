@@ -68,3 +68,20 @@ test('Test authentication', t => {
         });
 });
 
+//Check therrariums
+test('Test amount of terrariums', t => {
+    const request = Object.assign({}, {
+        method: 'GET',
+        url: '/terrariums',
+        payload: {},
+        headers: {
+            authorization: token
+        }
+    });
+
+    return server.inject(request)
+        .then(response => {
+            t.is(response.result.terrariums.length, 2);
+        });
+});
+
