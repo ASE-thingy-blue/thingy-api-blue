@@ -204,7 +204,7 @@ var createPublicAPI = (server) => {
             tags: ['webclient', 'api'],
             description: 'Gets the configuration from all Thingies in all the terrariums of a user',
             validate: {
-                
+
             },
             plugins: {
                 'hapi-swagger': {
@@ -217,7 +217,7 @@ var createPublicAPI = (server) => {
             }
         }
     });
-    
+
     server.route({
         method: 'GET',
         path: '/terrariums/violations',
@@ -246,7 +246,7 @@ var createPublicAPI = (server) => {
             tags: ['webclient', 'api'],
             description: 'Gets all threshold violations from all Thingies in all terrariums of a user',
             validate: {
-                
+
             },
             plugins: {
                 'hapi-swagger': {
@@ -521,9 +521,17 @@ var createPublicAPI = (server) => {
                         if (err) {
                             console.error(err);
                             return reply({'Error': 'User not found'}).code(404);
-                        } else {
-                            reply(user.terrariums.id(request.params.terrarium_id)).code(200);
                         }
+
+                        let terra = user.terrariums.id(request.params.terrarium_id);
+                        if (!terra) {
+                            return reply({
+                                "error": "User has no terrarium with the given id",
+                                id: request.params.terrarium_id
+                            }).code(401);
+                        }
+
+                        reply(terra).code(200);
                 });
             });
         },
@@ -567,7 +575,12 @@ var createPublicAPI = (server) => {
                         var from = request.query.from;
                         var to = request.query.to;
                         var limit = request.query.limit;
-                        var terra = user.terrariums.id(request.params.terrarium_id);
+                        let terra = user.terrariums.id(request.params.terrarium_id);
+
+                        if(!terra){
+                            return reply({"error": "User has no terrarium with the given id",
+                                id: request.params.terrarium_id}).code(401);
+                        }
 
                         if (err) {
                             console.error(err);
@@ -669,6 +682,11 @@ var createPublicAPI = (server) => {
                         var limit = request.query.limit;
                         var terra = user.terrariums.id(request.params.terrarium_id);
 
+                        if(!terra){
+                            return reply({"error": "User has no terrarium with the given id",
+                                id: request.params.terrarium_id}).code(401);
+                        }
+
                         if (err) {
                             console.error(err);
                             return reply({"Error": "User not found"}).code(404);
@@ -727,7 +745,7 @@ var createPublicAPI = (server) => {
             }
         }
     });
-    
+
     server.route({
         method: 'GET',
         path: '/terrarium/{terrarium_id}/configurations',
@@ -747,9 +765,17 @@ var createPublicAPI = (server) => {
                         if (err) {
                             console.error(err);
                             return reply({'Error': 'User not found'}).code(404);
-                        } else {
-                            reply(user.terrariums.id(request.params.terrarium_id)).code(200);
                         }
+
+                        let terra = user.terrariums.id(request.params.terrarium_id);
+                        if (!terra) {
+                            return reply({
+                                "error": "User has no terrarium with the given id",
+                                id: request.params.terrarium_id
+                            }).code(401);
+                        }
+
+                        reply(terra).code(200);
                 });
             });
         },
@@ -763,7 +789,7 @@ var createPublicAPI = (server) => {
                         .description('ID of the terrarium I want the configurations from')
                 },
                 query: {
-                    
+
                 }
             },
             plugins: {
@@ -777,7 +803,7 @@ var createPublicAPI = (server) => {
             }
         }
     });
-    
+
     server.route({
         method: 'GET',
         path: '/terrarium/{terrarium_id}/violations',
@@ -797,9 +823,16 @@ var createPublicAPI = (server) => {
                         if (err) {
                             console.error(err);
                             return reply({'Error': 'User not found'}).code(404);
-                        } else {
-                            reply(user.terrariums.id(request.params.terrarium_id)).code(200);
                         }
+                        let terra = user.terrariums.id(request.params.terrarium_id);
+                        if (!terra) {
+                            return reply({
+                                "error": "User has no terrarium with the given id",
+                                id: request.params.terrarium_id
+                            }).code(401);
+                        }
+
+                        reply(user.terrariums.id(request.params.terrarium_id)).code(200);
                 });
             });
         },
@@ -813,7 +846,7 @@ var createPublicAPI = (server) => {
                         .description('ID of the terrarium I want the threshold violations from')
                 },
                 query: {
-                    
+
                 }
             },
             plugins: {
@@ -847,7 +880,11 @@ var createPublicAPI = (server) => {
                         var from = request.query.from;
                         var to = request.query.to;
                         var limit = request.query.limit;
-                        var terra = user.terrariums.id(request.params.terrarium_id);
+                        let terra = user.terrariums.id(request.params.terrarium_id);
+                        if(!terra){
+                            return reply({"error": "User has no terrarium with the given id",
+                                id: request.params.terrarium_id}).code(401);
+                        }
 
                         if (err) {
                             console.error(err);
@@ -927,7 +964,11 @@ var createPublicAPI = (server) => {
                         var from = request.query.from;
                         var to = request.query.to;
                         var limit = request.query.limit;
-                        var terra = user.terrariums.id(request.params.terrarium_id);
+                        let terra = user.terrariums.id(request.params.terrarium_id);
+                        if(!terra){
+                            return reply({"error": "User has no terrarium with the given id",
+                                id: request.params.terrarium_id}).code(401);
+                        }
 
                         if (err) {
                             console.error(err);
@@ -1009,7 +1050,17 @@ var createPublicAPI = (server) => {
                         var from = request.query.from;
                         var to = request.query.to;
                         var limit = request.query.limit;
-                        var thingy = user.terrariums.id(request.params.terrarium_id).thingies.id(request.params.thingy_id);
+                        let terra = user.terrariums.id(request.params.terrarium_id);
+                        if(!terra){
+                            return reply({"error": "User has no terrarium with the given id",
+                                id: request.params.terrarium_id}).code(401);
+                        }
+
+                        let thingy = terra.thingies.id(request.params.thingy_id);
+                        if(!thingy){
+                            return reply({"error": "Terrarium has no thingy with the given id",
+                                id: request.params.thingy_id}).code(401);
+                        }
 
                         if (err) {
                             console.error(err);
@@ -1109,8 +1160,19 @@ var createPublicAPI = (server) => {
                             console.error(err);
                             return reply({'Error': 'User not found'}).code(404);
                         } else {
-                            reply(user.terrariums.id(request.params.terrarium_id)
-                                .thingies.id(request.params.thingy_id)).code(200);
+                            let terra = user.terrariums.id(request.params.terrarium_id);
+                            if(!terra){
+                                return reply({"error": "User has no terrarium with the given id",
+                                    id: request.params.terrarium_id}).code(401);
+                            }
+
+                            let thingy = terra.thingies.id(request.params.thingy_id);
+                            if(!thingy){
+                                return reply({"error": "Terrarium has no thingy with the given id",
+                                    id: request.params.thingy_id}).code(401);
+                            }
+
+                            reply(thingy).code(200);
                         }
                 });
             });
@@ -1139,7 +1201,7 @@ var createPublicAPI = (server) => {
             }
         }
     });
-    
+
     server.route({
         method: 'GET',
         path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/violations',
@@ -1160,8 +1222,19 @@ var createPublicAPI = (server) => {
                             console.error(err);
                             return reply({'Error': 'User not found'}).code(404);
                         } else {
-                            reply(user.terrariums.id(request.params.terrarium_id)
-                                .thingies.id(request.params.thingy_id)).code(200);
+                            let terra = user.terrariums.id(request.params.terrarium_id);
+                            if(!terra){
+                                return reply({"error": "User has no terrarium with the given id",
+                                    id: request.params.terrarium_id}).code(401);
+                            }
+
+                            let thingy = terra.thingies.id(request.params.thingy_id);
+                            if(!thingy){
+                                return reply({"error": "Terrarium has no thingy with the given id",
+                                    id: request.params.thingy_id}).code(401);
+                            }
+
+                            reply(thingy).code(200);
                         }
                 });
             });
@@ -1190,7 +1263,7 @@ var createPublicAPI = (server) => {
             }
         }
     });
-    
+
     server.route({
         method: 'GET',
         path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/temperature',
@@ -1210,7 +1283,17 @@ var createPublicAPI = (server) => {
                         var from = request.query.from;
                         var to = request.query.to;
                         var limit = request.query.limit;
-                        var thingy = user.terrariums.id(request.params.terrarium_id).thingies.id(request.params.thingy_id);
+                        let terra = user.terrariums.id(request.params.terrarium_id);
+                        if(!terra){
+                            return reply({"error": "User has no terrarium with the given id",
+                                id: request.params.terrarium_id}).code(401);
+                        }
+
+                        let thingy = terra.thingies.id(request.params.thingy_id);
+                        if(!thingy){
+                            return reply({"error": "Terrarium has no thingy with the given id",
+                                id: request.params.thingy_id}).code(401);
+                        }
 
                         if (err) {
                             console.error(err);
@@ -1289,7 +1372,17 @@ var createPublicAPI = (server) => {
                         var from = request.query.from;
                         var to = request.query.to;
                         var limit = request.query.limit;
-                        var thingy = user.terrariums.id(request.params.terrarium_id).thingies.id(request.params.thingy_id);
+                        let terra = user.terrariums.id(request.params.terrarium_id);
+                        if(!terra){
+                            return reply({"error": "User has no terrarium with the given id",
+                                id: request.params.terrarium_id}).code(401);
+                        }
+
+                        let thingy = terra.thingies.id(request.params.thingy_id);
+                        if(!thingy){
+                            return reply({"error": "Terrarium has no thingy with the given id",
+                                id: request.params.thingy_id}).code(401);
+                        }
 
                         if (err) {
                             console.error(err);
@@ -1368,7 +1461,17 @@ var createPublicAPI = (server) => {
                         var from = request.query.from;
                         var to = request.query.to;
                         var limit = request.query.limit;
-                        var thingy = user.terrariums.id(request.params.terrarium_id).thingies.id(request.params.thingy_id);
+                        let terra = user.terrariums.id(request.params.terrarium_id);
+                        if(!terra){
+                            return reply({"error": "User has no terrarium with the given id",
+                                id: request.params.terrarium_id}).code(401);
+                        }
+
+                        let thingy = terra.thingies.id(request.params.thingy_id);
+                        if(!thingy){
+                            return reply({"error": "Terrarium has no thingy with the given id",
+                                id: request.params.thingy_id}).code(401);
+                        }
 
                         if (err) {
                             console.error(err);
