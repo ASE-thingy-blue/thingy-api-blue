@@ -3,7 +3,7 @@ const Inert = require('inert');
 const Vision = require('vision');
 const HapiSwagger = require('hapi-swagger');
 const Mongoose = require('mongoose');
-const Constants = require('constants');
+const Crypto = require('crypto');
 const Jwt = require('jwt-simple');
 const Fs = require('fs');
 const Path = require('path');
@@ -56,7 +56,7 @@ var tlsoptions = {
             !SHA1:",
   honorCipherOrder: true,
   // Disable SSL 2, SSL 3, TLS 1.0 and TLS 1.1
-  secureOptions: Constants.SSL_OP_NO_SSLv2 | Constants.SSL_OP_NO_SSLv3 | Constants.SSL_OP_NO_TLSv1 | Constants.SSL_OP_NO_TLSv1_1,
+  secureOptions: Crypto.constants.SSL_OP_NO_SSLv2 | Crypto.constants.SSL_OP_NO_SSLv3 | Crypto.constants.SSL_OP_NO_TLSv1 | Crypto.constants.SSL_OP_NO_TLSv1_1,
   // Force TLS version 2
   secureProtocol: 'TLSv1_2_server_method'
 };
