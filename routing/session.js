@@ -1,7 +1,6 @@
 const Argon2 = require("argon2");
 const Fs = require('fs');
 const Path = require('path');
-const Async = require('async');
 
 // Returns a promise.
 // Users of that module would have to use it as:
@@ -18,4 +17,4 @@ module.exports = Argon2.hash(Fs.readFileSync(Path.join('certs', 'ThingyAPI.epk')
 {
     // Internal failure
     console.error(err);
-})
+});

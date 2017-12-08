@@ -2,9 +2,7 @@ const Joi = require('joi');
 const Mongoose = require('mongoose');
 const Jwt = require('jwt-simple');
 
-var Thingy = Mongoose.model('Thingy');
 var User = Mongoose.model('User');
-var Unit = Mongoose.model('Unit');
 
 // Quirk to have synchronously loaded modules with require() that use return values loaded asynchronously
 // It is not possible to write:
@@ -32,7 +30,7 @@ const getAuthenticatedPayload = function (request, callback)
     {
         callback(ex, null);
     }
-}
+};
 
 var createPublicAPI = (server) => {
     /**
@@ -112,19 +110,19 @@ var createPublicAPI = (server) => {
 
                                     thingy.humidities.forEach(function (hum) {
                                         if(hum.timestamp >= from && hum.timestamp <= to){
-                                            hums.push(hum)
+                                            hums.push(hum);
                                         }
                                     });
 
                                     thingy.temperatures.forEach(function (temp) {
                                         if(temp.timestamp >= from && temp.timestamp <= to){
-                                            temps.push(temp)
+                                            temps.push(temp);
                                         }
                                     });
 
                                     thingy.airQualities.forEach(function (airQ) {
                                         if(airQ.timestamp >= from && airQ.timestamp <= to){
-                                            airQs.push(airQ)
+                                            airQs.push(airQ);
                                         }
                                     });
 
@@ -146,7 +144,7 @@ var createPublicAPI = (server) => {
                                     thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
                                     thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
                                     thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
-                                })
+                                });
                             });
                         }
 
@@ -204,7 +202,7 @@ var createPublicAPI = (server) => {
             tags: ['webclient', 'api'],
             description: 'Gets the configuration from all Thingies in all the terrariums of a user',
             validate: {
-
+                // TODO: Validation
             },
             plugins: {
                 'hapi-swagger': {
@@ -246,7 +244,7 @@ var createPublicAPI = (server) => {
             tags: ['webclient', 'api'],
             description: 'Gets all threshold violations from all Thingies in all terrariums of a user',
             validate: {
-
+                // TODO: Validation
             },
             plugins: {
                 'hapi-swagger': {
@@ -292,7 +290,7 @@ var createPublicAPI = (server) => {
 
                                     thingy.temperatures.forEach(function (temp) {
                                         if(temp.timestamp >= from && temp.timestamp <= to){
-                                            temps.push(temp)
+                                            temps.push(temp);
                                         }
                                     });
 
@@ -308,7 +306,7 @@ var createPublicAPI = (server) => {
                             user.terrariums.forEach(function (t) {
                                 t.thingies.forEach(function (thingy) {
                                     thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
-                                })
+                                });
                             });
                         }
 
@@ -370,7 +368,7 @@ var createPublicAPI = (server) => {
 
                                     thingy.humidities.forEach(function (hum) {
                                         if(hum.timestamp >= from && hum.timestamp <= to){
-                                            hums.push(hum)
+                                            hums.push(hum);
                                         }
                                     });
 
@@ -386,7 +384,7 @@ var createPublicAPI = (server) => {
                             user.terrariums.forEach(function (t) {
                                 t.thingies.forEach(function (thingy) {
                                     thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
-                                })
+                                });
                             });
                         }
 
@@ -448,7 +446,7 @@ var createPublicAPI = (server) => {
 
                                     thingy.airQualities.forEach(function (airQ) {
                                         if(airQ.timestamp >= from && airQ.timestamp <= to){
-                                            airQs.push(airQ)
+                                            airQs.push(airQ);
                                         }
                                     });
 
@@ -464,7 +462,7 @@ var createPublicAPI = (server) => {
                             user.terrariums.forEach(function (t) {
                                 t.thingies.forEach(function (thingy) {
                                     thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
-                                })
+                                });
                             });
                         }
 
@@ -526,7 +524,7 @@ var createPublicAPI = (server) => {
                         let terra = user.terrariums.id(request.params.terrarium_id);
                         if (!terra) {
                             return reply({
-                                "error": "User has no terrarium with the given id",
+                                "Error": "User has no terrarium with the given ID",
                                 id: request.params.terrarium_id
                             }).code(401);
                         }
@@ -578,7 +576,7 @@ var createPublicAPI = (server) => {
                         let terra = user.terrariums.id(request.params.terrarium_id);
 
                         if(!terra){
-                            return reply({"error": "User has no terrarium with the given id",
+                            return reply({"Error": "User has no terrarium with the given ID",
                                 id: request.params.terrarium_id}).code(401);
                         }
 
@@ -595,19 +593,19 @@ var createPublicAPI = (server) => {
 
                                 thingy.airQualities.forEach(function (airQ) {
                                     if(airQ.timestamp >= from && airQ.timestamp <= to){
-                                        airQs.push(airQ)
+                                        airQs.push(airQ);
                                     }
                                 });
 
                                 thingy.temperatures.forEach(function (temp) {
                                     if(temp.timestamp >= from && temp.timestamp <= to){
-                                        temps.push(temp)
+                                        temps.push(temp);
                                     }
                                 });
 
                                 thingy.humidities.forEach(function (hum) {
                                     if(hum.timestamp >= from && hum.timestamp <= to){
-                                        hums.push(hum)
+                                        hums.push(hum);
                                     }
                                 });
 
@@ -627,7 +625,7 @@ var createPublicAPI = (server) => {
                                 thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
                                 thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
                                 thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
-                            })
+                            });
                         }
 
                         reply(terra).code(200);
@@ -683,7 +681,7 @@ var createPublicAPI = (server) => {
                         var terra = user.terrariums.id(request.params.terrarium_id);
 
                         if(!terra){
-                            return reply({"error": "User has no terrarium with the given id",
+                            return reply({"Error": "User has no terrarium with the given ID",
                                 id: request.params.terrarium_id}).code(401);
                         }
 
@@ -698,7 +696,7 @@ var createPublicAPI = (server) => {
 
                                 thingy.temperatures.forEach(function (temp) {
                                     if(temp.timestamp >= from && temp.timestamp <= to){
-                                        temps.push(temp)
+                                        temps.push(temp);
                                     }
                                 });
 
@@ -712,7 +710,7 @@ var createPublicAPI = (server) => {
                         } else {
                             terra.thingies.forEach(function (thingy) {
                                 thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
-                            })
+                            });
                         }
 
                         reply(terra).code(200);
@@ -770,7 +768,7 @@ var createPublicAPI = (server) => {
                         let terra = user.terrariums.id(request.params.terrarium_id);
                         if (!terra) {
                             return reply({
-                                "error": "User has no terrarium with the given id",
+                                "Error": "User has no terrarium with the given ID",
                                 id: request.params.terrarium_id
                             }).code(401);
                         }
@@ -789,7 +787,7 @@ var createPublicAPI = (server) => {
                         .description('ID of the terrarium I want the configurations from')
                 },
                 query: {
-
+                    // TODO: Query
                 }
             },
             plugins: {
@@ -827,7 +825,7 @@ var createPublicAPI = (server) => {
                         let terra = user.terrariums.id(request.params.terrarium_id);
                         if (!terra) {
                             return reply({
-                                "error": "User has no terrarium with the given id",
+                                "Error": "User has no terrarium with the given ID",
                                 id: request.params.terrarium_id
                             }).code(401);
                         }
@@ -846,7 +844,7 @@ var createPublicAPI = (server) => {
                         .description('ID of the terrarium I want the threshold violations from')
                 },
                 query: {
-
+                    // TODO: Query
                 }
             },
             plugins: {
@@ -882,7 +880,7 @@ var createPublicAPI = (server) => {
                         var limit = request.query.limit;
                         let terra = user.terrariums.id(request.params.terrarium_id);
                         if(!terra){
-                            return reply({"error": "User has no terrarium with the given id",
+                            return reply({"Error": "User has no terrarium with the given ID",
                                 id: request.params.terrarium_id}).code(401);
                         }
 
@@ -897,7 +895,7 @@ var createPublicAPI = (server) => {
 
                                 thingy.humidities.forEach(function (hum) {
                                     if(hum.timestamp >= from && hum.timestamp <= to){
-                                        hums.push(hum)
+                                        hums.push(hum);
                                     }
                                 });
 
@@ -911,7 +909,7 @@ var createPublicAPI = (server) => {
                         } else {
                             terra.thingies.forEach(function (thingy) {
                                 thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
-                            })
+                            });
                         }
 
                         reply(terra).code(200);
@@ -966,7 +964,7 @@ var createPublicAPI = (server) => {
                         var limit = request.query.limit;
                         let terra = user.terrariums.id(request.params.terrarium_id);
                         if(!terra){
-                            return reply({"error": "User has no terrarium with the given id",
+                            return reply({"Error": "User has no terrarium with the given ID",
                                 id: request.params.terrarium_id}).code(401);
                         }
 
@@ -981,7 +979,7 @@ var createPublicAPI = (server) => {
 
                                 thingy.airQualities.forEach(function (airQ) {
                                     if(airQ.timestamp >= from && airQ.timestamp <= to){
-                                        airQs.push(airQ)
+                                        airQs.push(airQ);
                                     }
                                 });
 
@@ -995,7 +993,7 @@ var createPublicAPI = (server) => {
                         } else {
                             terra.thingies.forEach(function (thingy) {
                                 thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
-                            })
+                            });
                         }
 
                         reply(terra).code(200);
@@ -1052,13 +1050,13 @@ var createPublicAPI = (server) => {
                         var limit = request.query.limit;
                         let terra = user.terrariums.id(request.params.terrarium_id);
                         if(!terra){
-                            return reply({"error": "User has no terrarium with the given id",
+                            return reply({"Error": "User has no terrarium with the given ID",
                                 id: request.params.terrarium_id}).code(401);
                         }
 
                         let thingy = terra.thingies.id(request.params.thingy_id);
                         if(!thingy){
-                            return reply({"error": "Terrarium has no thingy with the given id",
+                            return reply({"Error": "Terrarium has no Thingy with the given ID",
                                 id: request.params.thingy_id}).code(401);
                         }
 
@@ -1074,19 +1072,19 @@ var createPublicAPI = (server) => {
 
                             thingy.airQualities.forEach(function (airQ) {
                                 if(airQ.timestamp >= from && airQ.timestamp <= to){
-                                    airQs.push(airQ)
+                                    airQs.push(airQ);
                                 }
                             });
 
                             thingy.temperatures.forEach(function (temp) {
                                 if(temp.timestamp >= from && temp.timestamp <= to){
-                                    temps.push(temp)
+                                    temps.push(temp);
                                 }
                             });
 
                             thingy.humidities.forEach(function (hum) {
                                 if(hum.timestamp >= from && hum.timestamp <= to){
-                                    hums.push(hum)
+                                    hums.push(hum);
                                 }
                             });
 
@@ -1162,13 +1160,13 @@ var createPublicAPI = (server) => {
                         } else {
                             let terra = user.terrariums.id(request.params.terrarium_id);
                             if(!terra){
-                                return reply({"error": "User has no terrarium with the given id",
+                                return reply({"Error": "User has no terrarium with the given ID",
                                     id: request.params.terrarium_id}).code(401);
                             }
 
                             let thingy = terra.thingies.id(request.params.thingy_id);
                             if(!thingy){
-                                return reply({"error": "Terrarium has no thingy with the given id",
+                                return reply({"Error": "Terrarium has no Thingy with the given ID",
                                     id: request.params.thingy_id}).code(401);
                             }
 
@@ -1224,13 +1222,13 @@ var createPublicAPI = (server) => {
                         } else {
                             let terra = user.terrariums.id(request.params.terrarium_id);
                             if(!terra){
-                                return reply({"error": "User has no terrarium with the given id",
+                                return reply({"Error": "User has no terrarium with the given ID",
                                     id: request.params.terrarium_id}).code(401);
                             }
 
                             let thingy = terra.thingies.id(request.params.thingy_id);
                             if(!thingy){
-                                return reply({"error": "Terrarium has no thingy with the given id",
+                                return reply({"Error": "Terrarium has no Thingy with the given ID",
                                     id: request.params.thingy_id}).code(401);
                             }
 
@@ -1285,13 +1283,13 @@ var createPublicAPI = (server) => {
                         var limit = request.query.limit;
                         let terra = user.terrariums.id(request.params.terrarium_id);
                         if(!terra){
-                            return reply({"error": "User has no terrarium with the given id",
+                            return reply({"Error": "User has no terrarium with the given ID",
                                 id: request.params.terrarium_id}).code(401);
                         }
 
                         let thingy = terra.thingies.id(request.params.thingy_id);
                         if(!thingy){
-                            return reply({"error": "Terrarium has no thingy with the given id",
+                            return reply({"Error": "Terrarium has no Thingy with the given ID",
                                 id: request.params.thingy_id}).code(401);
                         }
 
@@ -1305,7 +1303,7 @@ var createPublicAPI = (server) => {
 
                             thingy.temperatures.forEach(function (temp) {
                                 if(temp.timestamp >= from && temp.timestamp <= to){
-                                    temps.push(temp)
+                                    temps.push(temp);
                                 }
                             });
 
@@ -1374,13 +1372,13 @@ var createPublicAPI = (server) => {
                         var limit = request.query.limit;
                         let terra = user.terrariums.id(request.params.terrarium_id);
                         if(!terra){
-                            return reply({"error": "User has no terrarium with the given id",
+                            return reply({"Error": "User has no terrarium with the given ID",
                                 id: request.params.terrarium_id}).code(401);
                         }
 
                         let thingy = terra.thingies.id(request.params.thingy_id);
                         if(!thingy){
-                            return reply({"error": "Terrarium has no thingy with the given id",
+                            return reply({"Error": "Terrarium has no Thingy with the given ID",
                                 id: request.params.thingy_id}).code(401);
                         }
 
@@ -1394,7 +1392,7 @@ var createPublicAPI = (server) => {
 
                             thingy.humidities.forEach(function (hum) {
                                 if(hum.timestamp >= from && hum.timestamp <= to){
-                                    hums.push(hum)
+                                    hums.push(hum);
                                 }
                             });
 
@@ -1463,13 +1461,13 @@ var createPublicAPI = (server) => {
                         var limit = request.query.limit;
                         let terra = user.terrariums.id(request.params.terrarium_id);
                         if(!terra){
-                            return reply({"error": "User has no terrarium with the given id",
+                            return reply({"Error": "User has no terrarium with the given ID",
                                 id: request.params.terrarium_id}).code(401);
                         }
 
                         let thingy = terra.thingies.id(request.params.thingy_id);
                         if(!thingy){
-                            return reply({"error": "Terrarium has no thingy with the given id",
+                            return reply({"Error": "Terrarium has no Thingy with the given ID",
                                 id: request.params.thingy_id}).code(401);
                         }
 
@@ -1483,7 +1481,7 @@ var createPublicAPI = (server) => {
 
                             thingy.airQualities.forEach(function (airQ) {
                                 if(airQ.timestamp >= from && airQ.timestamp <= to){
-                                    airQs.push(airQ)
+                                    airQs.push(airQ);
                                 }
                             });
 
@@ -1530,6 +1528,6 @@ var createPublicAPI = (server) => {
             }
         }
     });
-}
+};
 
 module.exports = createPublicAPI;

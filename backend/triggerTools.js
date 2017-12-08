@@ -35,7 +35,7 @@ let updateThresholds = function(thingy) {
     for(let threshold of thresholds) {
     let ascending = threshold.ascending;
     let lower = threshold.ascending ? threshold.disarm : threshold.arm;
-    let upper = threshold.ascending ? threshold.arm : threshold.disarm;
+    let higher = threshold.ascending ? threshold.arm : threshold.disarm;
     let hasbad = false;
     let hascentral = false;
     // Check temperature

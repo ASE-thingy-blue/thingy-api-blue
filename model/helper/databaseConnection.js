@@ -101,7 +101,7 @@ var create = function()
     // If the Node process ends, close the Mongoose connection
     db.on('SIGINT', function()
     {
-        mongoose.connection.close(function()
+        Mongoose.connection.close(function()
         {
             console.warn('Mongoose disconnected on app interruption');
             process.exit(0);
@@ -111,7 +111,7 @@ var create = function()
     // If the Node process ends, close the Mongoose connection
     db.on('SIGTERM', function()
     {
-        mongoose.connection.close(function()
+        Mongoose.connection.close(function()
         {
             console.warn('Mongoose disconnected on app termination');
             process.exit(0);
