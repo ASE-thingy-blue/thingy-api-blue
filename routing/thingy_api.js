@@ -1,7 +1,7 @@
 const Mongoose = require('mongoose');
 const Joi = require('joi');
 
-const triggerTools = require('../backend/triggerTools')
+const triggerTools = require('../backend/triggerTools');
 
 var Terri = Mongoose.model('Terrarium');
 var Thingy = Mongoose.model('Thingy');
@@ -35,7 +35,7 @@ let getOrCreateUnit = (name, short, reply) => {
         }
         return result;
     });
-}
+};
 
 var createThingyAPI = (server) => {
         server.route({
@@ -84,7 +84,7 @@ var createThingyAPI = (server) => {
 
             User.findOne({name: data.user}, function (err, user) {
                 if (err) {
-                    reply({'Error': 'Database error'}).code(500)
+                    reply({'Error': 'Database error'}).code(500);
                 } else {
                     if (user === null) {
                         console.log('Create new user');
@@ -101,6 +101,9 @@ var createThingyAPI = (server) => {
                         user = newUser;
                     } else {
                         Thingy.findOne({macAddress: thingyId}, function (err, thingy) {
+                            if (err) {
+                                return reply({'Error': 'Database error'}).code(500);
+                            }
                             if (thingy === null) {
                                 console.log('Create a new Thingy');
                                 var newThingy = new Thingy({macAddress: data.thingy, callbackAddress: data.cb});
@@ -114,7 +117,7 @@ var createThingyAPI = (server) => {
 
                                 user.save();
                             }
-                        })
+                        });
                     }
                 }
             });
@@ -177,11 +180,11 @@ var createThingyAPI = (server) => {
 
                 switch (sensorId) {
                     case 'humidity':
-                        var unit_percent = getOrCreateUnit("Percent", "%", reply);
+                        var unitPercent = getOrCreateUnit("Percent", "%", reply);
 
                         var newHmu = new Hum({
                             value: data.humidity,
-                            unit: unit_percent,
+                            unit: unitPercent,
                             timestamp: data.timestamp
                         });
                         newHmu.save();
@@ -191,11 +194,11 @@ var createThingyAPI = (server) => {
                         thingy.save();
                         break;
                     case 'temperature':
-                        var unit_cels = getOrCreateUnit("Celsius", "C", reply);
+                        var unitCels = getOrCreateUnit("Celsius", "C", reply);
 
                         var newTemp = new Temp({
                             value: data.temperature,
-                            unit: unit_cels,
+                            unit: unitCels,
                             timestamp: data.timestamp
                         });
 
@@ -205,11 +208,11 @@ var createThingyAPI = (server) => {
                         thingy.save();
                         break;
                     case 'gas':
-                        var unit1_db = getOrCreateUnit("gram per cubic meter", "g/m3", reply);
-                        var unit2_db = getOrCreateUnit("microgram per cubic meter", "mg/m3", reply);
+                        var unit1Db = getOrCreateUnit("gram per cubic meter", "g/m3", reply);
+                        var unit2Db = getOrCreateUnit("microgram per cubic meter", "mg/m3", reply);
                         
-                        var carb = new Carbon({value: data.gas.eco2, unit: unit1_db});
-                        var tvoc = new Tvoc({value: data.gas.tvoc, unit: unit2_db});
+                        var carb = new Carbon({value: data.gas.eco2, unit: unit1Db});
+                        var tvoc = new Tvoc({value: data.gas.tvoc, unit: unit2Db});
 
                         carb.save();
                         tvoc.save();
@@ -236,6 +239,6 @@ var createThingyAPI = (server) => {
             }
         }
     });
-}
+};
 
 module.exports = createThingyAPI;
