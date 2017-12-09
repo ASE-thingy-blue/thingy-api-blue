@@ -425,7 +425,7 @@ var createPrivateAPI = (server) => {
                         return reply({
                             "Error": "User has no terrarium with the given ID",
                             id: request.params.terrarium_id
-                        }).code(401);
+                        }).code(404);
                     }
 
                     reply(terra).code(200);
@@ -467,7 +467,7 @@ var createPrivateAPI = (server) => {
                     let terra = user.terrariums.id(request.params.terrarium_id);
                     if(!terra){
                         return reply({"Error": "User has no terrarium with the given ID",
-                            id: request.params.terrarium_id}).code(401);
+                            id: request.params.terrarium_id}).code(404);
                     }
 
                     if (err) {
@@ -562,7 +562,7 @@ var createPrivateAPI = (server) => {
                     let terra = user.terrariums.id(request.params.terrarium_id);
                     if(!terra){
                         return reply({"Error": "User has no terrarium with the given ID",
-                            id: request.params.terrarium_id}).code(401);
+                            id: request.params.terrarium_id}).code(404);
                     }
 
                     if (err) {
@@ -641,7 +641,7 @@ var createPrivateAPI = (server) => {
                         return reply({
                             "Error": "User has no terrarium with the given ID",
                             id: request.params.terrarium_id
-                        }).code(401);
+                        }).code(404);
                     }
 
                     reply(terra).code(200);
@@ -690,7 +690,7 @@ var createPrivateAPI = (server) => {
                         return reply({
                             "Error": "User has no terrarium with the given ID",
                             id: request.params.terrarium_id
-                        }).code(401);
+                        }).code(404);
                     }
 
                     reply(user.terrariums.id(request.params.terrarium_id)).code(200);
@@ -735,7 +735,7 @@ var createPrivateAPI = (server) => {
                     let terra = user.terrariums.id(request.params.terrarium_id);
                     if(!terra){
                         return reply({"Error": "User has no terrarium with the given ID",
-                            id: request.params.terrarium_id}).code(401);
+                            id: request.params.terrarium_id}).code(404);
                     }
 
                     if (err) {
@@ -810,7 +810,7 @@ var createPrivateAPI = (server) => {
                     let terra = user.terrariums.id(request.params.terrarium_id);
                     if(!terra){
                         return reply({"Error": "User has no terrarium with the given ID",
-                            id: request.params.terrarium_id}).code(401);
+                            id: request.params.terrarium_id}).code(404);
                     }
 
                     if (err) {
@@ -888,13 +888,13 @@ var createPrivateAPI = (server) => {
                     let terra = user.terrariums.id(request.params.terrarium_id);
                     if(!terra){
                         return reply({"Error": "User has no terrarium with the given ID",
-                            id: request.params.terrarium_id}).code(401);
+                            id: request.params.terrarium_id}).code(404);
                     }
 
                     let thingy = terra.thingies.id(request.params.thingy_id);
                     if(!thingy){
                         return reply({"Error": "Terrarium has no Thingy with the given ID",
-                            id: request.params.thingy_id}).code(401);
+                            id: request.params.thingy_id}).code(404);
                     }
 
                     if (err) {
@@ -989,13 +989,13 @@ var createPrivateAPI = (server) => {
                         let terra = user.terrariums.id(request.params.terrarium_id);
                         if(!terra){
                             return reply({"Error": "User has no terrarium with the given ID",
-                                id: request.params.terrarium_id}).code(401);
+                                id: request.params.terrarium_id}).code(404);
                         }
 
                         let thingy = terra.thingies.id(request.params.thingy_id);
                         if(!thingy){
                             return reply({"Error": "Terrarium has no Thingy with the given ID",
-                                id: request.params.thingy_id}).code(401);
+                                id: request.params.thingy_id}).code(404);
                         }
 
                         reply(thingy).code(200);
@@ -1042,13 +1042,13 @@ var createPrivateAPI = (server) => {
                         let terra = user.terrariums.id(request.params.terrarium_id);
                         if(!terra){
                             return reply({"Error": "User has no terrarium with the given ID",
-                                id: request.params.terrarium_id}).code(401);
+                                id: request.params.terrarium_id}).code(404);
                         }
 
                         let thingy = terra.thingies.id(request.params.thingy_id);
                         if(!thingy){
                             return reply({"Error": "Terrarium has no Thingy with the given ID",
-                                id: request.params.thingy_id}).code(401);
+                                id: request.params.thingy_id}).code(404);
                         }
 
                         reply(thingy).code(200);
@@ -1094,13 +1094,13 @@ var createPrivateAPI = (server) => {
                     let terra = user.terrariums.id(request.params.terrarium_id);
                     if(!terra){
                         return reply({"Error": "User has no terrarium with the given ID",
-                            id: request.params.terrarium_id}).code(401);
+                            id: request.params.terrarium_id}).code(404);
                     }
 
                     let thingy = terra.thingies.id(request.params.thingy_id);
                     if(!thingy){
                         return reply({"Error": "Terrarium has no Thingy with the given ID",
-                            id: request.params.thingy_id}).code(401);
+                            id: request.params.thingy_id}).code(404);
                     }
 
                     if (err) {
@@ -1174,13 +1174,13 @@ var createPrivateAPI = (server) => {
                     let terra = user.terrariums.id(request.params.terrarium_id);
                     if(!terra){
                         return reply({"Error": "User has no terrarium with the given ID",
-                            id: request.params.terrarium_id}).code(401);
+                            id: request.params.terrarium_id}).code(404);
                     }
 
                     let thingy = terra.thingies.id(request.params.thingy_id);
                     if(!thingy){
                         return reply({"Error": "Terrarium has no Thingy with the given ID",
-                            id: request.params.thingy_id}).code(401);
+                            id: request.params.thingy_id}).code(404);
                     }
 
                     if (err) {
@@ -1254,13 +1254,13 @@ var createPrivateAPI = (server) => {
                     let terra = user.terrariums.id(request.params.terrarium_id);
                     if(!terra){
                         return reply({"Error": "User has no terrarium with the given ID",
-                            id: request.params.terrarium_id}).code(401);
+                            id: request.params.terrarium_id}).code(404);
                     }
 
                     let thingy = terra.thingies.id(request.params.thingy_id);
                     if(!thingy){
                         return reply({"Error": "Terrarium has no Thingy with the given ID",
-                            id: request.params.thingy_id}).code(401);
+                            id: request.params.thingy_id}).code(404);
                     }
 
                     if (err) {
