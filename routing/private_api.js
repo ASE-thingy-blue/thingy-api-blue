@@ -370,7 +370,7 @@ var createPrivateAPI = (server) => {
                     } else {
                         user.terrariums.forEach(function (t) {
                             t.thingies.forEach(function (thingy) {
-                                thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
+                                thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
                             });
                         });
                     }
@@ -465,7 +465,6 @@ var createPrivateAPI = (server) => {
                     var to = request.query.to;
                     var limit = request.query.limit;
                     let terra = user.terrariums.id(request.params.terrarium_id);
-
                     if(!terra){
                         return reply({"Error": "User has no terrarium with the given ID",
                             id: request.params.terrarium_id}).code(401);
@@ -561,7 +560,6 @@ var createPrivateAPI = (server) => {
                     var to = request.query.to;
                     var limit = request.query.limit;
                     let terra = user.terrariums.id(request.params.terrarium_id);
-
                     if(!terra){
                         return reply({"Error": "User has no terrarium with the given ID",
                             id: request.params.terrarium_id}).code(401);
@@ -887,7 +885,7 @@ var createPrivateAPI = (server) => {
                     var from = request.query.from;
                     var to = request.query.to;
                     var limit = request.query.limit;
-                    let terra = user.terrariums.id(request.params.terrarium_id).thingies.id(request.params.thingy_id);
+                    let terra = user.terrariums.id(request.params.terrarium_id);
                     if(!terra){
                         return reply({"Error": "User has no terrarium with the given ID",
                             id: request.params.terrarium_id}).code(401);
@@ -1094,7 +1092,6 @@ var createPrivateAPI = (server) => {
                     var to = request.query.to;
                     var limit = request.query.limit;
                     let terra = user.terrariums.id(request.params.terrarium_id);
-
                     if(!terra){
                         return reply({"Error": "User has no terrarium with the given ID",
                             id: request.params.terrarium_id}).code(401);
