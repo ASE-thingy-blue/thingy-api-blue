@@ -39,7 +39,7 @@ let getOrCreateUnit = (name, short, reply) => {
 };
 
 var createThingyAPI = (server) => {
-        server.route({
+    server.route({
         method: 'GET',
         path: '/thingy/{thingy_id}/setup',
         handler: function (request, reply) {
@@ -72,7 +72,8 @@ var createThingyAPI = (server) => {
                 params: {
                     thingy_id: thingyIdSchema
                 }
-            }
+            },
+            auth: 'jwt'
         }
     });
 
@@ -133,7 +134,8 @@ var createThingyAPI = (server) => {
                 params: {
                     thingy_id: thingyIdSchema
                 }
-            }
+            },
+            auth: 'jwt'
         }
     });
 
@@ -158,7 +160,8 @@ var createThingyAPI = (server) => {
                 params: {
                     thingy_id: thingyIdSchema
                 }
-            }
+            },
+            auth: 'jwt'
         }
     });
 
@@ -239,7 +242,8 @@ var createThingyAPI = (server) => {
                     thingy_id: thingyIdSchema,
                     sensor_id: sensorIdSchema
                 }
-            }
+            },
+            auth: 'jwt'
         }
     });
 };
