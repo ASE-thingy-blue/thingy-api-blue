@@ -24,6 +24,7 @@ let getOrCreateUnit = (name, short, reply) => {
     var result;
     Unit.find({name: name}, function (err, unit) {
         if (err) {
+            console.error(err);
             return reply({"Error": "Unit not in database"}).code(500);
         }
         if (unit === null) {
@@ -84,6 +85,7 @@ var createThingyAPI = (server) => {
 
             User.findOne({name: data.user}, function (err, user) {
                 if (err) {
+                    console.error(err);
                     reply({'Error': 'Database error'}).code(500);
                 } else {
                     if (user === null) {
@@ -102,6 +104,7 @@ var createThingyAPI = (server) => {
                     } else {
                         Thingy.findOne({macAddress: thingyId}, function (err, thingy) {
                             if (err) {
+                                console.error(err);
                                 return reply({'Error': 'Database error'}).code(500);
                             }
                             if (thingy === null) {
@@ -134,31 +137,30 @@ var createThingyAPI = (server) => {
         }
     });
 
-    server.route(
-        {
-            method: 'GET',
-            path: '/thingy/{thingy_id}/actuators/led',
-            handler: function (request, reply) {
-                var thingyId = request.params.thingy_id;
+    server.route({
+        method: 'GET',
+        path: '/thingy/{thingy_id}/actuators/led',
+        handler: function (request, reply) {
+            var thingyId = request.params.thingy_id;
 
-                // TODO: Get configuration from server by Thingy ID
-                var led = {
-                    color: 8,
-                    intensity: 20,
-                    delay: 1
-                };
+            // TODO: Get configuration from server by Thingy ID
+            var led = {
+                color: 8,
+                intensity: 20,
+                delay: 1
+            };
 
-                reply(led).code(200);
-            },
-            config: {
-                tags: ['thingy'],
-                validate: {
-                    params: {
-                        thingy_id: thingyIdSchema
-                    }
+            reply(led).code(200);
+        },
+        config: {
+            tags: ['thingy'],
+            validate: {
+                params: {
+                    thingy_id: thingyIdSchema
                 }
             }
-        });
+        }
+    });
 
     server.route({
         method: 'POST',
@@ -169,6 +171,7 @@ var createThingyAPI = (server) => {
 
             Thingy.findOne({macAddress: thingyId}, function (err, thingy) {
                 if (err) {
+                    console.error(err);
                     // Stop execution
                     return reply({
                         "Error": "This Thingy is not in our database",

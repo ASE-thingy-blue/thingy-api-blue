@@ -28,8 +28,7 @@ mailer.transporter = nodemailer.createTransport(mailer.mailConfig.server);
  * @param message
  * @param messageHtml
  */
-mailer.sendMail = function(to, subject, message, messageHtml) {
-
+mailer.sendMail = function (to, subject, message, messageHtml) {
     // setup email data with unicode symbols
     let mailOptions = {
         from: mailer.mailConfig.sender.from,
@@ -46,9 +45,8 @@ mailer.sendMail = function(to, subject, message, messageHtml) {
         }
         console.log('Message sent: %s', info.messageId);
     });
+};
 
-}
-
-module.exports =  {
+module.exports = {
     sendMail: mailer.sendMail.bind()
 };
