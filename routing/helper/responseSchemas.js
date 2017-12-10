@@ -1,66 +1,59 @@
 const Joi = require('joi');
 
 
-let unit = Joi.array().items(
-    Joi.object({
-        "name": Joi.string(),
-        "short": Joi.string(),
-        "_id": Joi.string()
-    })
-);
+let unit = Joi.object({
+    "name": Joi.string(),
+    "short": Joi.string(),
+    "_id": Joi.string()
+});
 
-let temperature = Joi.array().items(
-    Joi.object({
-        "_id": Joi.string(),
-        "unit": unit,
-        "value": Joi.number(),
-        "timestamp": Joi.date().timestamp()
-    })
-);
+let temperature = Joi.object({
+    "_id": Joi.string(),
+    "unit": unit,
+    "value": Joi.number(),
+    "timestamp": Joi.date().timestamp()
+});
 
-let humidity = Joi.array().items(
-    Joi.object({
-        "_id": Joi.string(),
-        "unit": unit,
-        "value": Joi.number(),
-        "timestamp": Joi.date().timestamp()
-    })
-);
+let humidity = Joi.object({
+    "_id": Joi.string(),
+    "unit": unit,
+    "value": Joi.number(),
+    "timestamp": Joi.date().timestamp()
+});
 
-let co2 = Joi.array().items(
-    Joi.object({
-        "_id": Joi.string(),
-        "value": Joi.number(),
-        "unit": unit,
-    }),
-);
+let co2 = Joi.object({
+    "_id": Joi.string(),
+    "value": Joi.number(),
+    "unit": unit,
+});
 
-let tvoc = Joi.array().items(
-    Joi.object({
-        "_id": Joi.string(),
-        "value": Joi.number(),
-        "unit": unit,
-    }),
-);
+let tvoc = Joi.object({
+    "_id": Joi.string(),
+    "value": Joi.number(),
+    "unit": unit,
+});
 
-let airQuality = Joi.array().items(
-    Joi.object({
-        "_id": Joi.string(),
-        "tvoc": Joi.array().items(tvoc),
-        "co2": Joi.array().items(co2),
-        "timestamp": Joi.date().timestamp()
-    })
-);
+let airQuality = Joi.object({
+    "_id": Joi.string(),
+    "tvoc": Joi.array().items(tvoc),
+    "co2": Joi.array().items(co2),
+    "timestamp": Joi.date().timestamp()
+});
 
-let thingy = Joi.array().items(Joi.object({
-        "_id": Joi.string(),
-        "description": Joi.string(),
-        "macAddress": Joi.string(),
-        "humidities": Joi.array().items(humidity),
-        "airQualities": Joi.array().items(airQuality),
-        "temperatures": Joi.array().items(temperature)
-    })
-);
+let thingy = Joi.object({
+    "_id": Joi.string(),
+    "description": Joi.string(),
+    "macAddress": Joi.string(),
+    "humidities": Joi.array().items(humidity),
+    "airQualities": Joi.array().items(airQuality),
+    "temperatures": Joi.array().items(temperature)
+});
+
+let terrarium = Joi.object({
+    _id: Joi.string(),
+    name: Joi.string(),
+    thingies: Joi.array().items(thingy)
+});
 
 module.exports = {
     unit: unit,
@@ -69,5 +62,6 @@ module.exports = {
     airQuality: airQuality,
     co2: co2,
     tvoc: tvoc,
-    thingy: thingy
+    thingy: thingy,
+    terrarium: terrarium
 };
