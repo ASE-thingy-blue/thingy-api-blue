@@ -1,6 +1,7 @@
 const Mongoose = require('mongoose');
 const User = Mongoose.model('User');
 const Jwt = require('jwt-simple');
+const Joi = require('joi');
 
 // Returns a promise. Use it as:
 /*
@@ -49,7 +50,6 @@ var createPublicAPI = (server) => {
     server.route({
         method: 'POST',
         path: '/authenticate',
-        config: { auth: false },
         handler: function (request, reply)
         {
             User.findOne({name: request.payload.name}, function(err, user)
@@ -81,13 +81,36 @@ var createPublicAPI = (server) => {
                     }
                 });
             });
+        },
+        config: {
+            auth: false,
+            tags: ['webclient', 'api'],
+            description: 'Log in',
+            validate: {
+                payload: {
+                    name: Joi.string().description('Name'),
+                    password: Joi.string().description('Password')
+                }
+            },
+            plugins: {
+                'hapi-swagger': {
+                    responses: {
+                        200: {
+                            description: 'Success',
+                            schema: Joi.object({
+                                success: Joi.boolean(),
+                                token: Joi.string()
+                            }).label('Result')
+                        }
+                    }
+                }
+            }
         }
     });
 
     server.route({
         method: 'POST',
         path: '/signup',
-        config: { auth: false },
         handler: function(request, reply) {
             if (!request.payload.name || !request.payload.password) {
             reply({success: false, message: 'Please provide username and password.'}).code(400);
@@ -108,6 +131,32 @@ var createPublicAPI = (server) => {
                     }
                     reply({success: true, message: 'Successfully created new user.'}).code(201);
                 });
+            }
+        },
+        config: {
+            auth: false,
+            tags: ['webclient', 'api'],
+            description: 'Sign up',
+            validate: {
+                payload: {
+                    name: Joi.string().description('Name'),
+                    email: Joi.string().description('E-Mail'),
+                    password: Joi.string().description('Password'),
+                    repassword: Joi.string().description('retype your password')
+                }
+            },
+            plugins: {
+                'hapi-swagger': {
+                    responses: {
+                        200: {
+                            description: 'Success',
+                            schema: Joi.object({
+                                success: Joi.boolean(),
+                                token: Joi.string()
+                            }).label('Result')
+                        }
+                    }
+                }
             }
         }
     });
