@@ -4,6 +4,8 @@ const HandlerAllTerrariums = require('./handlerAllTerrariums');
 const HandlerTerrarium = require('./handlerSpecificTerrarium');
 const HandlerThingy = require('./handlerSpecificThingy');
 
+const schemas = require('./helper/responseSchemas');
+
 var createPrivateAPI = (server) => {
     /**
      * ALL TERRARIUMS
@@ -59,52 +61,7 @@ var createPrivateAPI = (server) => {
                             schema: Joi.object({
                                 "_id": Joi.string(),
                                 "name": Joi.string(),
-                                "thingies": Joi.array().items(Joi.object({
-                                        "_id": Joi.string(),
-                                        "description": Joi.string(),
-                                        "macAddress": Joi.string(),
-                                        "humidities": Joi.array().items(Joi.object({
-                                                "_id": Joi.string(),
-                                                "unit": Joi.array().items(Joi.object({
-                                                        "name": Joi.string(),
-                                                        "short": Joi.string(),
-                                                        "_id": Joi.string()
-                                                    })
-                                                ),
-                                                "value": Joi.number(),
-                                                "timestamp": Joi.date().timestamp()
-                                            })
-                                        ),
-                                        "airQualities": Joi.array().items(Joi.object({
-                                                "_id": Joi.string(),
-                                                "tvoc": Joi.array().items(Joi.object({
-                                                        "_id": Joi.string(),
-                                                        "value": Joi.number(),
-                                                        "unit": Joi.array().items(Joi.object({
-                                                                "name": Joi.string(),
-                                                                "short": Joi.string(),
-                                                                "_id": Joi.string()
-                                                            }),
-                                                        ),
-                                                    }),
-                                                ),
-                                                "timestamp": Joi.date().timestamp()
-                                            })
-                                        ),
-                                        "temperatures": Joi.array().items(Joi.object({
-                                                "_id": Joi.string(),
-                                                "unit": Joi.array().items(Joi.object({
-                                                        "name": Joi.string(),
-                                                        "short": Joi.string(),
-                                                        "_id": Joi.string()
-                                                    }),
-                                                ),
-                                                "value": Joi.number(),
-                                                "timestamp": Joi.date().timestamp()
-                                            })
-                                        )
-                                    })
-                                ),
+                                "thingies": schemas.thingy
                             }).label('Result')
                         }
                     }
