@@ -12,7 +12,9 @@
 import test from 'ava';
 import server from '../index';
 
+const Mongoose = require('mongoose');
 let token;
+let User = Mongoose.model('User');
 
 //inject test data to the database
 //and makes the token available as class variable
@@ -50,7 +52,7 @@ test('Test if the home is working', t => {
 
 
 //api with authentication
-test('Test authentication', t => {
+test('Test /authentication', t => {
     const request = Object.assign({}, {
         method: 'POST',
         url: '/authenticate',
@@ -69,7 +71,7 @@ test('Test authentication', t => {
 });
 
 //Check therrariums
-test('Test amount of terrariums', t => {
+test('Test /terrariums', t => {
     const request = Object.assign({}, {
         method: 'GET',
         url: '/terrariums',
@@ -81,6 +83,17 @@ test('Test amount of terrariums', t => {
 
     return server.inject(request)
         .then(response => {
+            User.findOne({})
+                .select('terrariums._id terrariums.name terrariums.description')
+                .exec((err, userDB) => {
+                    if(err){
+                        t.false(true, "problem with the user in the db. PErhaps more then one user in the DB");
+                    } else {
+                        console.log(response.payload);
+                        console.log(userDB.terrariums);
+                        t.is(response.payload, userDB.terrariums);
+                    }
+                });
             t.is(response.result.terrariums.length, 2);
         });
 });
