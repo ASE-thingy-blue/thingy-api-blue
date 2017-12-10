@@ -248,6 +248,37 @@ var createPrivateAPI = (server) => {
      * SPECIFIC TERRARIUM
      */
     server.route({
+        method: 'POST',
+        path: '/terrarium',
+        handler: HandlerTerrarium.terrariumCreate,
+        config: {
+            tags: ['webclient', 'api'],
+            description: 'Creates a new terrarium with out of the given payload',
+            validate: {
+                payload: {
+                    name: Joi.string()
+                        .required()
+                        .description('Name of the new terrarium'),
+                    description: Joi.string()
+                        .description('Description of the terrarium'),
+                    callbackAddress: Joi.string()
+                        .description('A callback adress if there is one')
+                }
+            },
+            auth: 'jwt',
+            plugins: {
+                'hapi-swagger': {
+                    responses: {
+                        200: {
+                            description: 'Success'
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    server.route({
         method: 'GET',
         path: '/terrarium/{terrarium_id}/thingies',
         handler: HandlerTerrarium.terrariumThingies,

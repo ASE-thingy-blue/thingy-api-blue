@@ -1,8 +1,43 @@
 const Mongoose = require('mongoose');
 
 var User = Mongoose.model('User');
+let Terrarium = Mongoose.model('Terrarium');
+let Thingy = Mongoose.model('Thingy');
 
 module.exports = {
+
+    terrariumCreate: (request, reply) =>{
+        User.findOne({name: request.auth.credentials.userName})
+            .exec((err, user) =>{
+            if(err) {
+                console.error(err);
+                return reply({'Error': 'User not found'}).code(404);
+            }
+
+            let terraNew = new Terrarium({
+                name: request.payload.name,
+                description: request.payload.description,
+                callbackAddress: request.payload.callbackAddress});
+
+
+            terraNew.save((err, terri) => {
+                if (err) {
+                    return reply({'Error': 'Something went wrong! Terrarium not saved'}).code(500);
+                }
+
+                user.terrariums.push(terraNew);
+
+                user.save();
+
+                return reply({
+                    "success": true,
+                    message: "New terrarium created! Without thingies",
+                    id: terri._id
+                }).code(200);
+            });
+
+        });
+    },
 
     terrariumThingies: function (request, reply) {
         User.findOne({name: request.auth.credentials.userName})
