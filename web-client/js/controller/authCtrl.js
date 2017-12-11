@@ -7,7 +7,7 @@ termonWebClient.controller('authCtrl', ['$scope', '$state', 'authService', 'AUTH
 
     $scope.$on(AUTH_EVENTS.notAuthenticated, function(event) {
         authService.logout();
-        $state.go('login');
+        $state.go('public.login');
         console.log('Sorry, You have to login again.');
     });
     

@@ -3,6 +3,14 @@
     <h1>Terrariums</h1>
     <br/>
 
+    <div ng-if="!terDetails && !thingyDetails">
+        <button class="btn btn-success" ng-click="loadData()"><i class="fa fa-fw fa-refresh"></i>Reload all Data</button>
+    </div>
+    <div ng-if="terDetails || thingyDetails">
+        <button class="btn btn-success" ng-click="loadData()"><i class="fa fa-fw fa-backward"></i>Back to overview</button>
+    </div>
+    <br/>
+
     <div ng-if="!terDetails && !thingyDetails" class="row">
         <div ng-repeat="terrarium in terrariums" class="col-lg-6">
             <div class="panel panel-info">
@@ -15,6 +23,76 @@
                         <li ng-repeat="thingy in terrarium.thingies">
                             <a ng-click="showThingyDetails(terrarium, thingy)">{{thingy.description}} ({{thingy.macAddress}})</a>
                         </li>
+                    </ul>
+                    <button class="btn btn-success pull-right" ng-click="showTerDetails(terrarium)">Show Terrarium details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="terDetails" class="row">
+        <div ng-repeat="thingy in terDetails.thingies" class="col-lg-6">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <div ng-click="showThingyDetails(terDetails, thingy)" class="panel-heading">
+                        <h3 class="panel-title">{{thingy.description}} ({{terDetails.name}})</h3>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <h3>Sensor Data</h3>
+                    <ul>
+                        <li>Humidity:</li>
+                        <ul>
+                            <li>{{thingy.humidities[0].value}} {{thingy.humidities[0].unit.short}}</li>
+                            <li>Date: {{thingy.humidities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
+                        </ul>
+
+                        <li>Air Quality:</li>
+                        <ul>
+                            <li>TVOC: {{thingy.airQualities[0].tvoc.value}} {{thingy.airQualities[0].tvoc.unit.short}}</li>
+                            <li>CO2: {{thingy.airQualities[0].co2.value}} {{thingy.airQualities[0].co2.unit.short}}</li>
+                            <li>Date: {{thingy.airQualities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
+                        </ul>
+
+                        <li>Temperature:</li>
+                        <ul>
+                            <li>{{thingy.temperatures[0].value}} {{thingy.temperatures[0].unit.short}}</li>
+                            <li>Date: {{thingy.temperatures[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
+                        </ul>
+                    </ul>
+                    <button class="btn btn-success pull-right" ng-click="showThingyDetails(terDetails, thingy)">Show Thingy details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="thingyDetails" class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{thingyDetails.description}}</h3>
+                </div>
+                <div class="panel-body">
+                    <h3>Sensor Data</h3>
+                    <ul>
+                        <li>Humidity:</li>
+                        <ul>
+                            <li>{{thingyDetails.humidities[0].value}} {{thingyDetails.humidities[0].unit.short}}</li>
+                            <li>Date: {{thingyDetails.humidities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
+                        </ul>
+
+                        <li>Air Quality:</li>
+                        <ul>
+                            <li>TVOC: {{thingyDetails.airQualities[0].tvoc.value}} {{thingyDetails.airQualities[0].tvoc.unit.short}}</li>
+                            <li>CO2: {{thingyDetails.airQualities[0].co2.value}} {{thingyDetails.airQualities[0].co2.unit.short}}</li>
+                            <li>Date: {{thingyDetails.airQualities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
+                        </ul>
+
+                        <li>Temperature:</li>
+                        <ul>
+                            <li>{{thingyDetails.temperatures[0].value}} {{thingyDetails.temperatures[0].unit.short}}</li>
+                            <li>Date: {{thingyDetails.temperatures[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
+                        </ul>
                     </ul>
                 </div>
             </div>
