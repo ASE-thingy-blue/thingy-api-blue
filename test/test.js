@@ -71,7 +71,7 @@ test('Test /authentication', t => {
 });
 
 //Check therrariums
-test('Test /terrariums', t => {
+test('Test /terrariums', async t => {
     const request = Object.assign({}, {
         method: 'GET',
         url: '/terrariums',
@@ -81,20 +81,28 @@ test('Test /terrariums', t => {
         }
     });
 
+    let tRes, tUser;
+
+    let getDbData = async function() {
+        User.findOne({})
+            .select('terrariums._id terrariums.name terrariums.description')
+            .exec((err, userDB) => {
+                if(err){
+                    t.false(true, "problem with the user in the db. PErhaps more then one user in the DB");
+                } else {
+                    tUser = userDB.terrariums;
+                    tUser = JSON.parse(JSON.stringify(tUser));
+                    return;
+                }
+                return;
+            });
+    };
+    await getDbData();
+
     return server.inject(request)
         .then(response => {
-            User.findOne({})
-                .select('terrariums._id terrariums.name terrariums.description')
-                .exec((err, userDB) => {
-                    if(err){
-                        t.false(true, "problem with the user in the db. PErhaps more then one user in the DB");
-                    } else {
-                        console.log(response.payload);
-                        console.log(userDB.terrariums);
-                        t.is(response.payload, userDB.terrariums);
-                    }
-                });
-            t.is(response.result.terrariums.length, 2);
+            tRes = JSON.parse(response.payload).terrariums;
+            t.deepEqual(tRes, tUser);
         });
 });
 
