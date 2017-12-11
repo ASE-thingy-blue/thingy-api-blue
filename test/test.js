@@ -13,6 +13,7 @@ import test from 'ava';
 import server from '../index';
 
 const Mongoose = require('mongoose');
+const Joi = require('joi');
 let token;
 let User = Mongoose.model('User');
 
@@ -71,7 +72,7 @@ test('Test /authentication', t => {
 });
 
 //Check therrariums
-test('Test /terrariums', async t => {
+test('Test /terrariums', t => {
     const request = Object.assign({}, {
         method: 'GET',
         url: '/terrariums',
@@ -81,28 +82,22 @@ test('Test /terrariums', async t => {
         }
     });
 
-    let tRes, tUser;
-
-    let getDbData = async function() {
-        User.findOne({})
-            .select('terrariums._id terrariums.name terrariums.description')
-            .exec((err, userDB) => {
-                if(err){
-                    t.false(true, "problem with the user in the db. PErhaps more then one user in the DB");
-                } else {
-                    tUser = userDB.terrariums;
-                    tUser = JSON.parse(JSON.stringify(tUser));
-                    return;
-                }
-                return;
-            });
-    };
-    await getDbData();
+    let schema = Joi.object({
+        _id: Joi.string(),
+        terrariums: Joi.array().items(Joi.object({
+                _id: Joi.string(),
+                name: Joi.string()
+            })
+        )
+    });
 
     return server.inject(request)
         .then(response => {
-            tRes = JSON.parse(response.payload).terrariums;
-            t.deepEqual(tRes, tUser);
+            let resp = JSON.parse(response.payload);
+            const comp = Joi.validate(resp, schema);
+
+            t.true(comp.error === null) &&
+            t.is(response.statusCode, 200);
         });
 });
 
