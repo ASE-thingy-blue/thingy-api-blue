@@ -40,7 +40,7 @@ let airQuality = Joi.object({
     "timestamp": Joi.date().timestamp()
 });
 
-let thingy = Joi.object({
+let thingyWithAll = Joi.object({
     "_id": Joi.string(),
     "description": Joi.string(),
     "macAddress": Joi.string(),
@@ -49,10 +49,32 @@ let thingy = Joi.object({
     "temperatures": Joi.array().items(temperature)
 });
 
+let thingyWithHumidities = Joi.object({
+    "_id": Joi.string(),
+    "description": Joi.string(),
+    "macAddress": Joi.string(),
+    "humidities": Joi.array().items(humidity),
+});
+
+let thingyWithAirQualities = Joi.object({
+    "_id": Joi.string(),
+    "description": Joi.string(),
+    "macAddress": Joi.string(),
+    "airQualities": Joi.array().items(airQuality),
+});
+
+let thingyWithTemperatures = Joi.object({
+    "_id": Joi.string(),
+    "description": Joi.string(),
+    "macAddress": Joi.string(),
+    "temperatures": Joi.array().items(temperature),
+});
+
+
 let terrarium = Joi.object({
     _id: Joi.string(),
     name: Joi.string(),
-    thingies: Joi.array().items(thingy)
+    thingies: Joi.array().items(thingyWithAll)
 });
 
 module.exports = {
@@ -62,6 +84,9 @@ module.exports = {
     airQuality: airQuality,
     co2: co2,
     tvoc: tvoc,
-    thingy: thingy,
+    thingyWithAll: thingyWithAll,
+    thingyWithHumidities: thingyWithHumidities,
+    thingyWithAirQualities: thingyWithAirQualities,
+    thingyWithTemperatures: thingyWithTemperatures,
     terrarium: terrarium
 };
