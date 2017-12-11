@@ -3,8 +3,67 @@ const Joi = require('joi');
 const HandlerAllTerrariums = require('./handlerAllTerrariums');
 const HandlerTerrarium = require('./handlerSpecificTerrarium');
 const HandlerThingy = require('./handlerSpecificThingy');
+const HandlerUser = require('./handlerUser');
 
 var createPrivateAPI = (server) => {
+    /**
+     * USER
+     */
+    server.route({
+        method: 'GET',
+        path: '/user',
+        handler: HandlerUser.getUser,
+        config: {
+            tags: ['webclient', 'api'],
+            description: 'Get the user',
+            auth: 'jwt',
+            plugins: {
+                'hapi-swagger': {
+                    responses: {
+                        200: {
+                            description: 'Success',
+                            schema: Joi.object({
+                                name: Joi.string(),
+                                mailAddress: Joi.string().email()
+                            }).label('Result')
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'PUT',
+        path: '/user',
+        handler: HandlerUser.updateUser,
+        config: {
+            tags: ['webclient', 'api'],
+            description: 'Updates the user',
+            auth: 'jwt',
+            validate: {
+                payload: Joi.object({
+                    mailAddress: Joi.string().email(),
+                    password: Joi.string(),
+                    repassword: Joi.string()
+                }).with('password', 'repassword')
+            },
+            plugins: {
+                'hapi-swagger': {
+                    responses: {
+                        200: {
+                            description: 'Success',
+                            schema: Joi.object({
+                                name: Joi.string(),
+                                mailAddress: Joi.string().email()
+                            }).label('Result')
+                        }
+                    }
+                }
+            }
+        }
+    });
+
     /**
      * ALL TERRARIUMS
      */

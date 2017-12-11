@@ -140,7 +140,7 @@ var createPublicAPI = (server) => {
             validate: {
                 payload: {
                     name: Joi.string().description('Name'),
-                    email: Joi.string().description('E-Mail'),
+                    email: Joi.string().email().description('E-Mail'),
                     password: Joi.string().description('Password'),
                     repassword: Joi.string().description('retype your password')
                 }
