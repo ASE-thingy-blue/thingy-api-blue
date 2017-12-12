@@ -3,7 +3,7 @@
 /**
  * Controller - terrariumsCtrl
  */
-termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', function($scope, dataService) {
+termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', 'ngToast', function($scope, dataService, ngToast) {
 
     $scope.terrariums = [];
     
