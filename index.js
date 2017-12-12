@@ -9,6 +9,7 @@ const Crypto = require('crypto');
 const Jwt = require('jwt-simple');
 const Fs = require('fs');
 const Path = require('path');
+const Mongoose = require('mongoose');
 
 // Load model
 require('./model/makeModel');
@@ -146,3 +147,5 @@ server.views({
     relativeTo: __dirname,
     path: Path.join(__dirname, 'templates')
 });
+
+module.exports = server;

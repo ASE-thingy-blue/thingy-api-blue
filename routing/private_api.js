@@ -491,11 +491,7 @@ var createPrivateAPI = (server) => {
                     responses: {
                         200: {
                             description: 'Success',
-                            schema: Joi.object({
-                                "_id": Joi.string(),
-                                "name": Joi.string(),
-                                "thingies": Joi.array().items(schemas.thingyWithAll)
-                            }).label('Result')
+                            schema: schemas.thingyWithAll.label('Result')
                         }
                     }
                 }
@@ -593,11 +589,7 @@ var createPrivateAPI = (server) => {
                     responses: {
                         200: {
                             description: 'Success',
-                            schema: Joi.object({
-                                "_id": Joi.string(),
-                                "name": Joi.string(),
-                                "thingies": Joi.array().items(schemas.thingyWithTemperatures)
-                            }).label('Result')
+                            schema: schemas.thingyWithTemperatures.label('Result')
                         }
                     }
                 }
@@ -633,11 +625,7 @@ var createPrivateAPI = (server) => {
                     responses: {
                         200: {
                             description: 'Success',
-                            schema: Joi.object({
-                                "_id": Joi.string(),
-                                "name": Joi.string(),
-                                "thingies": Joi.array().items(schemas.thingyWithHumidities)
-                            }).label('Result')
+                            schema: schemas.thingyWithHumidities.label('Result')
                         }
                     }
                 }
@@ -673,11 +661,7 @@ var createPrivateAPI = (server) => {
                     responses: {
                         200: {
                             description: 'Success',
-                            schema: Joi.object({
-                                "_id": Joi.string(),
-                                "name": Joi.string(),
-                                "thingies": Joi.array().items(schemas.thingyWithTemperatures)
-                            }).label('Result')
+                            schema: schemas.thingyWithAirQualities.label('Result')
                         }
                     }
                 }

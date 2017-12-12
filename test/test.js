@@ -11,18 +11,22 @@
 
 import test from 'ava';
 import server from '../index';
+import schemas from '../routing/helper/responseSchemas';
 
 const Mongoose = require('mongoose');
 const Joi = require('joi');
-let token;
 let User = Mongoose.model('User');
+let token;
+let terrariumId;
+let thingyId;
 
 //inject test data to the database
 //and makes the token available as class variable
 test.before(t => {
     //require('child_process').execSync("node testvalues/insertTestValues.js");
 
-    const request = Object.assign({}, {
+    //Get token
+    const requestToken = Object.assign({}, {
         method: 'POST',
         url: '/authenticate',
         payload: {
@@ -31,9 +35,44 @@ test.before(t => {
         }
     });
 
-    return server.inject(request)
+    return server.inject(requestToken)
         .then(response => {
             token = response.result.token;
+        });
+});
+
+test.before(t => {
+    //Get terrarium id
+    const requestTerr = Object.assign({}, {
+        method: 'GET',
+        url: '/terrariums',
+        payload: {},
+        headers: {
+            authorization: token
+        }
+    });
+
+    return server.inject(requestTerr)
+        .then(response => {
+            terrariumId = JSON.parse(response.payload).terrariums[0]._id;
+        });
+
+    //Get thingy id
+});
+
+test.before(t => {
+    const requestThin = Object.assign({}, {
+        method: 'GET',
+        url: '/terrarium/'+terrariumId+'/thingies',
+        payload: {},
+        headers: {
+            authorization: token
+        }
+    });
+
+    return server.inject(requestThin)
+        .then(response => {
+            thingyId = JSON.parse(response.payload).thingies[0]._id;
         });
 });
 
@@ -71,7 +110,9 @@ test('Test /authentication', t => {
         });
 });
 
-//Check therrariums
+/**
+ * ALL TERRARIUMS
+ */
 test('Test /terrariums', t => {
     const request = Object.assign({}, {
         method: 'GET',
@@ -94,10 +135,397 @@ test('Test /terrariums', t => {
     return server.inject(request)
         .then(response => {
             let resp = JSON.parse(response.payload);
-            const comp = Joi.validate(resp, schema);
+            Joi.validate(resp, schema, (err) => {
+                if (err) {
+                    return t.false(true, "Schema is not fitting the response");
+                }
 
-            t.true(comp.error === null) &&
-            t.is(response.statusCode, 200);
+                t.is(response.statusCode, 200);
+            });
+        });
+});
+
+
+test('Test /terrariums/values', t => {
+    const request = Object.assign({}, {
+        method: 'GET',
+        url: '/terrariums/values',
+        payload: {},
+        headers: {
+            authorization: token
+        }
+    });
+
+    let schema = Joi.array().items(Joi.object({
+            "_id": Joi.string(),
+            "name": Joi.string(),
+            "thingies": Joi.array().items(schemas.thingyWithAll)
+        })
+    );
+
+    return server.inject(request)
+        .then(response => {
+            let resp = JSON.parse(response.payload);
+            let test = Joi.validate(resp, schema);
+
+            if(test.error === null){
+                t.is(response.statusCode, 200);
+            } else {
+                console.error(test);
+                t.false(true, "Schema is not fitting the response:\n");
+            }
+        });
+});
+
+test('Test /terrariums/temperature', t => {
+    const request = Object.assign({}, {
+        method: 'GET',
+        url: '/terrariums/temperature',
+        payload: {},
+        headers: {
+            authorization: token
+        }
+    });
+
+    let schema = Joi.array().items({
+        "_id": Joi.string(),
+        "name": Joi.string(),
+        "thingies": Joi.array().items(schemas.thingyWithTemperatures)
+    });
+
+    return server.inject(request)
+        .then(response => {
+            let resp = JSON.parse(response.payload);
+            let test = Joi.validate(resp, schema);
+
+            if(test.error === null){
+                t.is(response.statusCode, 200);
+            } else {
+                console.error(test);
+                t.false(true, "Schema is not fitting the response:\n");
+            }
+        });
+});
+
+test('Test /terrariums/humidity', t => {
+    const request = Object.assign({}, {
+        method: 'GET',
+        url: '/terrariums/humidity',
+        payload: {},
+        headers: {
+            authorization: token
+        }
+    });
+
+    let schema = Joi.array().items({
+        "_id": Joi.string(),
+        "name": Joi.string(),
+        "thingies": Joi.array().items(schemas.thingyWithHumidities)
+    });
+
+    return server.inject(request)
+        .then(response => {
+            let resp = JSON.parse(response.payload);
+            let test = Joi.validate(resp, schema);
+
+            if(test.error === null){
+                t.is(response.statusCode, 200);
+            } else {
+                console.error(test);
+                t.false(true, "Schema is not fitting the response:\n");
+            }
+        });
+});
+
+test('Test /terrariums/airquality', t => {
+    const request = Object.assign({}, {
+        method: 'GET',
+        url: '/terrariums/airquality',
+        payload: {},
+        headers: {
+            authorization: token
+        }
+    });
+
+    let schema = Joi.array().items({
+        "_id": Joi.string(),
+        "name": Joi.string(),
+        "thingies": Joi.array().items(schemas.thingyWithAirQualities)
+    });
+
+    return server.inject(request)
+        .then(response => {
+            let resp = JSON.parse(response.payload);
+            let test = Joi.validate(resp, schema);
+
+            if(test.error === null){
+                t.is(response.statusCode, 200);
+            } else {
+                console.error(test);
+                t.false(true, "Schema is not fitting the response:\n");
+            }
+        });
+});
+
+/**
+ * SPECIFIC TERRARIUMS
+ */
+
+test('Test /terrarium/{terrarium_id}/thingies', t => {
+    const request = Object.assign({}, {
+        method: 'GET',
+        url: '/terrarium/'+terrariumId+'/thingies',
+        payload: {},
+        headers: {
+            authorization: token
+        }
+    });
+
+    let schema = Joi.object({
+        "_id": Joi.string(),
+        "name": Joi.string(),
+        "thingies": Joi.array().items(schemas.thingy)
+    });
+
+    return server.inject(request)
+        .then(response => {
+            let resp = JSON.parse(response.payload);
+            let test = Joi.validate(resp, schema);
+
+            if(test.error === null){
+                t.is(response.statusCode, 200);
+            } else {
+                console.error(test);
+                t.false(true, "Schema is not fitting the response:\n");
+            }
+        });
+});
+
+test('Test /terrarium/{terrarium_id}/values', t => {
+    const request = Object.assign({}, {
+        method: 'GET',
+        url: '/terrarium/'+terrariumId+'/values',
+        payload: {},
+        headers: {
+            authorization: token
+        }
+    });
+
+    let schema = Joi.object({
+        "_id": Joi.string(),
+        "name": Joi.string(),
+        "thingies": Joi.array().items(schemas.thingyWithAll)
+    });
+
+    return server.inject(request)
+        .then(response => {
+            let resp = JSON.parse(response.payload);
+            let test = Joi.validate(resp, schema);
+
+            if(test.error === null){
+                t.is(response.statusCode, 200);
+            } else {
+                console.error(test);
+                t.false(true, "Schema is not fitting the response:\n");
+            }
+        });
+});
+
+test('Test /terrarium/{terrarium_id}/temperatures', t => {
+    const request = Object.assign({}, {
+        method: 'GET',
+        url: '/terrarium/'+terrariumId+'/temperatures',
+        payload: {},
+        headers: {
+            authorization: token
+        }
+    });
+
+    let schema = Joi.object({
+        "_id": Joi.string(),
+        "name": Joi.string(),
+        "thingies": Joi.array().items(schemas.thingyWithTemperatures)
+    });
+
+    return server.inject(request)
+        .then(response => {
+            let resp = JSON.parse(response.payload);
+            let test = Joi.validate(resp, schema);
+
+            if(test.error === null){
+                t.is(response.statusCode, 200);
+            } else {
+                console.error(test);
+                t.false(true, "Schema is not fitting the response:\n");
+            }
+        });
+});
+
+test('Test /terrarium/{terrarium_id}/humidities', t => {
+    const request = Object.assign({}, {
+        method: 'GET',
+        url: '/terrarium/'+terrariumId+'/humidities',
+        payload: {},
+        headers: {
+            authorization: token
+        }
+    });
+
+    let schema = Joi.object({
+        "_id": Joi.string(),
+        "name": Joi.string(),
+        "thingies": Joi.array().items(schemas.thingyWithHumidities)
+    });
+
+    return server.inject(request)
+        .then(response => {
+            let resp = JSON.parse(response.payload);
+            let test = Joi.validate(resp, schema);
+
+            if(test.error === null){
+                t.is(response.statusCode, 200);
+            } else {
+                console.error(test);
+                t.false(true, "Schema is not fitting the response:\n");
+            }
+        });
+});
+
+test('Test /terrarium/{terrarium_id}/airqualities', t => {
+    const request = Object.assign({}, {
+        method: 'GET',
+        url: '/terrarium/'+terrariumId+'/airqualities',
+        payload: {},
+        headers: {
+            authorization: token
+        }
+    });
+
+    let schema = Joi.object({
+        "_id": Joi.string(),
+        "name": Joi.string(),
+        "thingies": Joi.array().items(schemas.thingyWithAirQualities)
+    });
+
+    return server.inject(request)
+        .then(response => {
+            let resp = JSON.parse(response.payload);
+            let test = Joi.validate(resp, schema);
+
+            if(test.error === null){
+                t.is(response.statusCode, 200);
+            } else {
+                console.error(test);
+                t.false(true, "Schema is not fitting the response:\n");
+            }
+        });
+});
+
+/**
+ * SPECIFIC THING IN A SPECIFIC TERRARIUM
+ */
+
+test('Test /terrarium/{terrarium_id}/thingies/{thingy_id}/values', t => {
+    const request = Object.assign({}, {
+        method: 'GET',
+        url: '/terrarium/'+terrariumId+'/thingies/'+thingyId+'/values',
+        payload: {},
+        headers: {
+            authorization: token
+        }
+    });
+
+    let schema = schemas.thingyWithAll;
+
+    return server.inject(request)
+        .then(response => {
+            let resp = JSON.parse(response.payload);
+            let test = Joi.validate(resp, schema);
+
+            if(test.error === null){
+                t.is(response.statusCode, 200);
+            } else {
+                console.error(test);
+                t.false(true, "Schema is not fitting the response:\n");
+            }
+        });
+});
+
+test('Test /terrarium/{terrarium_id}/thingies/{thingy_id}/temperature', t => {
+    const request = Object.assign({}, {
+        method: 'GET',
+        url: '/terrarium/'+terrariumId+'/thingies/'+thingyId+'/temperature',
+        payload: {},
+        headers: {
+            authorization: token
+        }
+    });
+
+    let schema = schemas.thingyWithTemperatures;
+
+    return server.inject(request)
+        .then(response => {
+            let resp = JSON.parse(response.payload);
+            let test = Joi.validate(resp, schema);
+
+            if(test.error === null){
+                t.is(response.statusCode, 200);
+            } else {
+                console.error(test);
+                t.false(true, "Schema is not fitting the response:\n");
+            }
+        });
+});
+
+test('Test /terrarium/{terrarium_id}/thingies/{thingy_id}/humidity', t => {
+    const request = Object.assign({}, {
+        method: 'GET',
+        url: '/terrarium/'+terrariumId+'/thingies/'+thingyId+'/humidity',
+        payload: {},
+        headers: {
+            authorization: token
+        }
+    });
+
+    let schema = schemas.thingyWithHumidities;
+
+    return server.inject(request)
+        .then(response => {
+            let resp = JSON.parse(response.payload);
+            let test = Joi.validate(resp, schema);
+
+            if(test.error === null){
+                t.is(response.statusCode, 200);
+            } else {
+                console.error(test);
+                t.false(true, "Schema is not fitting the response:\n");
+            }
+        });
+});
+
+test('Test /terrarium/{terrarium_id}/thingies/{thingy_id}/airquality', t => {
+    const request = Object.assign({}, {
+        method: 'GET',
+        url: '/terrarium/'+terrariumId+'/thingies/'+thingyId+'/airquality',
+        payload: {},
+        headers: {
+            authorization: token
+        }
+    });
+
+    let schema = schemas.thingyWithAirQualities;
+
+    return server.inject(request)
+        .then(response => {
+            let resp = JSON.parse(response.payload);
+            let test = Joi.validate(resp, schema);
+
+            if(test.error === null){
+                t.is(response.statusCode, 200);
+            } else {
+                console.error(test);
+                t.false(true, "Schema is not fitting the response:\n");
+            }
         });
 });
 

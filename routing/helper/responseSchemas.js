@@ -11,14 +11,14 @@ let temperature = Joi.object({
     "_id": Joi.string(),
     "unit": unit,
     "value": Joi.number(),
-    "timestamp": Joi.date().timestamp()
+    "timestamp": Joi.date().iso()
 });
 
 let humidity = Joi.object({
     "_id": Joi.string(),
     "unit": unit,
     "value": Joi.number(),
-    "timestamp": Joi.date().timestamp()
+    "timestamp": Joi.date().iso()
 });
 
 let co2 = Joi.object({
@@ -35,9 +35,9 @@ let tvoc = Joi.object({
 
 let airQuality = Joi.object({
     "_id": Joi.string(),
-    "tvoc": Joi.array().items(tvoc),
-    "co2": Joi.array().items(co2),
-    "timestamp": Joi.date().timestamp()
+    "tvoc": tvoc,
+    "co2": co2,
+    "timestamp": Joi.date().iso()
 });
 
 let thingy = Joi.object({
