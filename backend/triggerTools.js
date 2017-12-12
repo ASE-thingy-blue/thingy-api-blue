@@ -78,6 +78,9 @@ let updateThresholds = function (thingy) {
         }
     }
 
+    // new thingies have no threshold violation list defined. create it if it is missing
+    if (thingy.thresholdViolations === undefined)
+	thingy.thresholdViolations = [];
     // Ignore unviolated that do not occur on Thingy
     thingy.thresholdViolations.forEach( e => unviolated = unviolated.filter( u => u == e.threshold ) );
     // Remove unviolated from Thingy
