@@ -32,11 +32,11 @@ module.exports = {
             .exec(function (err, user) {
                 if (err) {
                     console.error(err);
-                    return reply({"success": false, "message": "Database problem. Please try again later"}).code(200);
+                    return reply({"success": false, "message": "Database problem. Please try again later"}).code(500);
                 }
 
                 if(!user){
-                    return reply({"success": false, "message": "User not found"}).code(200);
+                    return reply({"success": false, "message": "User not found"}).code(404);
                 }
 
                 if(email){
@@ -45,7 +45,7 @@ module.exports = {
                 }
                 if(pw){
                     if (pw !== pw2) {
-                        return reply({"success": false, "message": "Repeated passwort does not match."}).code(200);
+                        return reply({"success": false, "message": "Repeated passwort does not match."}).code(400);
                     }
                     user.password = pw;
                     changes.password = "Psssssst!";
@@ -53,7 +53,7 @@ module.exports = {
 
                 user.save((err)=>{
                     if(err){
-                        return reply({"success": false, "message": "Database problem. Please try again later"}).code(200);
+                        return reply({"success": false, "message": "Database problem. Please try again later"}).code(500);
                     }
                 });
 

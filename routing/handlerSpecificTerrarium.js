@@ -11,7 +11,7 @@ module.exports = {
             .exec((err, user) =>{
             if(err) {
                 console.error(err);
-                return reply({'Error': 'User not found'}).code(404);
+                return reply({'message': 'User not found'}).code(404);
             }
 
             let terraNew = new Terrarium({
@@ -22,7 +22,7 @@ module.exports = {
 
             terraNew.save((err, terri) => {
                 if (err) {
-                    return reply({'Error': 'Something went wrong! Terrarium not saved'}).code(500);
+                    return reply({'message': 'Something went wrong! Terrarium not saved'}).code(500);
                 }
 
                 user.terrariums.push(terraNew);

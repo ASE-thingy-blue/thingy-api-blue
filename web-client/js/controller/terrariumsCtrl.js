@@ -24,6 +24,7 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', 'ngToast'
      */
     $scope.loadData = function() {
         $scope.hideDetails();
+        $scope.showSpinner = true;
 
         dataService.get('/terrariums').then(function(data) {
             $scope.terrariums = data.terrariums;
@@ -31,7 +32,8 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', 'ngToast'
                 dataService.get('/terrarium/'+terrarium._id+'/thingies').then(function(data) {
                     terrarium.thingies = data.thingies;
                 });
-            })
+            });
+            $scope.showSpinner = false;
         });
     };
     $scope.loadData();
@@ -74,14 +76,30 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', 'ngToast'
      * Opens a modal to create a new terrarium
      */
     $scope.showCreateTerrarium = function() {
-
+        $scope.modalError = undefined;
+        $scope.terToCreate = {};
+        $('#createTerrariumModal').modal('show');
     };
 
     /**
      * Saves a new terrarium over the API
+     * @param ter: Terrarium
      */
-    $scope.createTerrarium = function() {
+    $scope.createTerrarium = function(ter) {
+        $scope.showSpinner = true;
 
+        dataService.post('/terrariums', ter).then(function(result) {
+            $scope.terToCreate = undefined;
+            $scope.loadData();
+            $('#createTerrariumModal').modal('hide');
+        }).catch(function(err) {
+            if (err.data.message) {
+                $scope.modalError = err.data.message;
+            } else {
+                $scope.modalError = "Error connecting to server.";
+            }
+            $scope.showSpinner = false;
+        });
     };
 
     /**
@@ -89,7 +107,9 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', 'ngToast'
      * @param ter: Terrarium
      */
     $scope.showDeleteTerrarium = function(ter) {
-
+        $scope.modalError = undefined;
+        $scope.terToDelete = angular.copy(ter);
+        $('#deleteTerrariumModal').modal('show');
     };
 
     /**
@@ -97,7 +117,20 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', 'ngToast'
      * @param ter: Terrarium
      */
     $scope.deleteTerrarium = function(ter) {
+        $scope.showSpinner = true;
 
+        dataService.delete('/terrarium/' + ter._id).then(function(result) {
+            $scope.terToDelete = undefined;
+            $scope.loadData();
+            $('#deleteTerrariumModal').modal('hide');
+        }).catch(function(err) {
+            if (err.data.message) {
+                $scope.modalError = err.data.message;
+            } else {
+                $scope.modalError = "Error connecting to server.";
+            }
+            $scope.showSpinner = false;
+        });
     };
 
 

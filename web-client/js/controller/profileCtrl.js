@@ -28,12 +28,7 @@ termonWebClient.controller('profileCtrl', ['$scope', 'dataService', function($sc
         };
 
         dataService.put('/user', user).then(function(result) {
-            console.log(result);
-            if (result.success) {
-                $scope.successMsg = result.message;
-            } else {
-                $scope.errorMsg = result.message;
-            }
+            $scope.successMsg = result.message;
         }).catch(function(err) {
             if (err.data.message) {
                 $scope.errorMsg = err.data.message;
