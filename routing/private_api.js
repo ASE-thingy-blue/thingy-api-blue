@@ -4,7 +4,6 @@ const HandlerAllTerrariums = require('./handlerAllTerrariums');
 const HandlerTerrarium = require('./handlerSpecificTerrarium');
 const HandlerThingy = require('./handlerSpecificThingy');
 
-
 const schemas = require('./helper/responseSchemas');
 
 var createPrivateAPI = (server) => {
@@ -26,11 +25,7 @@ var createPrivateAPI = (server) => {
                             description: 'Success',
                             schema: Joi.object({
                                 _id: Joi.string(),
-                                terrariums: Joi.array().items(Joi.object({
-                                        _id: Joi.string(),
-                                        name: Joi.string()
-                                    })
-                                )
+                                terrariums: Joi.array().items(schemas.terrarium)
                             }).label('Result')
                         }
                     }
@@ -59,11 +54,12 @@ var createPrivateAPI = (server) => {
                     responses: {
                         200: {
                             description: 'Success',
-                            schema: Joi.object({
-                                "_id": Joi.string(),
-                                "name": Joi.string(),
-                                "thingies": Joi.array().items(schemas.thingyWithAll)
-                            }).label('Result')
+                            schema: Joi.array().items(Joi.object({
+                                    "_id": Joi.string(),
+                                    "name": Joi.string(),
+                                    "thingies": Joi.array().items(schemas.thingyWithAll)
+                                })
+                            ).label('Result')
                         }
                     }
                 }
@@ -240,8 +236,12 @@ var createPrivateAPI = (server) => {
                 'hapi-swagger': {
                     responses: {
                         200: {
-                            description: 'Success'
-                            //schema:""
+                            description: 'Success',
+                            schema: Joi.object({
+                                "_id": Joi.string(),
+                                "name": Joi.string(),
+                                "thingies": Joi.array().items(schemas.thingy)
+                            }).label('Result')
 
                         }
                     }
@@ -347,7 +347,7 @@ var createPrivateAPI = (server) => {
                     responses: {
                         200: {
                             description: 'Success'
-                            //ToDO schema:
+                            //TODO schema:
                         }
                     }
                 }
@@ -490,8 +490,12 @@ var createPrivateAPI = (server) => {
                 'hapi-swagger': {
                     responses: {
                         200: {
-                            description: 'Success'
-                            //ToDO schema:
+                            description: 'Success',
+                            schema: Joi.object({
+                                "_id": Joi.string(),
+                                "name": Joi.string(),
+                                "thingies": Joi.array().items(schemas.thingyWithAll)
+                            }).label('Result')
                         }
                     }
                 }
@@ -588,8 +592,12 @@ var createPrivateAPI = (server) => {
                 'hapi-swagger': {
                     responses: {
                         200: {
-                            description: 'Success'
-                            //ToDO schema:
+                            description: 'Success',
+                            schema: Joi.object({
+                                "_id": Joi.string(),
+                                "name": Joi.string(),
+                                "thingies": Joi.array().items(schemas.thingyWithTemperatures)
+                            }).label('Result')
                         }
                     }
                 }
@@ -624,8 +632,12 @@ var createPrivateAPI = (server) => {
                 'hapi-swagger': {
                     responses: {
                         200: {
-                            description: 'Success'
-                            //ToDo schema:
+                            description: 'Success',
+                            schema: Joi.object({
+                                "_id": Joi.string(),
+                                "name": Joi.string(),
+                                "thingies": Joi.array().items(schemas.thingyWithHumidities)
+                            }).label('Result')
                         }
                     }
                 }
@@ -660,8 +672,12 @@ var createPrivateAPI = (server) => {
                 'hapi-swagger': {
                     responses: {
                         200: {
-                            description: 'Success'
-                            //ToDo schema:
+                            description: 'Success',
+                            schema: Joi.object({
+                                "_id": Joi.string(),
+                                "name": Joi.string(),
+                                "thingies": Joi.array().items(schemas.thingyWithTemperatures)
+                            }).label('Result')
                         }
                     }
                 }
