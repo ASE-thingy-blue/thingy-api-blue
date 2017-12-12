@@ -35,13 +35,13 @@ let updateThresholds = function (thingy) {
     for (let threshold of thresholds) {
         let ascending = threshold.ascending;
         let lower = threshold.ascending ? threshold.disarm : threshold.arm;
-        let higher = threshold.ascending ? threshold.arm : threshold.disarm;
+        let upper = threshold.ascending ? threshold.arm : threshold.disarm;
         let hasbad = false;
         let hascentral = false;
         // Check temperature
         if (current.temperature.value <= lower.temperature.value) {
             hasbad = ascending ? hasbad : true;
-        } else if (current.temperature.value >= higher.temperature.value) {
+        } else if (current.temperature.value >= upper.temperature.value) {
             hasbad = ascending ? true : hasbad;
         } else {
             hascentral = true;
@@ -49,7 +49,7 @@ let updateThresholds = function (thingy) {
         // Check humidity
         if (current.humidity.value <= lower.humidity.value) {
             hasbad = ascending ? hasbad : true;
-        } else if (current.humidity.value >= higher.humidity.value) {
+        } else if (current.humidity.value >= upper.humidity.value) {
             hasbad = ascending ? true : hasbad;
         } else {
             hascentral = true;
@@ -57,7 +57,7 @@ let updateThresholds = function (thingy) {
         // Check CO2
         if (current.co2.value <= lower.co2.value) {
             hasbad = ascending ? hasbad : true;
-        } else if (current.co2.value >= higher.co2.value) {
+        } else if (current.co2.value >= upper.co2.value) {
             hasbad = ascending ? true : hasbad;
         } else {
             hascentral = true;
@@ -65,7 +65,7 @@ let updateThresholds = function (thingy) {
         // Check TVOC
         if (current.tvoc.value <= lower.tvoc.value) {
             hasbad = ascending ? hasbad : true;
-        } else if (current.tvoc.value >= higher.tvoc.value) {
+        } else if (current.tvoc.value >= upper.tvoc.value) {
             hasbad = ascending ? true : hasbad;
         } else {
             hascentral = true;
