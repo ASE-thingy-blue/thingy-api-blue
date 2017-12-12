@@ -43,8 +43,12 @@ termonWebClient.factory('authService', ['$rootScope', '$q', '$http', function($r
                 } else {
                     reject(result.data.message);
                 }
-            }).catch(function() {
-                reject('Can\'t connect to Server.');
+            }).catch(function(error) {
+                if (error.data.message) {
+                    reject(error.data.message);
+                } else {
+                    reject('Can\'t connect to Server.');
+                }
             });
         });
     };
@@ -58,8 +62,12 @@ termonWebClient.factory('authService', ['$rootScope', '$q', '$http', function($r
                 } else {
                     reject(result.data.message);
                 }
-            }).catch(function() {
-                reject('Can\'t connect to Server.');
+            }).catch(function(error) {
+                if (error.data.message) {
+                    reject(error.data.message);
+                } else {
+                    reject('Can\'t connect to Server.');
+                }
             });
         });
     };

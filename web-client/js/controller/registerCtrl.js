@@ -22,7 +22,7 @@ termonWebClient.controller('registerCtrl', ['$scope', 'authService', '$state', f
         authService.register($scope.user).then(function(msg) {
             $state.go('public.login');
         }, function(errMsg) {
-            $scope.registerError = 'Registration failed: ' + errMsg;
+            $scope.registerError = errMsg;
         });
     };
     
