@@ -6,6 +6,8 @@
 termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', function($scope, dataService) {
 
     $scope.terrariums = [];
+    
+    
 
     //view flags
     $scope.terDetails = null;
