@@ -78,7 +78,7 @@ var termonWebClient = angular.module('termonWebClient', ['ui.router', 'ngAnimate
         $transitions.onStart({ to: 'public.**' }, function(transition) {
             var auth = transition.injector().get('authService');
             if (auth.isAuthenticated()) {
-                // User isn't authenticated. Redirect to login state.
+                // User is authenticated. Redirect to Home page.
                 return transition.router.stateService.target('private.home');
             }
         });

@@ -28,8 +28,8 @@ require("../model/helper/databaseConnection");
 // Creating units
 var celsius = new Unit({name: "Celsius", short: "C"});
 var percent = new Unit({name: "Percent", short: "%"});
-var gPerQ = new Unit({name: "gram per qubic meter", short: "g/m3"});
-var mgPerQ = new Unit({name: "microgram per qubic meter", short: "ug/m3"});
+var gPerQ = new Unit({name: "gram per cubic meter", short: "g/m3"});
+var mgPerQ = new Unit({name: "microgram per cubic meter", short: "ug/m3"});
 promises.push(celsius.save());
 promises.push(percent.save());
 promises.push(gPerQ.save());
