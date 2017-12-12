@@ -3,7 +3,7 @@
 /**
  * Controller - terrariumsCtrl
  */
-termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', 'ngToast', function($scope, dataService, ngToast) {
+termonWebClient.controller('terrariumsCtrl', ['$scope', '$q', 'dataService', 'ngToast', function($scope, $q, dataService, ngToast) {
 
     $scope.terrariums = [];
 
@@ -23,17 +23,22 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', 'ngToast'
      *  Load Terrarium and Thingy data
      */
     $scope.loadData = function() {
-        $scope.hideDetails();
         $scope.showSpinner = true;
+        $scope.hideDetails();
 
         dataService.get('/terrariums').then(function(data) {
             $scope.terrariums = data.terrariums;
+            let promises = [];
             angular.forEach($scope.terrariums, function(terrarium) {
-                dataService.get('/terrarium/'+terrarium._id+'/thingies').then(function(data) {
+                let p = dataService.get('/terrarium/'+terrarium._id+'/thingies').then(function(data) {
                     terrarium.thingies = data.thingies;
                 });
+                promises.push(p);
             });
-            $scope.showSpinner = false;
+
+            $q.all(promises).then(function() {
+                $scope.showSpinner = false;
+            });
         });
     };
     $scope.loadData();
@@ -43,10 +48,12 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', 'ngToast'
      * @param ter: Terrarium
      */
     $scope.showTerDetails = function(ter) {
+        $scope.showSpinner = true;
         $scope.hideDetails();
 
         dataService.get('/terrarium/'+ter._id+'/values').then(function(data) {
             $scope.terDetails = data;
+            $scope.showSpinner = false;
         });
     };
 
@@ -56,18 +63,26 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', 'ngToast'
      * @param thingy: Thingy
      */
     $scope.showThingyDetails = function(ter, thingy) {
+        $scope.showSpinner = true;
         $scope.hideDetails();
         
         dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id+'/values').then(function(data) {
             $scope.thingyDetails = data;
+            let promises = [];
             //Load configuration and violations
-            dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id+'/configuration').then(function(data) {
+            let p1 = dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id+'/configuration').then(function(data) {
                 $scope.thingyDetails.configuration = data;
                 console.log($scope.thingyDetails.configuration);
             });
-            dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id+'/violations').then(function(data) {
+            promises.push(p1);
+            let p2 = dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id+'/violations').then(function(data) {
                 $scope.thingyDetails.violations = data;
                 console.log($scope.thingyDetails.violations);
+            });
+            promises.push(p2);
+
+            $q.all(promises).then(function() {
+                $scope.showSpinner = false;
             });
         });
     };

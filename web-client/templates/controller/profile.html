@@ -1,6 +1,6 @@
 <div id="page" class="maincontent">
 
-    <h1>Profile</h1>
+    <h1>Profile<span ng-if="showSpinner"> <i class="fa fa-spinner fa-spin"></i></span></h1>
     <br/>
 
     <div class="row">
@@ -27,11 +27,7 @@
                         <br />
                         <input type="password" name="repassword" class="form-control" placeholder="Repeate Password" ng-model="user.repassword" rg-required="user.password">
                         <br />
-                        <div class="wrapper">
-                        <span class="group-btn">
-                            <button type="submit" class="btn btn-success btn-md"><i class="fa fa-fw fa-save"></i>Save Profile</button>
-                        </span>
-                        </div>
+                        <button type="submit" class="btn btn-success"><i class="fa fa-fw fa-save"></i>save profile</button>
                     </form>
                 </div>
             </div>

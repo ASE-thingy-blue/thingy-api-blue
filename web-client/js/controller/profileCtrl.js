@@ -10,14 +10,17 @@ termonWebClient.controller('profileCtrl', ['$scope', 'dataService', function($sc
     $scope.successMsg = undefined;
 
     //Get the logged in user
+    $scope.showSpinner = true;
     dataService.get('/user').then(function(user) {
         $scope.user = user;
+        $scope.showSpinner = false;
     });
 
     /**
      * Update the users profile over API
      */
     $scope.updateProfile = function() {
+        $scope.showSpinner = true;
         $scope.errorMsg = undefined;
         $scope.successMsg = undefined;
 
@@ -35,6 +38,8 @@ termonWebClient.controller('profileCtrl', ['$scope', 'dataService', function($sc
             } else {
                 $scope.errorMsg = "Error connecting to server.";
             }
+        }).finally(function() {
+            $scope.showSpinner = false;
         });
     };
 
