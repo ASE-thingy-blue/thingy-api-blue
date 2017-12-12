@@ -24,6 +24,7 @@ module.exports = {
     updateUser: function (request, reply) {
         let email = request.payload.mailAddress;
         let pw = request.payload.password;
+        let pw2 = request.payload.repassword;
         let changes = {};
 
         User.findOne({name: request.auth.credentials.userName})
@@ -31,11 +32,11 @@ module.exports = {
             .exec(function (err, user) {
                 if (err) {
                     console.error(err);
-                    return reply({"Error": "Database problem. Please try again later"}).code(500);
+                    return reply({"success": false, "message": "Database problem. Please try again later"}).code(200);
                 }
 
                 if(!user){
-                    return reply({"Error": "User not found"}).code(404);
+                    return reply({"success": false, "message": "User not found"}).code(200);
                 }
 
                 if(email){
@@ -43,13 +44,16 @@ module.exports = {
                     changes.email = email;
                 }
                 if(pw){
+                    if (pw !== pw2) {
+                        return reply({"success": false, "message": "Repeated passwort does not match."}).code(200);
+                    }
                     user.password = pw;
                     changes.password = "Psssssst!";
                 }
 
                 user.save((err)=>{
                     if(err){
-                        return reply({"Error": "Database problem. Please try again later"}).code(500);
+                        return reply({"success": false, "message": "Database problem. Please try again later"}).code(200);
                     }
                 });
 

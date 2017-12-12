@@ -34,15 +34,10 @@ var termonWebClient = angular.module('termonWebClient', ['ui.router', 'ngAnimate
                 templateUrl: 'static/templates/controller/terrariums.html',
                 controller: 'terrariumsCtrl'
             })
-            .state('private.thingies', {
-                url: '/thingies',
-                templateUrl: 'static/templates/controller/thingies.html',
-                controller: 'thingiesCtrl'
-            })
-            .state('private.settings', {
-                url: '/settings',
-                templateUrl: 'static/templates/controller/settings.html',
-                controller: 'settingsCtrl'
+            .state('private.profile', {
+                url: '/profile',
+                templateUrl: 'static/templates/controller/profile.html',
+                controller: 'profileCtrl'
             })
             .state('private.logout', {
                 url: '/logout',

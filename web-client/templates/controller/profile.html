@@ -1,0 +1,40 @@
+<div id="page" class="maincontent">
+
+    <h1>Profile</h1>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Update your Profile</h3>
+                </div>
+                <div class="panel-body">
+
+                    <div ng-if="successMsg" class="alert alert-success">
+                        {{successMsg}}
+                    </div>
+                    <div ng-if="errorMsg" class="alert alert-danger">
+                        {{errorMsg}}
+                    </div>
+
+                    <form method="POST" ng-submit="updateProfile()">
+                        <input type="text" name="username" class="form-control" placeholder="Username" ng-model="user.name" disabled="disabled">
+                        <br />
+                        <input type="email" name="email" class="form-control" placeholder="E-Mail Address" ng-model="user.mailAddress" required>
+                        <br />
+                        <input type="password" name="password" class="form-control" placeholder="Password" ng-model="user.password">
+                        <br />
+                        <input type="password" name="repassword" class="form-control" placeholder="Repeate Password" ng-model="user.repassword" rg-required="user.password">
+                        <br />
+                        <div class="wrapper">
+                        <span class="group-btn">
+                            <button type="submit" class="btn btn-primary btn-md"><i class="fa fa-fw fa-save"></i>Save Profile</button>
+                        </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

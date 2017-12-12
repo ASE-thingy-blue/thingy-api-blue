@@ -17,14 +17,9 @@ termonWebClient.controller('navigationCtrl', ['$rootScope', '$scope', '$state', 
             state : 'private.terrariums',
             icon : 'fa-th'
         }, {
-            name : 'Thingies',
-            path : '/thingies',
-            state : 'private.thingies',
-            icon : 'fa-th-large'
-        }, {
-            name : 'Settings',
-            path : '/settings',
-            state : 'private.settings',
+            name : 'Profile',
+            path : '/profile',
+            state : 'private.profile',
             icon : 'fa-gear'
         }, {
             name : 'Logout',

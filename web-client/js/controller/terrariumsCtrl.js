@@ -18,7 +18,6 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', function(
         $scope.thingyDetails = null;
     };
 
-    console.log('init');
     $scope.loadData = function() {
         $scope.hideDetails();
 
@@ -38,7 +37,6 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', function(
 
         dataService.get('/terrarium/'+ter._id+'/values').then(function(data) {
             $scope.terDetails = data;
-            console.log($scope.terDetails);
         });
     };
 
@@ -47,7 +45,15 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', function(
         
         dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id+'/values').then(function(data) {
             $scope.thingyDetails = data;
-            console.log($scope.thingyDetails);
+            //Load configuration and violations
+            dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id+'/configuration').then(function(data) {
+                $scope.thingyDetails.configuration = data;
+                console.log($scope.thingyDetails.configuration);
+            });
+            dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id+'/violations').then(function(data) {
+                $scope.thingyDetails.violations = data;
+                console.log($scope.thingyDetails.violations);
+            });
         });
     };
 
