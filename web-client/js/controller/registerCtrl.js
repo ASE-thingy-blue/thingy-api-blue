@@ -14,6 +14,9 @@ termonWebClient.controller('registerCtrl', ['$scope', 'authService', '$state', f
         repassword: ''
     };
 
+    /**
+     * Register a new user over authService
+     */
     $scope.register = function() {
         $scope.registerError = undefined;
         authService.register($scope.user).then(function(msg) {

@@ -6,18 +6,22 @@
 termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', 'ngToast', function($scope, dataService, ngToast) {
 
     $scope.terrariums = [];
-    
-    
 
-    //view flags
+    //view flags (currently displayed objects)
     $scope.terDetails = null;
     $scope.thingyDetails = null;
 
+    /**
+     * Resets the view
+     */
     $scope.hideDetails = function() {
         $scope.terDetails = null;
         $scope.thingyDetails = null;
     };
 
+    /**
+     *  Load Terrarium and Thingy data
+     */
     $scope.loadData = function() {
         $scope.hideDetails();
 
@@ -32,6 +36,10 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', 'ngToast'
     };
     $scope.loadData();
 
+    /**
+     * Show Detail view for 1 terrarium (list of thingies with values)
+     * @param ter: Terrarium
+     */
     $scope.showTerDetails = function(ter) {
         $scope.hideDetails();
 
@@ -40,6 +48,11 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', 'ngToast'
         });
     };
 
+    /**
+     * Show Detail view for 1 terrarium (list of thingies with values)
+     * @param ter: Terrarium
+     * @param thingy: Thingy
+     */
     $scope.showThingyDetails = function(ter, thingy) {
         $scope.hideDetails();
         
@@ -55,6 +68,36 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', 'dataService', 'ngToast'
                 console.log($scope.thingyDetails.violations);
             });
         });
+    };
+
+    /**
+     * Opens a modal to create a new terrarium
+     */
+    $scope.showCreateTerrarium = function() {
+
+    };
+
+    /**
+     * Saves a new terrarium over the API
+     */
+    $scope.createTerrarium = function() {
+
+    };
+
+    /**
+     * Opens a modal to delete an existing terrarium
+     * @param ter: Terrarium
+     */
+    $scope.showDeleteTerrarium = function(ter) {
+
+    };
+
+    /**
+     * Deletes an existing terrarium over the API
+     * @param ter: Terrarium
+     */
+    $scope.deleteTerrarium = function(ter) {
+
     };
 
 

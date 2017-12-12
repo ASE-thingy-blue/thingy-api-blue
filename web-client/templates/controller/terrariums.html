@@ -3,11 +3,14 @@
     <h1>Terrariums</h1>
     <br/>
 
-    <div ng-if="!terDetails && !thingyDetails">
-        <button class="btn btn-success" ng-click="loadData()"><i class="fa fa-fw fa-refresh"></i>Reload all Data</button>
-    </div>
-    <div ng-if="terDetails || thingyDetails">
-        <button class="btn btn-success" ng-click="loadData()"><i class="fa fa-fw fa-backward"></i>Back to overview</button>
+    <div>
+        <div ng-if="!terDetails && !thingyDetails">
+            <button class="btn btn-primary" ng-click="loadData()"><i class="fa fa-fw fa-refresh"></i>reload data</button>
+            <button class="btn btn-success pull-right" ng-click="showCreateTerrarium()"><i class="fa fa-fw fa-refresh"></i>create terrarium</button>
+        </div>
+        <div ng-if="terDetails || thingyDetails">
+            <button class="btn btn-primary" ng-click="loadData()"><i class="fa fa-fw fa-backward"></i>overview</button>
+        </div>
     </div>
     <br/>
 
@@ -24,7 +27,8 @@
                             <a ng-click="showThingyDetails(terrarium, thingy)">{{thingy.description}} ({{thingy.macAddress}})</a>
                         </li>
                     </ul>
-                    <button class="btn btn-success pull-right" ng-click="showTerDetails(terrarium)">Show Terrarium details</button>
+                    <button class="btn btn-primary pull-right" ng-click="showTerDetails(terrarium)"><i class="fa fa-fw fa-info"></i>show details</button>
+                    <button ng-if="!terrarium.default" class="btn btn-danger pull-right" ng-click="showDeleteTerrarium(terrarium)"><i class="fa fa-fw fa-trash"></i>delete</button>
                 </div>
             </div>
         </div>
@@ -58,7 +62,7 @@
                             <li>Date: {{thingy.temperatures[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
                         </ul>
                     </ul>
-                    <button class="btn btn-success pull-right" ng-click="showThingyDetails(terDetails, thingy)">Show Thingy details</button>
+                    <button class="btn btn-primary pull-right" ng-click="showThingyDetails(terDetails, thingy)"><i class="fa fa-fw fa-info"></i>show details</button>
                 </div>
             </div>
         </div>
