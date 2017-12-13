@@ -92,7 +92,7 @@ var createThingyAPI = (server) => {
                     if (user === null) {
                         console.log('Create new user');
                         var newUser = new User({name: data.user});
-                        var terri = new Terri({name: "My first terrarium"});
+                        var terri = new Terri({name: "My first terrarium", isDefault: true});
                         var thingy = new Thingy({macAddress: data.thingy, callbackAddress: data.cb});
 
                         newUser.save();
@@ -111,7 +111,7 @@ var createThingyAPI = (server) => {
                             if (thingy === null) {
                                 console.log('Create a new Thingy');
                                 var newThingy = new Thingy({macAddress: data.thingy, callbackAddress: data.cb});
-                                var terri = new Terri({name: "My first terrarium"});
+                                var terri = new Terri({name: "My first terrarium", isDefault: true});
 
                                 newThingy.save();
                                 terri.thingies.push(newThingy);

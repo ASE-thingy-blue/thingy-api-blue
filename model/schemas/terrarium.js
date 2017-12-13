@@ -11,6 +11,10 @@ var terrariumSchema = Mongoose.Schema({
         },
         description: String,
         callbackAddress: String,
+        isDefault: {
+            type: Boolean,
+            default: false
+        },
 
         thingies: [require("./thingy")]
     });
