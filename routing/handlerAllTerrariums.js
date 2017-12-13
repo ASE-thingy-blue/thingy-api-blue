@@ -6,7 +6,7 @@ module.exports = {
 
     terrariums: function (request, reply) {
         User.findOne({name: request.auth.credentials.userName})
-            .select('terrariums._id terrariums.name terrariums.description')
+            .select('terrariums._id terrariums.name terrariums.description terrariums.isDefault')
             .exec(function (err, user) {
                 if (err) {
                     console.error(err);
