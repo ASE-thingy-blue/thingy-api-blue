@@ -2,7 +2,6 @@ const Mongoose = require("mongoose");
 
 var User = Mongoose.model("User");
 let Terrarium = Mongoose.model("Terrarium");
-let Thingy = Mongoose.model("Thingy");
 
 module.exports = {
 
