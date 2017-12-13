@@ -3,7 +3,7 @@
 /**
  * Controller - terrariumsCtrl
  */
-termonWebClient.controller('terrariumsCtrl', ['$scope', '$q', 'dataService', 'ngToast', function($scope, $q, dataService, ngToast) {
+termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state', '$q', 'dataService', 'ngToast', function($scope, $stateParams, $state, $q, dataService, ngToast) {
 
     $scope.terrariums = [];
 
@@ -22,7 +22,7 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$q', 'dataService', 'ng
     /**
      *  Load Terrarium and Thingy data
      */
-    $scope.loadData = function() {
+    $scope.loadData = function(initial) {
         $scope.showSpinner = true;
         $scope.hideDetails();
 
@@ -37,11 +37,22 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$q', 'dataService', 'ng
             });
 
             $q.all(promises).then(function() {
-                $scope.showSpinner = false;
+                //Thingy or Terrarium detail view
+                if (initial) {
+                    if (angular.isDefined($stateParams.thingyId) && angular.isDefined($stateParams.terId)) {
+                        $scope.showThingyDetails({_id:$stateParams.terId}, {_id:$stateParams.thingyId})
+                    } else if (angular.isDefined($stateParams.terId)) {
+                        $scope.showTerDetails({_id:$stateParams.terId})
+                    } else {
+                        $scope.showSpinner = false;
+                    }
+                } else {
+                    $scope.showSpinner = false;
+                }
             });
         });
     };
-    $scope.loadData();
+    $scope.loadData(true);
 
     /**
      * Show Detail view for 1 terrarium (list of thingies with values)
@@ -68,16 +79,17 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$q', 'dataService', 'ng
         
         dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id+'/values').then(function(data) {
             $scope.thingyDetails = data;
+            $scope.thingyDetails.ter = ter;
             let promises = [];
             //Load configuration and violations
             let p1 = dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id+'/configuration').then(function(data) {
                 $scope.thingyDetails.configuration = data;
-                console.log($scope.thingyDetails.configuration);
+                //console.log($scope.thingyDetails.configuration);
             });
             promises.push(p1);
             let p2 = dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id+'/violations').then(function(data) {
                 $scope.thingyDetails.violations = data;
-                console.log($scope.thingyDetails.violations);
+                //console.log($scope.thingyDetails.violations);
             });
             promises.push(p2);
 
@@ -148,5 +160,8 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$q', 'dataService', 'ng
         });
     };
 
+    $scope.showHistory = function(ter, thingy) {
+        $state.go('private.history', {terId: ter._id, thingyId: thingy._id})
+    }
 
 }]);

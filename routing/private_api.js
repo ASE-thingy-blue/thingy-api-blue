@@ -84,7 +84,8 @@ var createPrivateAPI = (server) => {
                                 _id: Joi.string(),
                                 terrariums: Joi.array().items(Joi.object({
                                     _id: Joi.string(),
-                                    name: Joi.string()
+                                    name: Joi.string(),
+                                    isDefault: Joi.boolean()
                                 }))
                             }).label('Result')
                         }

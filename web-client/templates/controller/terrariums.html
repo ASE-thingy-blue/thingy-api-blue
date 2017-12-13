@@ -9,58 +9,68 @@
             <button class="btn btn-success pull-right" ng-click="showCreateTerrarium()"><i class="fa fa-fw fa-refresh"></i>create terrarium</button>
         </div>
         <div ng-if="terDetails || thingyDetails">
-            <button class="btn btn-primary" ng-click="loadData()"><i class="fa fa-fw fa-backward"></i>overview</button>
+            <button class="btn btn-primary" ng-click="loadData()"><i class="fa fa-fw fa-backward"></i>terrarium list</button>
+            <button ng-if="thingyDetails" class="btn btn-primary" ng-click="showTerDetails(thingyDetails.ter)"><i class="fa fa-fw fa-info"></i>terrarium details</button>
         </div>
     </div>
     <br/>
 
-    <div ng-if="!terDetails && !thingyDetails" class="row">
-        <div ng-repeat="terrarium in terrariums" class="col-lg-6">
-            <div class="panel panel-info">
-                <div ng-click="showTerDetails(terrarium)" class="panel-heading">
-                    <h3 class="panel-title">{{terrarium.name}}</h3>
-                </div>
-                <div class="panel-body">
-                    <h3>Thingies</h3>
-                    <ul>
-                        <li ng-repeat="thingy in terrarium.thingies">
-                            <a ng-click="showThingyDetails(terrarium, thingy)">{{thingy.description}} ({{thingy.macAddress}})</a>
-                        </li>
-                        <li ng-if="!terrarium.thingies || terrarium.thingies.length === 0">
-                            Terrarium has no Thingies
-                        </li>
-                    </ul>
-                    <button class="btn btn-primary pull-right" ng-click="showTerDetails(terrarium)"><i class="fa fa-fw fa-info"></i>show details</button>
-                    <button ng-if="!terrarium.default" class="btn btn-danger pull-right" ng-click="showDeleteTerrarium(terrarium)"><i class="fa fa-fw fa-trash"></i>delete</button>
+    <div ng-if="!showSpinner">
+        <div ng-if="!terDetails && !thingyDetails" class="row">
+            <div ng-repeat="terrarium in terrariums | orderBy:['-isDefault','name']" class="col-lg-6">
+                <div class="panel" ng-class="{'panel-info':!terrarium.isDefault, 'panel-success':terrarium.isDefault}">
+                    <div ng-click="showTerDetails(terrarium)" class="panel-heading">
+                        <h3 class="panel-title">{{terrarium.name}}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>{{terrarium.description}}</p>
+                        <h3>Thingies</h3>
+                        <ul>
+                            <li ng-repeat="thingy in terrarium.thingies | orderBy:'description'">
+                                <a ng-click="showThingyDetails(terrarium, thingy)" class="fakelink">{{thingy.description}} ({{thingy.macAddress}})</a>
+                            </li>
+                            <li ng-if="!terrarium.thingies || terrarium.thingies.length === 0">
+                                Terrarium has no Thingies
+                            </li>
+                        </ul>
+                        <button class="btn btn-primary pull-right" ng-click="showTerDetails(terrarium)"><i class="fa fa-fw fa-info"></i>show details</button>
+                        <button ng-if="!terrarium.isDefault" class="btn btn-danger pull-right" ng-click="showDeleteTerrarium(terrarium)"><i class="fa fa-fw fa-trash"></i>delete</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <div ng-if="terDetails" class="row">
-        <div ng-repeat="thingy in terDetails.thingies" class="col-lg-6">
+        <div ng-if="!showSpinner && terDetails.thingies.length === 0" class="col-lg-12">
+            <div class="alert alert-warning">
+                <p>Terrarium has no Thingies.</p>
+            </div>
+        </div>
+        <div ng-repeat="thingy in terDetails.thingies | orderBy:'description'" class="col-lg-6">
             <div class="panel panel-info">
                 <div ng-click="showThingyDetails(terDetails, thingy)" class="panel-heading">
-                    <h3 class="panel-title">{{thingy.description}} ({{terDetails.name}})</h3>
+                    <h3 class="panel-title">{{thingy.description}} ({{terDetails.name}})<span class="pull-right">{{thingy.macAddress}}</span></h3>
                 </div>
                 <div class="panel-body">
+                    <button class="btn btn-primary btn-corner" ng-click="showHistory(terDetails, thingy)"><i class="fa fa-fw fa-history"></i>history</button>
                     <h3>Sensor Data</h3>
                     <ul>
                         <li>Humidity:</li>
-                        <ul>
+                        <ul class="nobullets">
                             <li>{{thingy.humidities[0].value}} {{thingy.humidities[0].unit.short}}</li>
                             <li>Date: {{thingy.humidities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
                         </ul>
 
                         <li>Air Quality:</li>
-                        <ul>
+                        <ul class="nobullets">
                             <li>TVOC: {{thingy.airQualities[0].tvoc.value}} {{thingy.airQualities[0].tvoc.unit.short}}</li>
                             <li>CO2: {{thingy.airQualities[0].co2.value}} {{thingy.airQualities[0].co2.unit.short}}</li>
                             <li>Date: {{thingy.airQualities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
                         </ul>
 
                         <li>Temperature:</li>
-                        <ul>
+                        <ul class="nobullets">
                             <li>{{thingy.temperatures[0].value}} {{thingy.temperatures[0].unit.short}}</li>
                             <li>Date: {{thingy.temperatures[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
                         </ul>
@@ -75,30 +85,56 @@
         <div class="col-lg-12">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h3 class="panel-title">{{thingyDetails.description}} - Status</h3>
+                    <h3 class="panel-title">{{thingyDetails.description}} - State<span class="pull-right">{{thingyDetails.macAddress}}</span></h3>
                 </div>
                 <div class="panel-body">
-                    <h3>Sensor Data</h3>
-                    <ul>
-                        <li>Humidity:</li>
-                        <ul>
-                            <li>{{thingyDetails.humidities[0].value}} {{thingyDetails.humidities[0].unit.short}}</li>
-                            <li>Date: {{thingyDetails.humidities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
-                        </ul>
+                    <button class="btn btn-primary btn-corner" ng-click="showHistory(thingyDetails.ter, thingyDetails)"><i class="fa fa-fw fa-history"></i>history</button>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h3>Sensor Data</h3>
+                            <ul>
+                                <li>Humidity:</li>
+                                <ul class="nobullets">
+                                    <li>{{thingyDetails.humidities[0].value}} {{thingyDetails.humidities[0].unit.short}}</li>
+                                    <li>Date: {{thingyDetails.humidities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
+                                </ul>
 
-                        <li>Air Quality:</li>
-                        <ul>
-                            <li>TVOC: {{thingyDetails.airQualities[0].tvoc.value}} {{thingyDetails.airQualities[0].tvoc.unit.short}}</li>
-                            <li>CO2: {{thingyDetails.airQualities[0].co2.value}} {{thingyDetails.airQualities[0].co2.unit.short}}</li>
-                            <li>Date: {{thingyDetails.airQualities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
-                        </ul>
+                                <li>Air Quality:</li>
+                                <ul class="nobullets">
+                                    <li>TVOC: {{thingyDetails.airQualities[0].tvoc.value}} {{thingyDetails.airQualities[0].tvoc.unit.short}}</li>
+                                    <li>CO2: {{thingyDetails.airQualities[0].co2.value}} {{thingyDetails.airQualities[0].co2.unit.short}}</li>
+                                    <li>Date: {{thingyDetails.airQualities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
+                                </ul>
 
-                        <li>Temperature:</li>
-                        <ul>
-                            <li>{{thingyDetails.temperatures[0].value}} {{thingyDetails.temperatures[0].unit.short}}</li>
-                            <li>Date: {{thingyDetails.temperatures[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
-                        </ul>
-                    </ul>
+                                <li>Temperature:</li>
+                                <ul class="nobullets">
+                                    <li>{{thingyDetails.temperatures[0].value}} {{thingyDetails.temperatures[0].unit.short}}</li>
+                                    <li>Date: {{thingyDetails.temperatures[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
+                                </ul>
+                            </ul>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <h3>Sensor State</h3>
+                            <ul>
+                                <li>Humidity:</li>
+                                <ul class="nobullets">
+                                    <li><span class="label label-success">OK</span></li>
+                                </ul>
+
+                                <li>Air Quality:</li>
+                                <ul class="nobullets">
+                                    <li><span class="label label-danger">TVOC: DANGER</span></li>
+                                    <li><span class="label label-warning">CO2: WARNING</span></li>
+                                </ul>
+
+                                <li>Temperature:</li>
+                                <ul class="nobullets">
+                                    <li><span class="label label-success">OK</span></li>
+                                </ul>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

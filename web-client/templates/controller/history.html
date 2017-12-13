@@ -1,0 +1,18 @@
+<div id="page" class="maincontent">
+
+    <h1>History<span ng-if="showSpinner"> <i class="fa fa-spinner fa-spin"></i></span></h1>
+    <br/>
+
+    <div>
+        <button class="btn btn-primary" ng-click="goBack('overview')"><i class="fa fa-fw fa-backward"></i>overview</button>
+        <button class="btn btn-primary" ng-click="goBack('terrarium')"><i class="fa fa-fw fa-info"></i>terrarium details</button>
+        <button class="btn btn-primary" ng-click="goBack('thingy')"><i class="fa fa-fw fa-info"></i>thingy details</button>
+    </div>
+    <br/>
+
+    <div class="row">
+        Terrarium ID: {{terId}}
+        Thingy ID: {{thingyId}}
+    </div>
+
+</div>
