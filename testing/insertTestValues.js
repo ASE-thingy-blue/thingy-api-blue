@@ -256,10 +256,14 @@ terri2.thingies.push(thingy3);
 terri2.thingies.push(thingy4);
 promises.push(terri2.save());
 
+var terri3 = new Terri({name: "Default terrarium", isDefault: true});
+promises.push(terri3.save());
+
 // User
 var user = new User({name: "Joe Slowinski", mailAddress: "schlangenman@gmail.com", password: "testpw"});
 user.terrariums.push(terri1);
 user.terrariums.push(terri2);
+user.terrariums.push(terri3);
 user.profiles.push(config1);
 promises.push(user.save());
 

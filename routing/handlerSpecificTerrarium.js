@@ -37,6 +37,65 @@ module.exports = {
         });
     },
 
+    terrariumDelete: (request, reply) => {
+        User.findOne({name: request.auth.credentials.userName})
+            .exec((err, user) => {
+                if (err) {
+                    console.error(err);
+                    return reply({"message": "User not found"}).code(404);
+                }
+
+                let terra = user.terrariums.id(request.params.terrariumId);
+                if (!terra) {
+                    return reply({
+                        "Error": "User has no terrarium with the given ID",
+                        id: request.params.terrariumId
+                    }).code(404);
+                }
+
+                if(terra.isDefault){
+                    return reply({
+                        "Error": "You cant delete the default terrarium",
+                        id: request.params.terrariumId
+                    }).code(400);
+                }
+
+                let thingies = terra.thingies;
+                if(thingies){
+                    var defaultTerra;
+                    user.terrariums.forEach((terra) =>{
+                        if(terra.isDefault) {
+                            defaultTerra = terra;
+                            defaultTerra.thingies = defaultTerra.thingies.concat(thingies);
+                            defaultTerra.save();
+                        }
+                    });
+
+                    if(!defaultTerra) {
+                        defaultTerra = new Terrarium({name: "Default Terrarium", isDefault: true});
+                        defaultTerra.thingies.concat(thingies);
+                        defaultTerra.save();
+                        user.terrariums.push(defaultTerra);
+                    }
+                }
+
+                user.terrariums.splice(user.terrariums.indexOf(terra), 1);
+
+
+                user.save((err) => {
+                    if (err) {
+                        return reply({"message": "Something went wrong! Terrarium not saved"}).code(500);
+                    }
+
+                    return reply({
+                        "success": true,
+                        message: "Terrarium was deleted",
+                        id: request.params.terrariumId
+                    }).code(200);
+                });
+            });
+    },
+
     terrariumThingies: function (request, reply) {
         User.findOne({name: request.auth.credentials.userName})
             .select("terrariums._id " +

@@ -324,6 +324,33 @@ var createPrivateAPI = (server) => {
     /**
      * SPECIFIC TERRARIUM
      */
+    server.route({
+        method: 'DELETE',
+        path: '/terrarium/{terrariumId}',
+        handler: HandlerTerrarium.terrariumDelete,
+        config: {
+            tags: ['webclient', 'api'],
+            description: 'Deletes a given terrarium',
+            validate: {
+                params: {
+                    terrariumId: Joi.string()
+                        .required()
+                        .description('ID of the terrarium I want to delete')
+                }
+            },
+            auth: 'jwt',
+            plugins: {
+                'hapi-swagger': {
+                    responses: {
+                        200: {
+                            description: 'Success'
+                        }
+                    }
+                }
+            }
+        }
+    });
+
 
     server.route({
         method: 'GET',
