@@ -13,7 +13,6 @@
     "argon2": "^0.16.2",
     "bluebird": "^3.5.1",
     "ejs": "^2.5.7",
-    "eslint": "^4.12.0",
     "hapi": "^16.6.2",
     "hapi-auth-jwt-simple": "^1.0.0",
     "hapi-swagger": "^8.0.0",
@@ -25,5 +24,18 @@
     "ng-toast": "^2.0.0",
     "nodemailer": "^4.4.0",
     "vision": "^4.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.13.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "jshint": "^2.9.5"
+  },
+  "scripts": {
+    "eslint": "eslint .",
+    "jshint": "jshint ."
   }
 }
