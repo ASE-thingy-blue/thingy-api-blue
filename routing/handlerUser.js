@@ -25,7 +25,6 @@ module.exports = {
         let email = request.payload.mailAddress;
         let pw = request.payload.password;
         let pw2 = request.payload.repassword;
-        let changes = {};
 
         User.findOne({name: request.auth.credentials.userName})
             .select("name mailAddress password")
@@ -41,14 +40,12 @@ module.exports = {
 
                 if (email) {
                     user.mailAddress = email;
-                    changes.email = email;
                 }
                 if (pw) {
                     if (pw !== pw2) {
                         return reply({"success": false, "message": "Repeated passwort does not match."}).code(400);
                     }
                     user.password = pw;
-                    changes.password = "Psssssst!";
                 }
 
                 user.save((err) => {
@@ -57,7 +54,7 @@ module.exports = {
                     }
                 });
 
-                reply({"success": true, "message": "User update complete!", "values": changes}).code(200);
+                reply({"success": true, "message": "User update complete!"}).code(200);
             });
     }
 };
