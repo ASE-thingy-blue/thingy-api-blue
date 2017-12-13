@@ -6,35 +6,35 @@ const Mongoose = require('mongoose');
  */
 var targetValuesSchema = Mongoose.Schema({
 
-    temperature : {
-    value : {
-        type : Number,
-        require : true
+    temperature: {
+    value: {
+        type: Number,
+        require: true
     },
-    unit : require('./unit')
+    unit: require('./unit')
     },
 
-    humidity : {
-    value : {
-        type : Number,
-        require : true
+    humidity: {
+    value: {
+        type: Number,
+        require: true
     },
-    unit : require('./unit')
+    unit: require('./unit')
     },
-    co2 : {
-    value : {
-        type : Number,
-        require : true
+    co2: {
+    value: {
+        type: Number,
+        require: true
     },
-    unit : require('./unit')
+    unit: require('./unit')
     },
-    tvoc : {
-    value : {
-        type : Number,
-        require : true
+    tvoc: {
+    value: {
+        type: Number,
+        require: true
     },
-    unit : require('./unit')
-    },
+    unit: require('./unit')
+    }
 
 });
 

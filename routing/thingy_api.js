@@ -25,7 +25,7 @@ let getOrCreateUnit = (name, short, reply) => {
     Unit.find({name: name}, function (err, unit) {
         if (err) {
             console.error(err);
-            return reply({"Error": "Unit not in database"}).code(500);
+            return reply({'Error': 'Unit not in database'}).code(500);
         }
         if (unit === null) {
             var newUnit = new Unit({name: name, short: short});
@@ -41,9 +41,9 @@ let getOrCreateUnit = (name, short, reply) => {
 var createThingyAPI = (server) => {
     server.route({
         method: 'GET',
-        path: '/thingy/{thingy_id}/setup',
+        path: '/thingy/{thingyId}/setup',
         handler: function (request, reply) {
-            var thingyId = request.params.thingy_id;
+            var thingyId = request.params.thingyId;
 
             // TODO: Get configuration from server by Thingy ID
             var setup = {
@@ -70,7 +70,7 @@ var createThingyAPI = (server) => {
             tags: ['thingy'],
             validate: {
                 params: {
-                    thingy_id: thingyIdSchema
+                    thingyId: thingyIdSchema
                 }
             },
             auth: 'jwt'
@@ -79,9 +79,9 @@ var createThingyAPI = (server) => {
 
     server.route({
         method: 'PUT',
-        path: '/thingy/{thingy_id}',
+        path: '/thingy/{thingyId}',
         handler: function (request, reply) {
-            var thingyId = request.params.thingy_id;
+            var thingyId = request.params.thingyId;
             var data = request.payload;
 
             User.findOne({name: data.user}, function (err, user) {
@@ -92,7 +92,7 @@ var createThingyAPI = (server) => {
                     if (user === null) {
                         console.log('Create new user');
                         var newUser = new User({name: data.user});
-                        var terri = new Terri({name: "My first terrarium", isDefault: true});
+                        var terri = new Terri({name: 'My first terrarium', isDefault: true});
                         var thingy = new Thingy({macAddress: data.thingy, callbackAddress: data.cb});
 
                         newUser.save();
@@ -111,7 +111,7 @@ var createThingyAPI = (server) => {
                             if (thingy === null) {
                                 console.log('Create a new Thingy');
                                 var newThingy = new Thingy({macAddress: data.thingy, callbackAddress: data.cb});
-                                var terri = new Terri({name: "My first terrarium", isDefault: true});
+                                var terri = new Terri({name: 'My first terrarium', isDefault: true});
 
                                 newThingy.save();
                                 terri.thingies.push(newThingy);
@@ -132,7 +132,7 @@ var createThingyAPI = (server) => {
             tags: ['thingy'],
             validate: {
                 params: {
-                    thingy_id: thingyIdSchema
+                    thingyId: thingyIdSchema
                 }
             },
             auth: 'jwt'
@@ -141,9 +141,9 @@ var createThingyAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/thingy/{thingy_id}/actuators/led',
+        path: '/thingy/{thingyId}/actuators/led',
         handler: function (request, reply) {
-            var thingyId = request.params.thingy_id;
+            var thingyId = request.params.thingyId;
 
             // TODO: Get configuration from server by Thingy ID
             var led = {
@@ -158,7 +158,7 @@ var createThingyAPI = (server) => {
             tags: ['thingy'],
             validate: {
                 params: {
-                    thingy_id: thingyIdSchema
+                    thingyId: thingyIdSchema
                 }
             },
             auth: 'jwt'
@@ -167,18 +167,18 @@ var createThingyAPI = (server) => {
 
     server.route({
         method: 'POST',
-        path: '/thingy/{thingy_id}/sensors/{sensor_id}',
+        path: '/thingy/{thingyId}/sensors/{sensorId}',
         handler: function (request, reply) {
-            var thingyId = request.params.thingy_id;
-            var sensorId = request.params.sensor_id;
+            var thingyId = request.params.thingyId;
+            var sensorId = request.params.sensorId;
 
             Thingy.findOne({macAddress: thingyId}, function (err, thingy) {
                 if (err) {
                     console.error(err);
                     // Stop execution
                     return reply({
-                        "Error": "This Thingy is not in our database",
-                        "thingy": thingyId
+                        'Error': 'This Thingy is not in our database',
+                        'thingy': thingyId
                     }).code(404);
                 }
 
@@ -186,7 +186,7 @@ var createThingyAPI = (server) => {
 
                 switch (sensorId) {
                     case 'humidity':
-                        var unitPercent = getOrCreateUnit("Percent", "%", reply);
+                        var unitPercent = getOrCreateUnit('Percent', '%', reply);
 
                         var newHmu = new Hum({
                             value: data.humidity,
@@ -200,7 +200,7 @@ var createThingyAPI = (server) => {
                         thingy.save();
                         break;
                     case 'temperature':
-                        var unitCels = getOrCreateUnit("Celsius", "C", reply);
+                        var unitCels = getOrCreateUnit('Celsius', 'C', reply);
 
                         var newTemp = new Temp({
                             value: data.temperature,
@@ -214,9 +214,9 @@ var createThingyAPI = (server) => {
                         thingy.save();
                         break;
                     case 'gas':
-                        var unit1Db = getOrCreateUnit("gram per cubic meter", "g/m3", reply);
-                        var unit2Db = getOrCreateUnit("microgram per cubic meter", "mg/m3", reply);
-                        
+                        var unit1Db = getOrCreateUnit('gram per cubic meter', 'g/m3', reply);
+                        var unit2Db = getOrCreateUnit('microgram per cubic meter', 'mg/m3', reply);
+
                         var carb = new Carbon({value: data.gas.eco2, unit: unit1Db});
                         var tvoc = new Tvoc({value: data.gas.tvoc, unit: unit2Db});
 
@@ -239,8 +239,8 @@ var createThingyAPI = (server) => {
             tags: ['thingy'],
             validate: {
                 params: {
-                    thingy_id: thingyIdSchema,
-                    sensor_id: sensorIdSchema
+                    thingyId: thingyIdSchema,
+                    sensorId: sensorIdSchema
                 }
             },
             auth: 'jwt'

@@ -1,19 +1,19 @@
-const Mongoose = require('mongoose');
+const Mongoose = require("mongoose");
 
-let User = Mongoose.model('User');
+let User = Mongoose.model("User");
 
 module.exports = {
 
     getUser: function (request, reply) {
         User.findOne({name: request.auth.credentials.userName})
-            .select('name mailAddress')
+            .select("name mailAddress")
             .exec(function (err, user) {
                 if (err) {
                     console.error(err);
                     return reply({"Error": "Database problem. Please try again later"}).code(500);
                 }
 
-                if(!user){
+                if (!user) {
                     return reply({"Error": "User not found"}).code(404);
                 }
 
@@ -28,22 +28,22 @@ module.exports = {
         let changes = {};
 
         User.findOne({name: request.auth.credentials.userName})
-            .select('name mailAddress password')
+            .select("name mailAddress password")
             .exec(function (err, user) {
                 if (err) {
                     console.error(err);
                     return reply({"success": false, "message": "Database problem. Please try again later"}).code(500);
                 }
 
-                if(!user){
+                if (!user) {
                     return reply({"success": false, "message": "User not found"}).code(404);
                 }
 
-                if(email){
+                if (email) {
                     user.mailAddress = email;
                     changes.email = email;
                 }
-                if(pw){
+                if (pw) {
                     if (pw !== pw2) {
                         return reply({"success": false, "message": "Repeated passwort does not match."}).code(400);
                     }
@@ -51,8 +51,8 @@ module.exports = {
                     changes.password = "Psssssst!";
                 }
 
-                user.save((err)=>{
-                    if(err){
+                user.save((err) => {
+                    if (err) {
                         return reply({"success": false, "message": "Database problem. Please try again later"}).code(500);
                     }
                 });

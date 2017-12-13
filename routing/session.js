@@ -1,4 +1,4 @@
-const Argon2 = require("argon2");
+const Argon2 = require('argon2');
 const Fs = require('fs');
 const Path = require('path');
 

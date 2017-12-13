@@ -83,10 +83,9 @@ var createPrivateAPI = (server) => {
                             schema: Joi.object({
                                 _id: Joi.string(),
                                 terrariums: Joi.array().items(Joi.object({
-                                        _id: Joi.string(),
-                                        name: Joi.string()
-                                    })
-                                )
+                                    _id: Joi.string(),
+                                    name: Joi.string()
+                                }))
                             }).label('Result')
                         }
                     }
@@ -147,54 +146,46 @@ var createPrivateAPI = (server) => {
                         200: {
                             description: 'Success',
                             schema: Joi.object({
-                                "_id": Joi.string(),
-                                "name": Joi.string(),
-                                "thingies": Joi.array().items(Joi.object({
-                                        "_id": Joi.string(),
-                                        "description": Joi.string(),
-                                        "macAddress": Joi.string(),
-                                        "humidities": Joi.array().items(Joi.object({
-                                                "_id": Joi.string(),
-                                                "unit": Joi.array().items(Joi.object({
-                                                        "name": Joi.string(),
-                                                        "short": Joi.string(),
-                                                        "_id": Joi.string()
-                                                    })
-                                                ),
-                                                "value": Joi.number(),
-                                                "timestamp": Joi.date().timestamp()
-                                            })
-                                        ),
-                                        "airQualities": Joi.array().items(Joi.object({
-                                                "_id": Joi.string(),
-                                                "tvoc": Joi.array().items(Joi.object({
-                                                        "_id": Joi.string(),
-                                                        "value": Joi.number(),
-                                                        "unit": Joi.array().items(Joi.object({
-                                                                "name": Joi.string(),
-                                                                "short": Joi.string(),
-                                                                "_id": Joi.string()
-                                                            }),
-                                                        ),
-                                                    }),
-                                                ),
-                                                "timestamp": Joi.date().timestamp()
-                                            })
-                                        ),
-                                        "temperatures": Joi.array().items(Joi.object({
-                                                "_id": Joi.string(),
-                                                "unit": Joi.array().items(Joi.object({
-                                                        "name": Joi.string(),
-                                                        "short": Joi.string(),
-                                                        "_id": Joi.string()
-                                                    }),
-                                                ),
-                                                "value": Joi.number(),
-                                                "timestamp": Joi.date().timestamp()
-                                            })
-                                        )
-                                    })
-                                ),
+                                '_id': Joi.string(),
+                                'name': Joi.string(),
+                                'thingies': Joi.array().items(Joi.object({
+                                    '_id': Joi.string(),
+                                    'description': Joi.string(),
+                                    'macAddress': Joi.string(),
+                                    'humidities': Joi.array().items(Joi.object({
+                                        '_id': Joi.string(),
+                                        'unit': Joi.array().items(Joi.object({
+                                            'name': Joi.string(),
+                                            'short': Joi.string(),
+                                            '_id': Joi.string()
+                                        })),
+                                        'value': Joi.number(),
+                                        'timestamp': Joi.date().timestamp()
+                                    })),
+                                    'airQualities': Joi.array().items(Joi.object({
+                                        '_id': Joi.string(),
+                                        'tvoc': Joi.array().items(Joi.object({
+                                            '_id': Joi.string(),
+                                            'value': Joi.number(),
+                                            'unit': Joi.array().items(Joi.object({
+                                                'name': Joi.string(),
+                                                'short': Joi.string(),
+                                                '_id': Joi.string()
+                                            }))
+                                        })),
+                                        'timestamp': Joi.date().timestamp()
+                                    })),
+                                    'temperatures': Joi.array().items(Joi.object({
+                                        '_id': Joi.string(),
+                                        'unit': Joi.array().items(Joi.object({
+                                            'name': Joi.string(),
+                                            'short': Joi.string(),
+                                            '_id': Joi.string()
+                                        })),
+                                        'value': Joi.number(),
+                                        'timestamp': Joi.date().timestamp()
+                                    }))
+                                }))
                             }).label('Result')
                         }
                     }
@@ -336,14 +327,14 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrarium/{terrarium_id}/thingies',
+        path: '/terrarium/{terrariumId}/thingies',
         handler: HandlerTerrarium.terrariumThingies,
         config: {
             tags: ['webclient', 'api'],
             description: 'Gets all Thingies of a certain terrarium',
             validate: {
                 params: {
-                    terrarium_id: Joi.string()
+                    terrariumId: Joi.string()
                         .required()
                         .description('ID of the terrarium I want the Thingies from')
                 }
@@ -363,14 +354,14 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrarium/{terrarium_id}/values',
+        path: '/terrarium/{terrariumId}/values',
         handler: HandlerTerrarium.terrariumValues,
         config: {
             tags: ['webclient', 'api'],
             description: 'Gets all values from all Thingies form a certain terrarium',
             validate: {
                 params: {
-                    terrarium_id: Joi.string()
+                    terrariumId: Joi.string()
                         .required()
                         .description('ID of the terrarium I want the values from')
                 },
@@ -395,14 +386,14 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrarium/{terrarium_id}/temperatures',
+        path: '/terrarium/{terrariumId}/temperatures',
         handler: HandlerTerrarium.terrariumTemperatures,
         config: {
             tags: ['webclient', 'api'],
             description: 'Gets all temperatures values from all Thingies form a certain terrarium',
             validate: {
                 params: {
-                    terrarium_id: Joi.string()
+                    terrariumId: Joi.string()
                         .required()
                         .description('ID of the terrarium I want the temperature from')
                 },
@@ -427,14 +418,14 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrarium/{terrarium_id}/configurations',
+        path: '/terrarium/{terrariumId}/configurations',
         handler: HandlerTerrarium.terrariumConfigurations,
         config: {
             tags: ['webclient', 'api'],
             description: 'Gets the configurations from all Thingies form a certain terrarium',
             validate: {
                 params: {
-                    terrarium_id: Joi.string()
+                    terrariumId: Joi.string()
                         .required()
                         .description('ID of the terrarium I want the configurations from')
                 },
@@ -457,14 +448,14 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrarium/{terrarium_id}/violations',
+        path: '/terrarium/{terrariumId}/violations',
         handler: HandlerTerrarium.terrariumViolations,
         config: {
             tags: ['webclient', 'api'],
             description: 'Gets the threshold violations from all Thingies form a certain terrarium',
             validate: {
                 params: {
-                    terrarium_id: Joi.string()
+                    terrariumId: Joi.string()
                         .required()
                         .description('ID of the terrarium I want the threshold violations from')
                 },
@@ -487,14 +478,14 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrarium/{terrarium_id}/humidities',
+        path: '/terrarium/{terrariumId}/humidities',
         handler: HandlerTerrarium.terrariumHumidities,
         config: {
             tags: ['webclient', 'api'],
             description: 'Gets all humidity values from all Thingies form a certain terrarium',
             validate: {
                 params: {
-                    terrarium_id: Joi.string()
+                    terrariumId: Joi.string()
                         .required()
                         .description('ID of the terrarium I want the humidity from')
                 },
@@ -519,14 +510,14 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrarium/{terrarium_id}/airqualities',
+        path: '/terrarium/{terrariumId}/airqualities',
         handler: HandlerTerrarium.terrariumAirqualities,
         config: {
             tags: ['webclient', 'api'],
             description: 'Gets all airquality values from all Thingies form a certain terrarium',
             validate: {
                 params: {
-                    terrarium_id: Joi.string()
+                    terrariumId: Joi.string()
                         .required()
                         .description('ID of the terrarium I want the airquality from')
                 },
@@ -554,17 +545,17 @@ var createPrivateAPI = (server) => {
      */
     server.route({
         method: 'GET',
-        path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/values',
+        path: '/terrarium/{terrariumId}/thingies/{thingyId}/values',
         handler: HandlerThingy.thingyValues,
         config: {
             tags: ['webclient', 'api'],
             description: 'Gets all values that are measured in a certain terrarium with a certain Thingy',
             validate: {
                 params: {
-                    terrarium_id: Joi.string()
+                    terrariumId: Joi.string()
                         .required()
                         .description('ID of the terrarium I want the values from'),
-                    thingy_id: Joi.string()
+                    thingyId: Joi.string()
                         .required()
                         .description('ID of the Thingy I want the values from')
                 },
@@ -589,20 +580,20 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/configuration',
+        path: '/terrarium/{terrariumId}/thingies/{thingyId}/configuration',
         handler: HandlerThingy.thingyConfiguration,
         config: {
             tags: ['webclient', 'api'],
             description: 'Gets the configuration of a certain Thingy',
             validate: {
                 params: {
-                    terrarium_id: Joi.string()
+                    terrariumId: Joi.string()
                         .required()
                         .description('ID of the terrarium I want the Thingy configuration from'),
-                    thingy_id: Joi.string()
+                    thingyId: Joi.string()
                         .required()
                         .description('ID of the Thingy I want the configuration from')
-                },
+                }
             },
             auth: 'jwt',
             plugins: {
@@ -619,20 +610,20 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/violations',
+        path: '/terrarium/{terrariumId}/thingies/{thingyId}/violations',
         handler: HandlerThingy.thingyViolations,
         config: {
             tags: ['webclient', 'api'],
             description: 'Gets the threshold violations of a certain Thingy',
             validate: {
                 params: {
-                    terrarium_id: Joi.string()
+                    terrariumId: Joi.string()
                         .required()
                         .description('ID of the terrarium I want the threshold violations from'),
-                    thingy_id: Joi.string()
+                    thingyId: Joi.string()
                         .required()
                         .description('ID of the Thingy I want the threshold violations from')
-                },
+                }
             },
             auth: 'jwt',
             plugins: {
@@ -649,17 +640,17 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/temperature',
+        path: '/terrarium/{terrariumId}/thingies/{thingyId}/temperature',
         handler: HandlerThingy.thingyTemperature,
         config: {
             tags: ['webclient', 'api'],
             description: 'Gets the temperature that is measured in a certain terrarium with a certain Thingy',
             validate: {
                 params: {
-                    terrarium_id: Joi.string()
+                    terrariumId: Joi.string()
                         .required()
                         .description('ID of the terrarium I want the temperature from'),
-                    thingy_id: Joi.string()
+                    thingyId: Joi.string()
                         .required()
                         .description('ID of the Thingy I want the temperature from')
                 },
@@ -684,17 +675,17 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/humidity',
+        path: '/terrarium/{terrariumId}/thingies/{thingyId}/humidity',
         handler: HandlerThingy.thingyHumidity,
         config: {
             tags: ['webclient', 'api'],
             description: 'Gets the humidity that is measured in a certain terrarium with a certain Thingy',
             validate: {
                 params: {
-                    terrarium_id: Joi.string()
+                    terrariumId: Joi.string()
                         .required()
                         .description('ID of the terrarium I want the humidity from'),
-                    thingy_id: Joi.string()
+                    thingyId: Joi.string()
                         .required()
                         .description('ID of the Thingy I want the humidity from')
                 },
@@ -719,17 +710,17 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrarium/{terrarium_id}/thingies/{thingy_id}/airquality',
+        path: '/terrarium/{terrariumId}/thingies/{thingyId}/airquality',
         handler: HandlerThingy.thingyAirquality,
         config: {
             tags: ['webclient', 'api'],
             description: 'Gets the airquality that is measured in a certain terrarium with a certain Thingy',
             validate: {
                 params: {
-                    terrarium_id: Joi.string()
+                    terrariumId: Joi.string()
                         .required()
                         .description('ID of the terrarium I want the airquality from'),
-                    thingy_id: Joi.string()
+                    thingyId: Joi.string()
                         .required()
                         .description('ID of the Thingy I want the airquality from')
                 },

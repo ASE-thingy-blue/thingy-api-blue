@@ -3,25 +3,25 @@
  * Start it with node {path/to/the/file}. e.g. node testing/insertTestValues.js
  */
 
-const Mongoose = require('mongoose');
-Mongoose.Promise = require('bluebird');
+const Mongoose = require("mongoose");
+const Bluebird = require("bluebird");
 var promises = [];
 
 // Load model
-require('../model/makeModel');
+require("../model/makeModel");
 
-var Terri = Mongoose.model('Terrarium');
-var Thingy = Mongoose.model('Thingy');
-var Temp = Mongoose.model('Temperature');
-var Hum = Mongoose.model('Humidity');
-var AirQ = Mongoose.model('AirQuality');
-var Tvoc = Mongoose.model('TVOC');
-var Carbon = Mongoose.model('Carbondioxide');
-var User = Mongoose.model('User');
-var Unit = Mongoose.model('Unit');
-var TargetValues = Mongoose.model('TargetValues');
-var TargetConfiguration = Mongoose.model('TargetConfiguration');
-var Threshold = Mongoose.model('Threshold');
+var Terri = Mongoose.model("Terrarium");
+var Thingy = Mongoose.model("Thingy");
+var Temp = Mongoose.model("Temperature");
+var Hum = Mongoose.model("Humidity");
+var AirQ = Mongoose.model("AirQuality");
+var Tvoc = Mongoose.model("TVOC");
+var Carbon = Mongoose.model("Carbondioxide");
+var User = Mongoose.model("User");
+var Unit = Mongoose.model("Unit");
+var TargetValues = Mongoose.model("TargetValues");
+var TargetConfiguration = Mongoose.model("TargetConfiguration");
+var Threshold = Mongoose.model("Threshold");
 
 require("../model/helper/databaseConnection");
 
@@ -125,7 +125,7 @@ var tvoc8 = new Tvoc({value: 2, unit: mgPerQ});
 var tvoc9 = new Tvoc({value: 2, unit: mgPerQ});
 var tvoc10 = new Tvoc({value: 2, unit: mgPerQ});
 var tvoc11 = new Tvoc({value: 2, unit: mgPerQ});
-var tvoc12= new Tvoc({value: 2, unit: mgPerQ});
+var tvoc12 = new Tvoc({value: 2, unit: mgPerQ});
 promises.push(tvoc1.save());
 promises.push(tvoc2.save());
 promises.push(tvoc3.save());
@@ -166,13 +166,13 @@ promises.push(airQ11.save());
 promises.push(airQ12.save());
 
 // Target Values
-var target1 = new TargetValues({temperature: {value: 30, unit: celsius}, humidity:{value:40, unit:percent}, co2:{value:2, unit:gPerQ}, tvoc:{value:3, unit:mgPerQ}});
-var target2 = new TargetValues({temperature: {value: 25, unit: celsius}, humidity:{value:35, unit:percent}, co2:{value:1, unit:gPerQ}, tvoc:{value:2, unit:mgPerQ}});
-var target3 = new TargetValues({temperature: {value: 28, unit: celsius}, humidity:{value:36, unit:percent}, co2:{value:1, unit:gPerQ}, tvoc:{value:2, unit:mgPerQ}});
-var target4 = new TargetValues({temperature: {value: 35, unit: celsius}, humidity:{value:45, unit:percent}, co2:{value:3, unit:gPerQ}, tvoc:{value:5, unit:mgPerQ}});
-var target5 = new TargetValues({temperature: {value: 33, unit: celsius}, humidity:{value:42, unit:percent}, co2:{value:3, unit:gPerQ}, tvoc:{value:4, unit:mgPerQ}});
-var target6 = new TargetValues({temperature: {value: 40, unit: celsius}, humidity:{value:50, unit:percent}, co2:{value:10, unit:gPerQ}, tvoc:{value:10, unit:mgPerQ}});
-var target7 = new TargetValues({temperature: {value: 38, unit: celsius}, humidity:{value:47, unit:percent}, co2:{value:6, unit:gPerQ}, tvoc:{value:7, unit:mgPerQ}});
+var target1 = new TargetValues({temperature: {value: 30, unit: celsius}, humidity: {value: 40, unit: percent}, co2: {value: 2, unit: gPerQ}, tvoc: {value: 3, unit: mgPerQ}});
+var target2 = new TargetValues({temperature: {value: 25, unit: celsius}, humidity: {value: 35, unit: percent}, co2: {value: 1, unit: gPerQ}, tvoc: {value: 2, unit: mgPerQ}});
+var target3 = new TargetValues({temperature: {value: 28, unit: celsius}, humidity: {value: 36, unit: percent}, co2: {value: 1, unit: gPerQ}, tvoc: {value: 2, unit: mgPerQ}});
+var target4 = new TargetValues({temperature: {value: 35, unit: celsius}, humidity: {value: 45, unit: percent}, co2: {value: 3, unit: gPerQ}, tvoc: {value: 5, unit: mgPerQ}});
+var target5 = new TargetValues({temperature: {value: 33, unit: celsius}, humidity: {value: 42, unit: percent}, co2: {value: 3, unit: gPerQ}, tvoc: {value: 4, unit: mgPerQ}});
+var target6 = new TargetValues({temperature: {value: 40, unit: celsius}, humidity: {value: 50, unit: percent}, co2: {value: 10, unit: gPerQ}, tvoc: {value: 10, unit: mgPerQ}});
+var target7 = new TargetValues({temperature: {value: 38, unit: celsius}, humidity: {value: 47, unit: percent}, co2: {value: 6, unit: gPerQ}, tvoc: {value: 7, unit: mgPerQ}});
 promises.push(target1.save());
 promises.push(target2.save());
 promises.push(target3.save());
@@ -183,8 +183,8 @@ promises.push(target7.save());
 
 // Thresholds
 var threshold1 = new Threshold({title: "bad", severity: "warning", ascending: false, arm: target2, disarm: target3});
-var threshold2 = new Threshold({title: "bad", severity: "warning", ascending: true, arm:target4, disarm:target5});
-var threshold3 = new Threshold({title: "very bad", severity: "severe", ascending: true, arm:target6, disarm:target7});
+var threshold2 = new Threshold({title: "bad", severity: "warning", ascending: true, arm: target4, disarm: target5});
+var threshold3 = new Threshold({title: "very bad", severity: "severe", ascending: true, arm: target6, disarm: target7});
 promises.push(threshold1.save());
 promises.push(threshold2.save());
 promises.push(threshold3.save());
@@ -263,16 +263,16 @@ user.terrariums.push(terri2);
 user.profiles.push(config1);
 promises.push(user.save());
 
-Promise.all(promises)
-	.then(function (results)
-	{
-		console.log(results);
-		console.log("Test values written to database");
-		Mongoose.disconnect();
-	})
-	.catch(function (err)
-	{
-		console.error(err);
-		console.error('Error writing test values to database');
-		Mongoose.disconnect();
-	});
+Bluebird.all(promises)
+    .then(function (results)
+    {
+        console.log(results);
+        console.log("Test values written to database");
+        Mongoose.disconnect();
+    })
+    .catch(function (err)
+    {
+        console.error(err);
+        console.error("Error writing test values to database");
+        Mongoose.disconnect();
+    });

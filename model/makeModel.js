@@ -1,6 +1,6 @@
 const Mongoose = require('mongoose');
 
-var init = function() {
+var init = function () {
     Mongoose.model('User', require('./schemas/user'));
     Mongoose.model('Terrarium', require('./schemas/terrarium'));
     Mongoose.model('Thingy', require('./schemas/thingy'));

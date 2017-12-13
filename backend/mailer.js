@@ -1,10 +1,10 @@
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 
 let mailer = {};
 
 mailer.mailConfig = {
     sender: {
-        from: '"Termon Web Service" <termon@pillo-srv.ch>'
+        from: "'Termon Web Service' <termon@pillo-srv.ch>"
     },
     server: {
         host: "vm-mail.pillo-srv.ch",
@@ -43,7 +43,7 @@ mailer.sendMail = function (to, subject, message, messageHtml) {
             console.log(error);
             return;
         }
-        console.log('Message sent: %s', info.messageId);
+        console.log("Message sent: %s", info.messageId);
     });
 };
 

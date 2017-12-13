@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const Hapi = require('hapi');
 const Inert = require('inert');
@@ -14,51 +14,51 @@ const Path = require('path');
 require('./model/makeModel');
 
 // Create the DB connection
-require("./model/helper/databaseConnection");
+require('./model/helper/databaseConnection');
 
 // Returns a promise. Use it as:
 /*
 require('./routing/session').then(value =>
 {
-  // Use value here
+    // Use value here
 });
 */
 const Session = require('./routing/session');
 
 var tlsoptions = {
-  key: Fs.readFileSync(Path.join('certs', 'ThingyAPI.epk')),
-  cert: Fs.readFileSync(Path.join('certs', 'ThingyAPI.cer')),
+    key: Fs.readFileSync(Path.join('certs', 'ThingyAPI.epk')),
+    cert: Fs.readFileSync(Path.join('certs', 'ThingyAPI.cer')),
 
-  // This is necessary if the client uses the self-signed certificate.
-  ca: [ Fs.readFileSync(Path.join('certs', 'ThingyRootCA.cer')) ],
+    // This is necessary if the client uses the self-signed certificate.
+    ca: [ Fs.readFileSync(Path.join('certs', 'ThingyRootCA.cer')) ],
 
-  ciphers: "ECDHE-RSA-AES128-GCM-SHA256:\
-            ECDHE-RSA-AES256-GCM-SHA384:\
-            DHE-RSA-AES128-GCM-SHA256:\
-            DHE-RSA-AES256-GCM-SHA384:\
-            ECDHE-RSA-AES128-SHA256:\
-            DHE-RSA-AES128-SHA256:\
-            ECDHE-RSA-AES256-SHA384:\
-            DHE-RSA-AES256-SHA384:\
-            ECDHE-RSA-AES256-SHA256:\
-            DHE-RSA-AES256-SHA256:\
-            HIGH:\
-            !aNULL:\
-            !eNULL:\
-            !EXPORT:\
-            !DES:\
-            !3DES:\
-            !RC4:\
-            !MD5:\
-            !PSK:\
-            !SRP:\
-            !CAMELLIA:\
-            !SHA1:",
-  honorCipherOrder: true,
-  // Disable SSL 2, SSL 3, TLS 1.0 and TLS 1.1
-  secureOptions: Crypto.constants.SSL_OP_NO_SSLv2 | Crypto.constants.SSL_OP_NO_SSLv3 | Crypto.constants.SSL_OP_NO_TLSv1 | Crypto.constants.SSL_OP_NO_TLSv1_1,
-  // Force TLS version 2
-  secureProtocol: 'TLSv1_2_server_method'
+    ciphers: 'ECDHE-RSA-AES128-GCM-SHA256:' +
+             'ECDHE-RSA-AES256-GCM-SHA384:' +
+             'DHE-RSA-AES128-GCM-SHA256:' +
+             'DHE-RSA-AES256-GCM-SHA384:' +
+             'ECDHE-RSA-AES128-SHA256:' +
+             'DHE-RSA-AES128-SHA256:' +
+             'ECDHE-RSA-AES256-SHA384:' +
+             'DHE-RSA-AES256-SHA384:' +
+             'ECDHE-RSA-AES256-SHA256:' +
+             'DHE-RSA-AES256-SHA256:' +
+             'HIGH:' +
+             '!aNULL:' +
+             '!eNULL:' +
+             '!EXPORT:' +
+             '!DES:' +
+             '!3DES:' +
+             '!RC4:' +
+             '!MD5:' +
+             '!PSK:' +
+             '!SRP:' +
+             '!CAMELLIA:' +
+             '!SHA1:',
+    honorCipherOrder: true,
+    // Disable SSL 2, SSL 3, TLS 1.0 and TLS 1.1
+    secureOptions: Crypto.constants.SSL_OP_NO_SSLv2 | Crypto.constants.SSL_OP_NO_SSLv3 | Crypto.constants.SSL_OP_NO_TLSv1 | Crypto.constants.SSL_OP_NO_TLSv1_1,
+    // Force TLS version 2
+    secureProtocol: 'TLSv1_2_server_method'
 };
 
 const server = new Hapi.Server();

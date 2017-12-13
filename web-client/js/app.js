@@ -57,7 +57,7 @@ var termonWebClient = angular.module('termonWebClient', ['ui.router', 'ngAnimate
         //Change for Production
         $rootScope.url = $location.protocol()+ '://' + $location.host();
         if ($location.port() !== 80 || $location.port() !== 443) {
-            $rootScope.url = $rootScope.url + ':' + $location.port()
+            $rootScope.url = $rootScope.url + ':' + $location.port();
         }
 
         //Redirect unauthenticated User to Login page

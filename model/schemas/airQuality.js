@@ -2,7 +2,7 @@
  * Created by Tanja on 26/10/17.
  */
 
-const Mongoose = require('mongoose');
+const Mongoose = require("mongoose");
 
 var airQualitySchema = Mongoose.Schema({
     timestamp: {
@@ -12,7 +12,7 @@ var airQualitySchema = Mongoose.Schema({
 
     co2: require("./carbondioxide"),
 
-    tvoc: require('./tvoc')
+    tvoc: require("./tvoc")
 
 });
 

@@ -10,7 +10,7 @@ module.exports = {
             .exec(function (err, user) {
                 if (err) {
                     console.error(err);
-                    return reply({"Error": "User not found"}).code(404);
+                    return reply({'Error': 'User not found'}).code(404);
                 } else {
                     reply(user).code(200);
                 }
@@ -27,7 +27,7 @@ module.exports = {
 
                 if (err) {
                     console.error(err);
-                    return reply({"Error": "User not found"}).code(404);
+                    return reply({'Error': 'User not found'}).code(404);
                 }
 
                 if (from && to) {
@@ -38,19 +38,19 @@ module.exports = {
                             var airQs = [];
 
                             thingy.humidities.forEach(function (hum) {
-                                if(hum.timestamp >= from && hum.timestamp <= to){
+                                if (hum.timestamp >= from && hum.timestamp <= to) {
                                     hums.push(hum);
                                 }
                             });
 
                             thingy.temperatures.forEach(function (temp) {
-                                if(temp.timestamp >= from && temp.timestamp <= to){
+                                if (temp.timestamp >= from && temp.timestamp <= to) {
                                     temps.push(temp);
                                 }
                             });
 
                             thingy.airQualities.forEach(function (airQ) {
-                                if(airQ.timestamp >= from && airQ.timestamp <= to){
+                                if (airQ.timestamp >= from && airQ.timestamp <= to) {
                                     airQs.push(airQ);
                                 }
                             });
@@ -59,14 +59,13 @@ module.exports = {
                             thingy.temperatures = temps;
                             thingy.airQualities = airQs;
 
-                            if(limit){
+                            if (limit) {
                                 thingy.humidities.splice(limit, thingy.humidities.length - limit);
-                                thingy.temperatures.splice(limit, thingy.temperatures.length-limit);
-                                thingy.airQualities.splice(limit, thingy.airQualities.length-limit);
+                                thingy.temperatures.splice(limit, thingy.temperatures.length - limit);
+                                thingy.airQualities.splice(limit, thingy.airQualities.length - limit);
                             }
                         });
                     });
-
                 } else {
                     user.terrariums.forEach(function (t) {
                         t.thingies.forEach(function (thingy) {
@@ -116,7 +115,7 @@ module.exports = {
 
                 if (err) {
                     console.error(err);
-                    return reply({"Error": "User not found"}).code(404);
+                    return reply({'Error': 'User not found'}).code(404);
                 }
 
                 if (from && to) {
@@ -125,19 +124,18 @@ module.exports = {
                             var temps = [];
 
                             thingy.temperatures.forEach(function (temp) {
-                                if(temp.timestamp >= from && temp.timestamp <= to){
+                                if (temp.timestamp >= from && temp.timestamp <= to) {
                                     temps.push(temp);
                                 }
                             });
 
                             thingy.temperatures = temps;
 
-                            if(limit){
-                                thingy.temperatures.splice(limit, thingy.temperatures.length-limit);
+                            if (limit) {
+                                thingy.temperatures.splice(limit, thingy.temperatures.length - limit);
                             }
                         });
                     });
-
                 } else {
                     user.terrariums.forEach(function (t) {
                         t.thingies.forEach(function (thingy) {
@@ -160,7 +158,7 @@ module.exports = {
 
                 if (err) {
                     console.error(err);
-                    return reply({"Error": "User not found"}).code(404);
+                    return reply({'Error': 'User not found'}).code(404);
                 }
 
                 if (from && to) {
@@ -169,19 +167,18 @@ module.exports = {
                             var hums = [];
 
                             thingy.humidities.forEach(function (hum) {
-                                if(hum.timestamp >= from && hum.timestamp <= to){
+                                if (hum.timestamp >= from && hum.timestamp <= to) {
                                     hums.push(hum);
                                 }
                             });
 
                             thingy.humidities = hums;
 
-                            if(limit){
+                            if (limit) {
                                 thingy.humidities.splice(limit, thingy.humidities.length - limit);
                             }
                         });
                     });
-
                 } else {
                     user.terrariums.forEach(function (t) {
                         t.thingies.forEach(function (thingy) {
@@ -204,7 +201,7 @@ module.exports = {
 
                 if (err) {
                     console.error(err);
-                    return reply({"Error": "User not found"}).code(404);
+                    return reply({'Error': 'User not found'}).code(404);
                 }
 
                 if (from && to) {
@@ -213,19 +210,18 @@ module.exports = {
                             var airQs = [];
 
                             thingy.airQualities.forEach(function (airQ) {
-                                if(airQ.timestamp >= from && airQ.timestamp <= to){
+                                if (airQ.timestamp >= from && airQ.timestamp <= to) {
                                     airQs.push(airQ);
                                 }
                             });
 
                             thingy.airQualities = airQs;
 
-                            if(limit){
+                            if (limit) {
                                 thingy.airQualities.splice(limit, thingy.airQualities.length - limit);
                             }
                         });
                     });
-
                 } else {
                     user.terrariums.forEach(function (t) {
                         t.thingies.forEach(function (thingy) {

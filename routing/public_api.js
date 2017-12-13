@@ -52,7 +52,7 @@ var createPublicAPI = (server) => {
         path: '/authenticate',
         handler: function (request, reply)
         {
-            User.findOne({name: request.payload.name}, function(err, user)
+            User.findOne({name: request.payload.name}, function (err, user)
             {
                 if (err) throw err;
 
@@ -70,7 +70,7 @@ var createPublicAPI = (server) => {
                         let nbf = Date.now() / 1000;
                         Session.then(tokenKey =>
                         {
-                            var token = Jwt.encode({nbf: nbf, exp: expires, "userID" : user._id, "userName" : user.name, "mailAddress" : user.mailAddress}, tokenKey);
+                            var token = Jwt.encode({nbf: nbf, exp: expires, 'userID': user._id, 'userName': user.name, 'mailAddress': user.mailAddress}, tokenKey);
                             // Return the information including token as JSON
                             return reply({success: true, token: `${token}`}).code(200);
                         });
@@ -111,7 +111,7 @@ var createPublicAPI = (server) => {
     server.route({
         method: 'POST',
         path: '/signup',
-        handler: function(request, reply) {
+        handler: function (request, reply) {
             if (!request.payload.name || !request.payload.password) {
             reply({success: false, message: 'Please provide username and password.'}).code(400);
             } else {
@@ -125,7 +125,7 @@ var createPublicAPI = (server) => {
                     password: request.payload.password
                 });
                 // Save the user
-                newUser.save(function(err) {
+                newUser.save(function (err) {
                     if (err) {
                         return reply({success: false, message: 'Error creating new user.'}).code(500);
                     }

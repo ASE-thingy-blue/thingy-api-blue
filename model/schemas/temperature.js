@@ -10,12 +10,12 @@ var temperatureSchema = Mongoose.Schema({
         default: Date.now
     },
 
-	value : {
-		type : Number,
-		require : true
-	},
+    value: {
+        type: Number,
+        require: true
+    },
 
-	unit : require('./unit')
+    unit: require('./unit')
 
 });
 

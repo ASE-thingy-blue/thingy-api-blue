@@ -1,17 +1,17 @@
-const Mongoose = require('mongoose');
+const Mongoose = require("mongoose");
 
-var User = Mongoose.model('User');
-let Terrarium = Mongoose.model('Terrarium');
-let Thingy = Mongoose.model('Thingy');
+var User = Mongoose.model("User");
+let Terrarium = Mongoose.model("Terrarium");
+let Thingy = Mongoose.model("Thingy");
 
 module.exports = {
 
-    terrariumCreate: (request, reply) =>{
+    terrariumCreate: (request, reply) => {
         User.findOne({name: request.auth.credentials.userName})
-            .exec((err, user) =>{
-            if(err) {
+            .exec((err, user) => {
+            if (err) {
                 console.error(err);
-                return reply({'message': 'User not found'}).code(404);
+                return reply({"message": "User not found"}).code(404);
             }
 
             let terraNew = new Terrarium({
@@ -19,10 +19,9 @@ module.exports = {
                 description: request.payload.description,
                 callbackAddress: request.payload.callbackAddress});
 
-
             terraNew.save((err, terri) => {
                 if (err) {
-                    return reply({'message': 'Something went wrong! Terrarium not saved'}).code(500);
+                    return reply({"message": "Something went wrong! Terrarium not saved"}).code(500);
                 }
 
                 user.terrariums.push(terraNew);
@@ -35,28 +34,27 @@ module.exports = {
                     id: terri._id
                 }).code(200);
             });
-
         });
     },
 
     terrariumThingies: function (request, reply) {
         User.findOne({name: request.auth.credentials.userName})
-            .select('terrariums._id ' +
-                'terrariums.name ' +
-                'terrariums.description ' +
-                'terrariums.thingies._id ' +
-                'terrariums.thingies.macAddress ' +
-                'terrariums.thingies.description')
+            .select("terrariums._id " +
+                "terrariums.name " +
+                "terrariums.description " +
+                "terrariums.thingies._id " +
+                "terrariums.thingies.macAddress " +
+                "terrariums.thingies.description")
             .exec(function (err, user) {
                 if (err) {
                     console.error(err);
-                    return reply({'Error': 'User not found'}).code(404);
+                    return reply({"Error": "User not found"}).code(404);
                 }
-                let terra = user.terrariums.id(request.params.terrarium_id);
+                let terra = user.terrariums.id(request.params.terrariumId);
                 if (!terra) {
                     return reply({
                         "Error": "User has no terrarium with the given ID",
-                        id: request.params.terrarium_id
+                        id: request.params.terrariumId
                     }).code(404);
                 }
 
@@ -71,11 +69,11 @@ module.exports = {
                 var from = request.query.from;
                 var to = request.query.to;
                 var limit = request.query.limit;
-                let terra = user.terrariums.id(request.params.terrarium_id);
+                let terra = user.terrariums.id(request.params.terrariumId);
 
-                if(!terra){
+                if (!terra) {
                     return reply({"Error": "User has no terrarium with the given ID",
-                        id: request.params.terrarium_id}).code(404);
+                        id: request.params.terrariumId}).code(404);
                 }
 
                 if (err) {
@@ -90,19 +88,19 @@ module.exports = {
                         var airQs = [];
 
                         thingy.airQualities.forEach(function (airQ) {
-                            if(airQ.timestamp >= from && airQ.timestamp <= to){
+                            if (airQ.timestamp >= from && airQ.timestamp <= to) {
                                 airQs.push(airQ);
                             }
                         });
 
                         thingy.temperatures.forEach(function (temp) {
-                            if(temp.timestamp >= from && temp.timestamp <= to){
+                            if (temp.timestamp >= from && temp.timestamp <= to) {
                                 temps.push(temp);
                             }
                         });
 
                         thingy.humidities.forEach(function (hum) {
-                            if(hum.timestamp >= from && hum.timestamp <= to){
+                            if (hum.timestamp >= from && hum.timestamp <= to) {
                                 hums.push(hum);
                             }
                         });
@@ -111,13 +109,12 @@ module.exports = {
                         thingy.temperatures = temps;
                         thingy.airQualities = airQs;
 
-                        if(limit){
+                        if (limit) {
                             thingy.airQualities.splice(limit, thingy.airQualities.length - limit);
                             thingy.humidities.splice(limit, thingy.humidities.length - limit);
                             thingy.temperatures.splice(limit, thingy.temperatures.length - limit);
                         }
                     });
-
                 } else {
                     terra.thingies.forEach(function (thingy) {
                         thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
@@ -132,16 +129,16 @@ module.exports = {
 
     terrariumTemperatures: function (request, reply) {
         User.findOne({name: request.auth.credentials.userName})
-            .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
+            .select("-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations")
             .exec(function (err, user) {
                 var from = request.query.from;
                 var to = request.query.to;
                 var limit = request.query.limit;
-                let terra = user.terrariums.id(request.params.terrarium_id);
+                let terra = user.terrariums.id(request.params.terrariumId);
 
-                if(!terra){
+                if (!terra) {
                     return reply({"Error": "User has no terrarium with the given ID",
-                        id: request.params.terrarium_id}).code(404);
+                        id: request.params.terrariumId}).code(404);
                 }
 
                 if (err) {
@@ -154,18 +151,17 @@ module.exports = {
                         var temps = [];
 
                         thingy.temperatures.forEach(function (temp) {
-                            if(temp.timestamp >= from && temp.timestamp <= to){
+                            if (temp.timestamp >= from && temp.timestamp <= to) {
                                 temps.push(temp);
                             }
                         });
 
                         thingy.temperatures = temps;
 
-                        if(limit){
+                        if (limit) {
                             thingy.temperatures.splice(limit, thingy.temperatures.length - limit);
                         }
                     });
-
                 } else {
                     terra.thingies.forEach(function (thingy) {
                         thingy.temperatures = thingy.temperatures[thingy.temperatures.length - 1];
@@ -178,18 +174,18 @@ module.exports = {
 
     terrariumConfigurations: function (request, reply) {
         User.findOne({name: request.auth.credentials.userName})
-            .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.temperatures -terrariums.thingies.thresholdViolations')
+            .select("-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.temperatures -terrariums.thingies.thresholdViolations")
             .exec(function (err, user) {
                 if (err) {
                     console.error(err);
-                    return reply({'Error': 'User not found'}).code(404);
+                    return reply({"Error": "User not found"}).code(404);
                 }
 
-                let terra = user.terrariums.id(request.params.terrarium_id);
+                let terra = user.terrariums.id(request.params.terrariumId);
                 if (!terra) {
                     return reply({
                         "Error": "User has no terrarium with the given ID",
-                        id: request.params.terrarium_id
+                        id: request.params.terrariumId
                     }).code(404);
                 }
 
@@ -199,35 +195,35 @@ module.exports = {
 
     terrariumViolations: function (request, reply) {
         User.findOne({name: request.auth.credentials.userName})
-            .select('-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.temperatures -terrariums.thingies.targetConfiguration')
+            .select("-terrariums.thingies.humidities -terrariums.thingies.airQualities -terrariums.thingies.temperatures -terrariums.thingies.targetConfiguration")
             .exec(function (err, user) {
                 if (err) {
                     console.error(err);
-                    return reply({'Error': 'User not found'}).code(404);
+                    return reply({"Error": "User not found"}).code(404);
                 }
-                let terra = user.terrariums.id(request.params.terrarium_id);
+                let terra = user.terrariums.id(request.params.terrariumId);
                 if (!terra) {
                     return reply({
                         "Error": "User has no terrarium with the given ID",
-                        id: request.params.terrarium_id
+                        id: request.params.terrariumId
                     }).code(404);
                 }
 
-                reply(user.terrariums.id(request.params.terrarium_id)).code(200);
+                reply(user.terrariums.id(request.params.terrariumId)).code(200);
         });
     },
 
     terrariumHumidities: function (request, reply) {
         User.findOne({name: request.auth.credentials.userName})
-            .select('-terrariums.thingies.temperatures -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
+            .select("-terrariums.thingies.temperatures -terrariums.thingies.airQualities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations")
             .exec(function (err, user) {
                 var from = request.query.from;
                 var to = request.query.to;
                 var limit = request.query.limit;
-                let terra = user.terrariums.id(request.params.terrarium_id);
-                if(!terra){
+                let terra = user.terrariums.id(request.params.terrariumId);
+                if (!terra) {
                     return reply({"Error": "User has no terrarium with the given ID",
-                        id: request.params.terrarium_id}).code(404);
+                        id: request.params.terrariumId}).code(404);
                 }
 
                 if (err) {
@@ -240,18 +236,17 @@ module.exports = {
                         var hums = [];
 
                         thingy.humidities.forEach(function (hum) {
-                            if(hum.timestamp >= from && hum.timestamp <= to){
+                            if (hum.timestamp >= from && hum.timestamp <= to) {
                                 hums.push(hum);
                             }
                         });
 
                         thingy.humidities = hums;
 
-                        if(limit){
+                        if (limit) {
                             thingy.humidities.splice(limit, thingy.humidities.length - limit);
                         }
                     });
-
                 } else {
                     terra.thingies.forEach(function (thingy) {
                         thingy.humidities = thingy.humidities[thingy.humidities.length - 1];
@@ -264,15 +259,15 @@ module.exports = {
 
     terrariumAirqualities: function (request, reply) {
         User.findOne({name: request.auth.credentials.userName})
-            .select('-terrariums.thingies.temperatures -terrariums.thingies.humidities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')
+            .select("-terrariums.thingies.temperatures -terrariums.thingies.humidities -terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations")
             .exec(function (err, user) {
                 var from = request.query.from;
                 var to = request.query.to;
                 var limit = request.query.limit;
-                let terra = user.terrariums.id(request.params.terrarium_id);
-                if(!terra){
+                let terra = user.terrariums.id(request.params.terrariumId);
+                if (!terra) {
                     return reply({"Error": "User has no terrarium with the given ID",
-                        id: request.params.terrarium_id}).code(404);
+                        id: request.params.terrariumId}).code(404);
                 }
 
                 if (err) {
@@ -285,18 +280,17 @@ module.exports = {
                         var airQs = [];
 
                         thingy.airQualities.forEach(function (airQ) {
-                            if(airQ.timestamp >= from && airQ.timestamp <= to){
+                            if (airQ.timestamp >= from && airQ.timestamp <= to) {
                                 airQs.push(airQ);
                             }
                         });
 
                         thingy.airQualities = airQs;
 
-                        if(limit){
+                        if (limit) {
                             thingy.airQualities.splice(limit, thingy.airQualities.length - limit);
                         }
                     });
-
                 } else {
                     terra.thingies.forEach(function (thingy) {
                         thingy.airQualities = thingy.airQualities[thingy.airQualities.length - 1];
