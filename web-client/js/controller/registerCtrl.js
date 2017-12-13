@@ -25,5 +25,5 @@ termonWebClient.controller('registerCtrl', ['$scope', 'authService', '$state', f
             $scope.registerError = errMsg;
         });
     };
-    
+
 }]);

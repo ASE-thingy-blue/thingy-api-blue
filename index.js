@@ -106,23 +106,21 @@ const registerAuthRoutes = function (err)
     {
         console.error(err);
     }
-    Session.then(tokenKey =>
-    {
-        server.auth.strategy('jwt', 'jwt',
-        {
-            mode: 'required',
-            validateFunc: validateToken,
-            verifyOptions: { ignoreExpiration: false, algorithms: ['HS256'] }
-        });
-        server.auth.default('jwt');
 
-        // Register public API paths
-        require('./routing/public_api')(server);
-        // Register Thingy API paths
-        require('./routing/thingy_api')(server);
-        // Register private API paths
-        require('./routing/private_api')(server);
+    server.auth.strategy('jwt', 'jwt',
+    {
+        mode: 'required',
+        validateFunc: validateToken,
+        verifyOptions: { ignoreExpiration: false, algorithms: ['HS256'] }
     });
+    server.auth.default('jwt');
+
+    // Register public API paths
+    require('./routing/public_api')(server);
+    // Register Thingy API paths
+    require('./routing/thingy_api')(server);
+    // Register private API paths
+    require('./routing/private_api')(server);
 
     server.start(() => {
         console.log('Server running at: ', server.info.uri);

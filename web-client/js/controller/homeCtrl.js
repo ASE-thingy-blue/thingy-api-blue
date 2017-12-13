@@ -13,5 +13,5 @@ termonWebClient.controller('homeCtrl', ['$scope', 'dataService', function($scope
         $scope.user = user;
         $scope.showSpinner = false;
     });
-    
+
 }]);

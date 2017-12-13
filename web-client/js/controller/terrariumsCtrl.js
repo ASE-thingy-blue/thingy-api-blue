@@ -65,7 +65,7 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$q', 'dataService', 'ng
     $scope.showThingyDetails = function(ter, thingy) {
         $scope.showSpinner = true;
         $scope.hideDetails();
-        
+
         dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id+'/values').then(function(data) {
             $scope.thingyDetails = data;
             let promises = [];

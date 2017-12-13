@@ -351,7 +351,6 @@ var createPrivateAPI = (server) => {
         }
     });
 
-
     server.route({
         method: 'GET',
         path: '/terrarium/{terrariumId}/thingies',

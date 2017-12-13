@@ -11,12 +11,8 @@
                 </div>
                 <div class="panel-body">
 
-                    <div ng-if="successMsg" class="alert alert-success">
-                        {{successMsg}}
-                    </div>
-                    <div ng-if="errorMsg" class="alert alert-danger">
-                        {{errorMsg}}
-                    </div>
+                    <div ng-if="successMsg" class="alert alert-success">{{successMsg}}</div>
+                    <div ng-if="errorMsg" class="alert alert-danger">{{errorMsg}}</div>
 
                     <form method="POST" ng-submit="updateProfile()">
                         <input type="text" name="username" class="form-control" placeholder="Username" ng-model="user.name" disabled="disabled">
@@ -27,7 +23,7 @@
                         <br />
                         <input type="password" name="repassword" class="form-control" placeholder="Repeate Password" ng-model="user.repassword" rg-required="user.password">
                         <br />
-                        <button type="submit" class="btn btn-success"><i class="fa fa-fw fa-save"></i>save profile</button>
+                        <button type="submit" class="btn btn-success"><i class="fa fa-fw fa-save"></i>Save profile</button>
                     </form>
                 </div>
             </div>

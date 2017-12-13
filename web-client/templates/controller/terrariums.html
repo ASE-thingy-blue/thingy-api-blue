@@ -1,15 +1,15 @@
 <div id="page" class="maincontent">
 
-    <h1>Terrariums<span ng-if="showSpinner"> <i class="fa fa-spinner fa-spin"></i></span></h1>
+    <h1>Terrariums<span ng-if="showSpinner"><i class="fa fa-spinner fa-spin"></i></span></h1>
     <br/>
 
     <div>
         <div ng-if="!terDetails && !thingyDetails">
-            <button class="btn btn-primary" ng-click="loadData()"><i class="fa fa-fw fa-refresh"></i>reload data</button>
-            <button class="btn btn-success pull-right" ng-click="showCreateTerrarium()"><i class="fa fa-fw fa-refresh"></i>create terrarium</button>
+            <button class="btn btn-primary" ng-click="loadData()"><i class="fa fa-fw fa-refresh"></i>Reload data</button>
+            <button class="btn btn-success pull-right" ng-click="showCreateTerrarium()"><i class="fa fa-fw fa-asterisk"></i>Create new terrarium</button>
         </div>
         <div ng-if="terDetails || thingyDetails">
-            <button class="btn btn-primary" ng-click="loadData()"><i class="fa fa-fw fa-backward"></i>overview</button>
+            <button class="btn btn-primary" ng-click="loadData()"><i class="fa fa-fw fa-backward"></i>Overview</button>
         </div>
     </div>
     <br/>
@@ -26,12 +26,10 @@
                         <li ng-repeat="thingy in terrarium.thingies">
                             <a ng-click="showThingyDetails(terrarium, thingy)">{{thingy.description}} ({{thingy.macAddress}})</a>
                         </li>
-                        <li ng-if="!terrarium.thingies || terrarium.thingies.length === 0">
-                            Terrarium has no Thingies
-                        </li>
+                        <li ng-if="!terrarium.thingies || terrarium.thingies.length === 0">Terrarium has no Thingies</li>
                     </ul>
-                    <button class="btn btn-primary pull-right" ng-click="showTerDetails(terrarium)"><i class="fa fa-fw fa-info"></i>show details</button>
-                    <button ng-if="!terrarium.default" class="btn btn-danger pull-right" ng-click="showDeleteTerrarium(terrarium)"><i class="fa fa-fw fa-trash"></i>delete</button>
+                    <button class="btn btn-primary pull-right" ng-click="showTerDetails(terrarium)"><i class="fa fa-fw fa-info"></i>Show details</button>
+                    <button ng-if="!terrarium.default" class="btn btn-danger pull-right" ng-click="showDeleteTerrarium(terrarium)"><i class="fa fa-fw fa-trash"></i>Delete terrarium</button>
                 </div>
             </div>
         </div>
@@ -44,7 +42,7 @@
                     <h3 class="panel-title">{{thingy.description}} ({{terDetails.name}})</h3>
                 </div>
                 <div class="panel-body">
-                    <h3>Sensor Data</h3>
+                    <h3>Sensor data</h3>
                     <ul>
                         <li>Humidity:</li>
                         <ul>
@@ -52,7 +50,7 @@
                             <li>Date: {{thingy.humidities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
                         </ul>
 
-                        <li>Air Quality:</li>
+                        <li>Air quality:</li>
                         <ul>
                             <li>TVOC: {{thingy.airQualities[0].tvoc.value}} {{thingy.airQualities[0].tvoc.unit.short}}</li>
                             <li>CO2: {{thingy.airQualities[0].co2.value}} {{thingy.airQualities[0].co2.unit.short}}</li>
@@ -65,7 +63,7 @@
                             <li>Date: {{thingy.temperatures[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
                         </ul>
                     </ul>
-                    <button class="btn btn-primary pull-right" ng-click="showThingyDetails(terDetails, thingy)"><i class="fa fa-fw fa-info"></i>show details</button>
+                    <button class="btn btn-primary pull-right" ng-click="showThingyDetails(terDetails, thingy)"><i class="fa fa-fw fa-info"></i>Show details</button>
                 </div>
             </div>
         </div>
@@ -78,7 +76,7 @@
                     <h3 class="panel-title">{{thingyDetails.description}} - Status</h3>
                 </div>
                 <div class="panel-body">
-                    <h3>Sensor Data</h3>
+                    <h3>Sensor data</h3>
                     <ul>
                         <li>Humidity:</li>
                         <ul>
@@ -86,7 +84,7 @@
                             <li>Date: {{thingyDetails.humidities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
                         </ul>
 
-                        <li>Air Quality:</li>
+                        <li>Air quality:</li>
                         <ul>
                             <li>TVOC: {{thingyDetails.airQualities[0].tvoc.value}} {{thingyDetails.airQualities[0].tvoc.unit.short}}</li>
                             <li>CO2: {{thingyDetails.airQualities[0].co2.value}} {{thingyDetails.airQualities[0].co2.unit.short}}</li>
@@ -109,8 +107,7 @@
                     <h3 class="panel-title">{{thingyDetails.description}} - Settings</h3>
                 </div>
                 <div class="panel-body">
-                    <h3>Sensor Configuration</h3>
-                    
+                    <h3>Sensor configuration</h3>
                 </div>
             </div>
         </div>

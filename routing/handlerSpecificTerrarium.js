@@ -52,7 +52,7 @@ module.exports = {
                     }).code(404);
                 }
 
-                if(terra.isDefault){
+                if (terra.isDefault) {
                     return reply({
                         "Error": "You cant delete the default terrarium",
                         id: request.params.terrariumId
@@ -60,17 +60,17 @@ module.exports = {
                 }
 
                 let thingies = terra.thingies;
-                if(thingies){
+                if (thingies) {
                     var defaultTerra;
-                    user.terrariums.forEach((terra) =>{
-                        if(terra.isDefault) {
+                    user.terrariums.forEach((terra) => {
+                        if (terra.isDefault) {
                             defaultTerra = terra;
                             defaultTerra.thingies = defaultTerra.thingies.concat(thingies);
                             defaultTerra.save();
                         }
                     });
 
-                    if(!defaultTerra) {
+                    if (!defaultTerra) {
                         defaultTerra = new Terrarium({name: "Default Terrarium", isDefault: true});
                         defaultTerra.thingies.concat(thingies);
                         defaultTerra.save();
@@ -79,7 +79,6 @@ module.exports = {
                 }
 
                 user.terrariums.splice(user.terrariums.indexOf(terra), 1);
-
 
                 user.save((err) => {
                     if (err) {

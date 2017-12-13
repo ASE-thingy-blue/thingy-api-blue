@@ -18,7 +18,7 @@ mailer.mailConfig = {
     }
 };
 
-// create reusable transporter object using the default SMTP transport
+// Create reusable transporter object using the default SMTP transport
 mailer.transporter = nodemailer.createTransport(mailer.mailConfig.server);
 
 /**
@@ -29,7 +29,7 @@ mailer.transporter = nodemailer.createTransport(mailer.mailConfig.server);
  * @param messageHtml
  */
 mailer.sendMail = function (to, subject, message, messageHtml) {
-    // setup email data with unicode symbols
+    // Setup email data with unicode symbols
     let mailOptions = {
         from: mailer.mailConfig.sender.from,
         to: to,
@@ -37,7 +37,7 @@ mailer.sendMail = function (to, subject, message, messageHtml) {
         text: message,
         html: messageHtml
     };
-        // // send mail with defined transport object
+    // Send mail with defined transport object
     mailer.transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.log(error);

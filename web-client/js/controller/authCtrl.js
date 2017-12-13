@@ -13,5 +13,5 @@ termonWebClient.controller('authCtrl', ['$scope', '$state', 'authService', 'AUTH
         $state.go('public.login');
         console.log('Sorry, You have to login again.');
     });
-    
+
 }]);

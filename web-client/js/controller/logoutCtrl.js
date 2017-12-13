@@ -8,5 +8,5 @@ termonWebClient.controller('logoutCtrl', ['$scope', 'authService', '$state', fun
     //Logout User and redirect to Login Page
     authService.logout();
     $state.go('public.login');
-    
+
 }]);
