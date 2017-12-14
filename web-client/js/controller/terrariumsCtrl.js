@@ -25,7 +25,6 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
     $scope.loadData = function(initial) {
         $scope.showSpinner = true;
         $scope.hideDetails();
-        //TODO you get now also the thingies
         dataService.get('/terrarium').then(function(data) {
             $scope.terrariums = data;
             let promises = [];

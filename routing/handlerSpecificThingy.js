@@ -4,6 +4,45 @@ var User = Mongoose.model("User");
 
 module.exports = {
 
+    thingyDelete: function (request, reply) {
+        User.findOne({name: request.auth.credentials.userName})
+        .exec(function (err, user) {
+            let terra = user.terrariums.id(request.params.terrariumId);
+            if (!terra) {
+                return reply({
+                    "Error": "User has no terrarium with the given ID",
+                    id: request.params.terrariumId
+                }).code(404);
+            }
+
+            let thingy = terra.thingies.id(request.params.thingyId);
+            if (!thingy) {
+                return reply({
+                    "Error": "Terrarium has no Thingy with the given ID",
+                    id: request.params.thingyId
+                }).code(404);
+            }
+
+            if (err) {
+                console.error(err);
+                return reply({"Error": "User not found"}).code(404);
+            }
+
+            terra.thingies.splice(terra.thingies.indexOf(thingy), 1);
+            user.save((err) => {
+                if (err) {
+                    return reply({"message": "Something went wrong! Terrarium not saved"}).code(500);
+                }
+
+                return reply({
+                    "success": true,
+                    message: "Thingy was deleted",
+                    id: request.params.terrariumId
+                }).code(200);
+            });
+        });
+    },
+
     thingyValues: function (request, reply) {
         User.findOne({name: request.auth.credentials.userName})
             .select("-terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations")

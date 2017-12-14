@@ -298,6 +298,38 @@ var createPrivateAPI = (server) => {
      * SPECIFIC TERRARIUM
      */
     server.route({
+        method: 'GET',
+        path: '/terrarium/{terrariumId}',
+        handler: HandlerTerrarium.terrariumValues,
+        config: {
+            tags: ['webclient', 'api'],
+            description: 'Gets all values from all Thingies form a certain terrarium',
+            validate: {
+                params: {
+                    terrariumId: Joi.string()
+                        .required()
+                        .description('ID of the terrarium I want the values from')
+                },
+                query: {
+                    limit: Joi.number().description('Amount of results'),
+                    from: Joi.date().description('Value from a certain date'),
+                    to: Joi.date().description('Value to a certain date')
+                }
+            },
+            auth: 'jwt',
+            plugins: {
+                'hapi-swagger': {
+                    responses: {
+                        200: {
+                            description: 'Success'
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    server.route({
         method: 'DELETE',
         path: '/terrarium/{terrariumId}',
         handler: HandlerTerrarium.terrariumDelete,
@@ -336,38 +368,6 @@ var createPrivateAPI = (server) => {
                     terrariumId: Joi.string()
                         .required()
                         .description('ID of the terrarium I want the Thingies from')
-                }
-            },
-            auth: 'jwt',
-            plugins: {
-                'hapi-swagger': {
-                    responses: {
-                        200: {
-                            description: 'Success'
-                        }
-                    }
-                }
-            }
-        }
-    });
-
-    server.route({
-        method: 'GET',
-        path: '/terrarium/{terrariumId}',
-        handler: HandlerTerrarium.terrariumValues,
-        config: {
-            tags: ['webclient', 'api'],
-            description: 'Gets all values from all Thingies form a certain terrarium',
-            validate: {
-                params: {
-                    terrariumId: Joi.string()
-                        .required()
-                        .description('ID of the terrarium I want the values from')
-                },
-                query: {
-                    limit: Joi.number().description('Amount of results'),
-                    from: Joi.date().description('Value from a certain date'),
-                    to: Joi.date().description('Value to a certain date')
                 }
             },
             auth: 'jwt',
@@ -562,6 +562,36 @@ var createPrivateAPI = (server) => {
                     limit: Joi.number().description('Amount of results'),
                     from: Joi.date().description('Value from a certain date'),
                     to: Joi.date().description('Value to a certain date')
+                }
+            },
+            auth: 'jwt',
+            plugins: {
+                'hapi-swagger': {
+                    responses: {
+                        200: {
+                            description: 'Success'
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    server.route({
+        method: 'DELETE',
+        path: '/terrarium/{terrariumId}/thingies/{thingyId}',
+        handler: HandlerThingy.thingyDelete,
+        config: {
+            tags: ['webclient', 'api'],
+            description: 'Deletes a certain thingy in a given terrarium',
+            validate: {
+                params: {
+                    terrariumId: Joi.string()
+                        .required()
+                        .description('ID of the terrarium I to delete the thingy'),
+                    thingyId: Joi.string()
+                        .required()
+                        .description('ID of the Thingy I want to delete')
                 }
             },
             auth: 'jwt',
