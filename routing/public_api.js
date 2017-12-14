@@ -113,23 +113,43 @@ var createPublicAPI = (server) => {
         path: '/signup',
         handler: function (request, reply) {
             if (!request.payload.name || !request.payload.password) {
-            reply({success: false, message: 'Please provide username and password.'}).code(400);
+                reply({success: false, message: 'Please provide username and password.'}).code(400);
             } else {
                 if (request.payload.password !== request.payload.repassword)
                 {
                     return reply({success: false, message: 'Passwords do not match.'}).code(400);
                 }
-                var newUser = new User({
-                    name: request.payload.name,
-                    mailAddress: request.payload.email,
-                    password: request.payload.password
-                });
-                // Save the user
-                newUser.save(function (err) {
+
+                User.find({name: request.payload.name}).count(function(err, countName) {
                     if (err) {
                         return reply({success: false, message: 'Error creating new user.'}).code(500);
                     }
-                    reply({success: true, message: 'Successfully created new user.'}).code(201);
+                    if (countName !== 0) {
+                        return reply({success: false, message: 'Username already taken.'}).code(500);
+                    } else {
+                        User.find({mailAddress: request.payload.email}).count(function(err, countEmail) {
+                            if (err) {
+                                return reply({success: false, message: 'Error creating new user.'}).code(500);
+                            }
+
+                            if (countEmail !== 0) {
+                                return reply({success: false, message: 'E-Mail already taken.'}).code(500);
+                            } else {
+                                var newUser = new User({
+                                    name: request.payload.name,
+                                    mailAddress: request.payload.email,
+                                    password: request.payload.password
+                                });
+                                // Save the user
+                                newUser.save(function (err) {
+                                    if (err) {
+                                        return reply({success: false, message: 'Error creating new user.'}).code(500);
+                                    }
+                                    reply({success: true, message: 'Successfully created new user.'}).code(201);
+                                });
+                            }
+                        });
+                    }
                 });
             }
         },
