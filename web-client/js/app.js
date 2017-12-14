@@ -34,6 +34,21 @@ var termonWebClient = angular.module('termonWebClient', ['ui.router', 'ngAnimate
                 templateUrl: 'static/templates/controller/terrariums.html',
                 controller: 'terrariumsCtrl'
             })
+            .state('private.terrarium', {
+                url: '/terrariums/:terId',
+                templateUrl: 'static/templates/controller/terrariums.html',
+                controller: 'terrariumsCtrl'
+            })
+            .state('private.thingy', {
+                url: '/terrariums/:terId/:thingyId',
+                templateUrl: 'static/templates/controller/terrariums.html',
+                controller: 'terrariumsCtrl'
+            })
+            .state('private.history', {
+                url: '/history/:terId/:thingyId',
+                templateUrl: 'static/templates/controller/history.html',
+                controller: 'historyCtrl'
+            })
             .state('private.profile', {
                 url: '/profile',
                 templateUrl: 'static/templates/controller/profile.html',

@@ -1,0 +1,59 @@
+<div id="page" class="maincontent">
+
+    <h1>History<span ng-if="showSpinner"> <i class="fa fa-spinner fa-spin"></i></span></h1>
+    <br/>
+
+    <div>
+        <button class="btn btn-primary" ng-click="goBack('overview')"><i class="fa fa-fw fa-backward"></i>overview</button>
+        <button class="btn btn-primary" ng-click="goBack('terrarium')"><i class="fa fa-fw fa-info"></i>terrarium details</button>
+        <button class="btn btn-primary" ng-click="goBack('thingy')"><i class="fa fa-fw fa-info"></i>thingy details</button>
+    </div>
+    <br/>
+
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Humidity</h3>
+                </div>
+                <div class="panel-body">
+                    <div id="chart_humidity" style="width: 100%; height: 400px;"></div>
+                </div>
+                <div class="panel-footer">
+                    <span>{{ timeRange(thingyValues.humidity) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Air Quality</h3>
+                </div>
+                <div class="panel-body">
+                    <div id="chart_airquality" style="width: 100%; height: 400px;"></div>
+                </div>
+                <div class="panel-footer">
+                    <span>{{ timeRange(thingyValues.airquality) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Temperature</h3>
+                </div>
+                <div class="panel-body">
+                    <div id="chart_temperature" style="width: 100%; height: 400px;"></div>
+                </div>
+                <div class="panel-footer">
+                    <span>{{ timeRange(thingyValues.temperature) }}</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

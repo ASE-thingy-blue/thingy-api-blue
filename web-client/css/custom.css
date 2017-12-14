@@ -76,3 +76,24 @@ form label {
     cursor: pointer;
 }
 
+h3 {
+    margin-top: 10px;
+}
+
+.fakelink {
+    cursor: pointer;
+}
+
+ul.nobullets {
+    margin-bottom: 10px;
+    padding-left: 15px;
+}
+ul.nobullets li {
+    list-style-type: none;
+}
+
+button.btn-corner {
+    z-index: 100;
+    position: absolute;
+    right: 30px;
+}

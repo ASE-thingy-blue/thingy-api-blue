@@ -15,6 +15,7 @@ termonWebClient.controller('navigationCtrl', ['$rootScope', '$scope', '$state', 
             name : 'Terrariums',
             path : '/terrariums',
             state : 'private.terrariums',
+            alt : ['private.terrarium', 'private.thingy'],
             icon : 'fa-th'
         }, {
             name : 'Profile',
@@ -31,7 +32,7 @@ termonWebClient.controller('navigationCtrl', ['$rootScope', '$scope', '$state', 
 
     $scope.isActive = function(nav) {
         let state = $state.current.name;
-        return nav.state === state;
+        return nav.state === state || (nav.alt && nav.alt.indexOf(state) > -1);
     };
 
     $scope.navigate = function(nav) {
