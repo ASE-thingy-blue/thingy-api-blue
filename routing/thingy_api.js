@@ -3,32 +3,32 @@ const Joi = require('joi');
 
 const triggerTools = require('../backend/triggerTools');
 
-var Terri = Mongoose.model('Terrarium');
-var Thingy = Mongoose.model('Thingy');
-var Temp = Mongoose.model('Temperature');
-var Hum = Mongoose.model('Humidity');
-var AirQ = Mongoose.model('AirQuality');
-var Tvoc = Mongoose.model('TVOC');
-var Carbon = Mongoose.model('Carbondioxide');
-var User = Mongoose.model('User');
-var Unit = Mongoose.model('Unit');
+const Terri = Mongoose.model('Terrarium');
+const Thingy = Mongoose.model('Thingy');
+const Temp = Mongoose.model('Temperature');
+const Hum = Mongoose.model('Humidity');
+const AirQ = Mongoose.model('AirQuality');
+const Tvoc = Mongoose.model('TVOC');
+const Carbon = Mongoose.model('Carbondioxide');
+const User = Mongoose.model('User');
+const Unit = Mongoose.model('Unit');
 
 // URL Param Schemes
-var thingyIdSchema = Joi.string().required().description('The Thingy UUID');
-var sensorIdSchema = Joi.string().required().description('The Thingy Sensor');
+const thingyIdSchema = Joi.string().required().description('The Thingy UUID');
+const sensorIdSchema = Joi.string().required().description('The Thingy Sensor');
 
 /*
  * Reads a unit from the DB by name or creates it if it does not exist
  */
 let getOrCreateUnit = (name, short, reply) => {
-    var result;
+    let result;
     Unit.find({name: name}, function (err, unit) {
         if (err) {
             console.error(err);
             return reply({'Error': 'Unit not in database'}).code(500);
         }
         if (unit === null) {
-            var newUnit = new Unit({name: name, short: short});
+            let newUnit = new Unit({name: name, short: short});
             newUnit.save();
             result = newUnit;
         } else {
@@ -38,15 +38,75 @@ let getOrCreateUnit = (name, short, reply) => {
     });
 };
 
-var createThingyAPI = (server) => {
+const createThingyAPI = (server) => {
+    server.route({
+        method: 'PUT',
+        path: '/thingy/{thingyId}',
+        handler: function (request, reply) {
+            let thingyId = request.params.thingyId;
+            let data = request.payload;
+
+            User.findOne({name: data.user}, function (err, user) {
+                if (err) {
+                    console.error(err);
+                    reply({'Error': 'Database error'}).code(500);
+                } else {
+                    if (user === null) {
+                        let newUser = new User({name: data.user});
+                        let terri = new Terri({name: 'My first terrarium', isDefault: true});
+                        let thingy = new Thingy({macAddress: data.thingy, callbackAddress: data.cb});
+
+                        newUser.save();
+                        terri.save();
+                        thingy.save();
+
+                        terri.thingies.push(thingy);
+                        newUser.terrariums.push(terri);
+                        user = newUser;
+                    } else {
+                        Thingy.findOne({macAddress: thingyId}, function (err, thingy) {
+                            if (err) {
+                                console.error(err);
+                                return reply({'Error': 'Database error'}).code(500);
+                            }
+                            if (thingy === null) {
+                                let newThingy = new Thingy({macAddress: data.thingy, callbackAddress: data.cb});
+                                let terri = new Terri({name: 'My first terrarium', isDefault: true});
+
+                                newThingy.save();
+                                terri.thingies.push(newThingy);
+
+                                terri.save();
+                                user.terrariums.push(terri);
+
+                                user.save();
+                            }
+                        });
+                    }
+                }
+            });
+
+            reply({success: true}).code(200);
+        },
+        config: {
+            tags: ['thingy'],
+            validate: {
+                params: {
+                    thingyId: thingyIdSchema
+                }
+            },
+            auth: false
+        }
+    });
+
     server.route({
         method: 'GET',
         path: '/thingy/{thingyId}/setup',
         handler: function (request, reply) {
-            var thingyId = request.params.thingyId;
+            let thingyId = request.params.thingyId;
+            console.log('setup');
 
-            // TODO: Get configuration from server by Thingy ID
-            var setup = {
+            let setup = {
                 temperature: {
                     interval: 5000
                 },
@@ -73,69 +133,7 @@ var createThingyAPI = (server) => {
                     thingyId: thingyIdSchema
                 }
             },
-            auth: 'jwt'
-        }
-    });
-
-    server.route({
-        method: 'PUT',
-        path: '/thingy/{thingyId}',
-        handler: function (request, reply) {
-            var thingyId = request.params.thingyId;
-            var data = request.payload;
-
-            User.findOne({name: data.user}, function (err, user) {
-                if (err) {
-                    console.error(err);
-                    reply({'Error': 'Database error'}).code(500);
-                } else {
-                    if (user === null) {
-                        console.log('Create new user');
-                        var newUser = new User({name: data.user});
-                        var terri = new Terri({name: 'My first terrarium', isDefault: true});
-                        var thingy = new Thingy({macAddress: data.thingy, callbackAddress: data.cb});
-
-                        newUser.save();
-                        terri.save();
-                        thingy.save();
-
-                        terri.thingies.push(thingy);
-                        newUser.terrariums.push(terri);
-                        user = newUser;
-                    } else {
-                        Thingy.findOne({macAddress: thingyId}, function (err, thingy) {
-                            if (err) {
-                                console.error(err);
-                                return reply({'Error': 'Database error'}).code(500);
-                            }
-                            if (thingy === null) {
-                                console.log('Create a new Thingy');
-                                var newThingy = new Thingy({macAddress: data.thingy, callbackAddress: data.cb});
-                                var terri = new Terri({name: 'My first terrarium', isDefault: true});
-
-                                newThingy.save();
-                                terri.thingies.push(newThingy);
-
-                                terri.save();
-                                user.terrariums.push(terri);
-
-                                user.save();
-                            }
-                        });
-                    }
-                }
-            });
-
-            reply({success: true}).code(200);
-        },
-        config: {
-            tags: ['thingy'],
-            validate: {
-                params: {
-                    thingyId: thingyIdSchema
-                }
-            },
-            auth: 'jwt'
+            auth: false
         }
     });
 
@@ -143,13 +141,22 @@ var createThingyAPI = (server) => {
         method: 'GET',
         path: '/thingy/{thingyId}/actuators/led',
         handler: function (request, reply) {
-            var thingyId = request.params.thingyId;
+            let thingyId = request.params.thingyId;
 
-            // TODO: Get configuration from server by Thingy ID
-            var led = {
-                color: 8,
-                intensity: 20,
-                delay: 1
+            //COLORS:
+            // 1 - light blue
+            // 2 - red
+            // 3
+            // 4
+            // 5
+            // 6 - light blue
+            // 7
+            // 8 - green
+
+            let led = {
+                color: 6,
+                intensity: 10,
+                delay: 3000
             };
 
             reply(led).code(200);
@@ -161,7 +168,7 @@ var createThingyAPI = (server) => {
                     thingyId: thingyIdSchema
                 }
             },
-            auth: 'jwt'
+            auth: false
         }
     });
 
@@ -169,8 +176,8 @@ var createThingyAPI = (server) => {
         method: 'POST',
         path: '/thingy/{thingyId}/sensors/{sensorId}',
         handler: function (request, reply) {
-            var thingyId = request.params.thingyId;
-            var sensorId = request.params.sensorId;
+            let thingyId = request.params.thingyId;
+            let sensorId = request.params.sensorId;
 
             Thingy.findOne({macAddress: thingyId}, function (err, thingy) {
                 if (err) {
@@ -182,13 +189,13 @@ var createThingyAPI = (server) => {
                     }).code(404);
                 }
 
-                var data = request.payload;
+                let data = request.payload;
 
                 switch (sensorId) {
                     case 'humidity':
-                        var unitPercent = getOrCreateUnit('Percent', '%', reply);
+                        let unitPercent = getOrCreateUnit('Percent', '%', reply);
 
-                        var newHmu = new Hum({
+                        let newHmu = new Hum({
                             value: data.humidity,
                             unit: unitPercent,
                             timestamp: data.timestamp
@@ -196,13 +203,14 @@ var createThingyAPI = (server) => {
                         newHmu.save();
 
                         thingy.humidities.push(newHmu);
-                        triggerTools.updateThresholds(thingy, request.auth.credentials.mailAddress);
+                        // TODO: we have no auth!
+                        //triggerTools.updateThresholds(thingy, request.auth.credentials.mailAddress);
                         thingy.save();
                         break;
                     case 'temperature':
-                        var unitCels = getOrCreateUnit('Celsius', 'C', reply);
+                        let unitCels = getOrCreateUnit('Celsius', 'C', reply);
 
-                        var newTemp = new Temp({
+                        let newTemp = new Temp({
                             value: data.temperature,
                             unit: unitCels,
                             timestamp: data.timestamp
@@ -210,24 +218,26 @@ var createThingyAPI = (server) => {
 
                         newTemp.save();
                         thingy.temperatures.push(newTemp);
-                        triggerTools.updateThresholds(thingy, request.auth.credentials.mailAddress);
+                        // TODO: we have no auth!
+                        // triggerTools.updateThresholds(thingy, request.auth.credentials.mailAddress);
                         thingy.save();
                         break;
                     case 'gas':
-                        var unit1Db = getOrCreateUnit('gram per cubic meter', 'g/m3', reply);
-                        var unit2Db = getOrCreateUnit('microgram per cubic meter', 'mg/m3', reply);
+                        let unit1Db = getOrCreateUnit('gram per cubic meter', 'g/m3', reply);
+                        let unit2Db = getOrCreateUnit('microgram per cubic meter', 'mg/m3', reply);
 
-                        var carb = new Carbon({value: data.gas.eco2, unit: unit1Db});
-                        var tvoc = new Tvoc({value: data.gas.tvoc, unit: unit2Db});
+                        let carb = new Carbon({value: data.gas.eco2, unit: unit1Db});
+                        let tvoc = new Tvoc({value: data.gas.tvoc, unit: unit2Db});
 
                         carb.save();
                         tvoc.save();
 
-                        var newAirQ = new AirQ({co2: carb, tvoc: tvoc});
+                        let newAirQ = new AirQ({co2: carb, tvoc: tvoc});
                         newAirQ.save();
 
                         thingy.airQualities.push(newAirQ);
-                        triggerTools.updateThresholds(thingy, request.auth.credentials.mailAddress);
+                        // TODO: we have no auth!
+                        //triggerTools.updateThresholds(thingy, request.auth.credentials.mailAddress);
                         thingy.save();
                         break;
                 }
@@ -243,7 +253,7 @@ var createThingyAPI = (server) => {
                     sensorId: sensorIdSchema
                 }
             },
-            auth: 'jwt'
+            auth: false
         }
     });
 };
