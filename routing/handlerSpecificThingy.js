@@ -4,6 +4,46 @@ var User = Mongoose.model("User");
 
 module.exports = {
 
+    thingyUpdate: function (request, reply) {
+        User.findOne({name: request.auth.credentials.userName})
+            .exec(function (err, user) {
+                let terra = user.terrariums.id(request.params.terrariumId);
+                if (!terra) {
+                    return reply({
+                        "Error": "User has no terrarium with the given ID",
+                        id: request.params.terrariumId
+                    }).code(404);
+                }
+
+                let thingy = terra.thingies.id(request.params.thingyId);
+                if (!thingy) {
+                    return reply({
+                        "Error": "Terrarium has no Thingy with the given ID",
+                        id: request.params.thingyId
+                    }).code(404);
+                }
+
+                if (err) {
+                    console.error(err);
+                    return reply({"Error": "User not found"}).code(404);
+                }
+
+                thingy.description = request.payload.description;
+
+                user.save((err) => {
+                    if (err) {
+                        return reply({"message": "Something went wrong! Terrarium not saved"}).code(500);
+                    }
+
+                    return reply({
+                        "success": true,
+                        message: "Thingy updated",
+                        id: request.params.terrariumId
+                    }).code(200);
+                });
+            });
+    },
+
     thingyDelete: function (request, reply) {
         User.findOne({name: request.auth.credentials.userName})
         .exec(function (err, user) {
