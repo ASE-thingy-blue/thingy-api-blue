@@ -172,78 +172,104 @@ var createThingyAPI = (server) => {
             var thingyId = request.params.thingyId;
             var sensorId = request.params.sensorId;
 
-            Thingy.findOne({macAddress: thingyId}, function (err, thingy) {
-                if (err) {
-                    console.error(err);
-                    // Stop execution
-                    return reply({
-                        'Error': 'This Thingy is not in our database',
-                        'thingy': thingyId
-                    }).code(404);
-                }
+            Terri.findOne()
+                .where({'thingies': {$elemMatch: {_id: thingyId}}})
+                .exec(function (err, terra) {
+                    if (err) {
+                        return reply({
+                            'Error': 'We have a problem.'
+                        }).code(500);
+                    }
 
-                var data = request.payload;
+                    if (!terra) {
+                        return reply({
+                            'Error': 'This Thingy is not in our database',
+                            'thingy': thingyId
+                        }).code(404);
+                    }
 
-                switch (sensorId) {
-                    case 'humidity':
-                        var unitPercent = getOrCreateUnit('Percent', '%', reply);
+                    User.findOne()
+                        .where({'terrariums': {$elemMatch: {_id: terra._id}}})
+                        .exec(function (err, user) {
+                            let uTerri = user.terrariums.id(terra.id);
+                            let uthingy = uTerri.thingies.id(thingyId);
+                            console.log(uthingy);
 
-                        var newHmu = new Hum({
-                            value: data.humidity,
-                            unit: unitPercent,
-                            timestamp: data.timestamp
+                            let data = request.payload;
+
+                            switch (sensorId) {
+                                case 'humidity':
+                                    var unitPercent = getOrCreateUnit('Percent', '%', reply);
+
+                                    var newHmu = new Hum({
+                                        value: data.humidity,
+                                        unit: unitPercent,
+                                        timestamp: new Date(data.timestamp).toISOString()
+                                    });
+                                    newHmu.save();
+
+                                    uthingy.humidities.push(newHmu);
+                                    //triggerTools.updateThresholds(uthingy, user.mailAddress);
+                                    user.save();
+                                    break;
+                                case 'temperature':
+                                    var unitCels = getOrCreateUnit('Celsius', 'C', reply);
+
+                                    var newTemp = new Temp({
+                                        value: data.temperature,
+                                        unit: unitCels,
+                                        timestamp: new Date(data.timestamp).toISOString()
+                                    });
+
+                                    newTemp.save();
+                                    uthingy.temperatures.push(newTemp);
+                                    //triggerTools.updateThresholds(uthingy, user.mailAddress);
+                                    user.save();
+                                    break;
+                                case 'gas':
+                                    var unit1Db = getOrCreateUnit('gram per cubic meter', 'g/m3', reply);
+                                    var unit2Db = getOrCreateUnit('microgram per cubic meter', 'mg/m3', reply);
+
+                                    var carb = new Carbon({value: data.gas.eco2, unit: unit1Db});
+                                    var tvoc = new Tvoc({value: data.gas.tvoc, unit: unit2Db});
+
+                                    carb.save();
+                                    tvoc.save();
+
+                                    var newAirQ = new AirQ({
+                                        co2: carb,
+                                        tvoc: tvoc,
+                                        timestamp: new Date(data.timestamp).toISOString()
+                                    });
+                                    newAirQ.save();
+
+                                    uthingy.airQualities.push(newAirQ);
+                                    //triggerTools.updateThresholds(uthingy, user.mailAddress);
+                                    user.save();
+                                    break;
+                            }
+
                         });
-                        newHmu.save();
-
-                        thingy.humidities.push(newHmu);
-                        triggerTools.updateThresholds(thingy, request.auth.credentials.mailAddress);
-                        thingy.save();
-                        break;
-                    case 'temperature':
-                        var unitCels = getOrCreateUnit('Celsius', 'C', reply);
-
-                        var newTemp = new Temp({
-                            value: data.temperature,
-                            unit: unitCels,
-                            timestamp: data.timestamp
-                        });
-
-                        newTemp.save();
-                        thingy.temperatures.push(newTemp);
-                        triggerTools.updateThresholds(thingy, request.auth.credentials.mailAddress);
-                        thingy.save();
-                        break;
-                    case 'gas':
-                        var unit1Db = getOrCreateUnit('gram per cubic meter', 'g/m3', reply);
-                        var unit2Db = getOrCreateUnit('microgram per cubic meter', 'mg/m3', reply);
-
-                        var carb = new Carbon({value: data.gas.eco2, unit: unit1Db});
-                        var tvoc = new Tvoc({value: data.gas.tvoc, unit: unit2Db});
-
-                        carb.save();
-                        tvoc.save();
-
-                        var newAirQ = new AirQ({co2: carb, tvoc: tvoc});
-                        newAirQ.save();
-
-                        thingy.airQualities.push(newAirQ);
-                        triggerTools.updateThresholds(thingy, request.auth.credentials.mailAddress);
-                        thingy.save();
-                        break;
-                }
-            });
+                });
 
             reply({success: true}).code(200);
         },
         config: {
-            tags: ['thingy'],
+            tags: ['thingy', 'api'],
             validate: {
                 params: {
                     thingyId: thingyIdSchema,
                     sensorId: sensorIdSchema
+                },
+                payload: {
+                    Thingy: Joi.string(),
+                    Sensor: Joi.string(),
+                    Data: Joi.object({
+                        temperature: Joi.number(),
+                        timestamp: Joi.date()
+                    })
                 }
-            },
-            auth: 'jwt'
+            }
         }
     });
 };
