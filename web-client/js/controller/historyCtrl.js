@@ -30,7 +30,7 @@ termonWebClient.controller('historyCtrl', ['$scope', '$stateParams', '$state', '
     };
 
     let from = new Date();
-    from.setDate(from.getDate() - 500); //TODO: use 7 days
+    from.setDate(from.getDate() - 7);
     let to = new Date();
     $scope.defaultValues = {
         from: from.getTime(),
@@ -74,8 +74,8 @@ termonWebClient.controller('historyCtrl', ['$scope', '$stateParams', '$state', '
 
             const uri = '/terrarium/' + $scope.terId + '/thingies/' + $scope.thingyId + '/' + type;
             let params = {
-                from: new Date(from),
-                to: new Date(to),
+                from: new Date(from).toISOString(),
+                to: new Date(to).toISOString(),
                 limit: limit
             };
 

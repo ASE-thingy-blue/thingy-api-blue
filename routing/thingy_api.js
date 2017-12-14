@@ -104,7 +104,6 @@ const createThingyAPI = (server) => {
         path: '/thingy/{thingyId}/setup',
         handler: function (request, reply) {
             let thingyId = request.params.thingyId;
-            console.log('setup');
 
             let setup = {
                 temperature: {
@@ -144,19 +143,18 @@ const createThingyAPI = (server) => {
             let thingyId = request.params.thingyId;
 
             //COLORS:
-            // 1 - light blue
-            // 2 - red
-            // 3
-            // 4
-            // 5
+            // 1 - red
+            // 2 - light green
+            // 3 - yellow
+            // 4 - blue
+            // 5 - violet
             // 6 - light blue
-            // 7
-            // 8 - green
+            // 7 - white
 
             let led = {
-                color: 6,
+                color: 2,
                 intensity: 10,
-                delay: 3000
+                delay: 2000
             };
 
             reply(led).code(200);
@@ -180,7 +178,7 @@ const createThingyAPI = (server) => {
             let sensorId = request.params.sensorId;
 
             Terri.findOne()
-                .where({'thingies': {$elemMatch: {_id: thingyId}}})
+                .where({'thingies': {$elemMatch: {macAddress: thingyId}}})
                 .exec(function (err, terra) {
                     if (err) {
                         return reply({
@@ -199,16 +197,17 @@ const createThingyAPI = (server) => {
                         .where({'terrariums': {$elemMatch: {_id: terra._id}}})
                         .exec(function (err, user) {
                             let uTerri = user.terrariums.id(terra.id);
-                            let uthingy = uTerri.thingies.id(thingyId);
-                            console.log(uthingy);
+                            let uthingy = uTerri.thingies.find(function(elem) {
+                                return elem.macAddress === thingyId;
+                            });
 
                             let data = request.payload;
 
                             switch (sensorId) {
                                 case 'humidity':
-                                    var unitPercent = getOrCreateUnit('Percent', '%', reply);
+                                    let unitPercent = getOrCreateUnit('Percent', '%', reply);
 
-                                    var newHmu = new Hum({
+                                    let newHmu = new Hum({
                                         value: data.humidity,
                                         unit: unitPercent,
                                         timestamp: new Date(data.timestamp).toISOString()
@@ -220,9 +219,9 @@ const createThingyAPI = (server) => {
                                     user.save();
                                     break;
                                 case 'temperature':
-                                    var unitCels = getOrCreateUnit('Celsius', 'C', reply);
+                                    let unitCels = getOrCreateUnit('Celsius', 'C', reply);
 
-                                    var newTemp = new Temp({
+                                    let newTemp = new Temp({
                                         value: data.temperature,
                                         unit: unitCels,
                                         timestamp: new Date(data.timestamp).toISOString()
@@ -234,16 +233,16 @@ const createThingyAPI = (server) => {
                                     user.save();
                                     break;
                                 case 'gas':
-                                    var unit1Db = getOrCreateUnit('gram per cubic meter', 'g/m3', reply);
-                                    var unit2Db = getOrCreateUnit('microgram per cubic meter', 'mg/m3', reply);
+                                    let unit1Db = getOrCreateUnit('gram per cubic meter', 'g/m3', reply);
+                                    let unit2Db = getOrCreateUnit('microgram per cubic meter', 'mg/m3', reply);
 
-                                    var carb = new Carbon({value: data.gas.eco2, unit: unit1Db});
-                                    var tvoc = new Tvoc({value: data.gas.tvoc, unit: unit2Db});
+                                    let carb = new Carbon({value: data.gas.eco2, unit: unit1Db});
+                                    let tvoc = new Tvoc({value: data.gas.tvoc, unit: unit2Db});
 
                                     carb.save();
                                     tvoc.save();
 
-                                    var newAirQ = new AirQ({
+                                    let newAirQ = new AirQ({
                                         co2: carb,
                                         tvoc: tvoc,
                                         timestamp: new Date(data.timestamp).toISOString()
@@ -255,11 +254,9 @@ const createThingyAPI = (server) => {
                                     user.save();
                                     break;
                             }
-
+                            reply({success: true}).code(200);
                         });
                 });
-
-            reply({success: true}).code(200);
         },
         config: {
             tags: ['thingy'],
