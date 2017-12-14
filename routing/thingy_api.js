@@ -196,7 +196,7 @@ var createThingyAPI = (server) => {
                         newHmu.save();
 
                         thingy.humidities.push(newHmu);
-                        triggerTools.updateThresholds(thingy);
+                        triggerTools.updateThresholds(thingy, request.auth.credentials.mailAddress);
                         thingy.save();
                         break;
                     case 'temperature':
@@ -210,7 +210,7 @@ var createThingyAPI = (server) => {
 
                         newTemp.save();
                         thingy.temperatures.push(newTemp);
-                        triggerTools.updateThresholds(thingy);
+                        triggerTools.updateThresholds(thingy, request.auth.credentials.mailAddress);
                         thingy.save();
                         break;
                     case 'gas':
@@ -227,7 +227,7 @@ var createThingyAPI = (server) => {
                         newAirQ.save();
 
                         thingy.airQualities.push(newAirQ);
-                        triggerTools.updateThresholds(thingy);
+                        triggerTools.updateThresholds(thingy, request.auth.credentials.mailAddress);
                         thingy.save();
                         break;
                 }

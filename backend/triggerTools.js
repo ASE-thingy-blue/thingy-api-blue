@@ -6,19 +6,28 @@ let ThresholdViolation = Mongoose.model('ThresholdViolation');
 /**
  * Process new violations
  *
- * thingy: The Thingy the violation occured on
- * violations: The list of new violations on that Thingy
+ * @param thingy: The Thingy the violation occured on.
+ * @param usersMailAddress: Mail address of the user to whom the Thingy belongs.
+ * @param violations: The list of new violations on that Thingy.
  */
-let processNewViolation = function (thingy, violations) {
-    // TODO: mail and other triggers here
-    //mailer.sendMail("s.hermidas@gmail.com", "Test Subject", "Hello\n\nThis is a Test Mail.\n\nRegards\nTermon API Service", "Hello<br/><br/>This is a Test Mail.<br/><br/>Regards<br/>Termon API Service")
+let processNewViolation = function (thingy, usersMailAddress, violations) {
+    // TODO: Mail and other triggers here
+    var message = 'A sensor of the Thingy "' + thingy.macAddress + '" (' + thingy.description + ') registered ' + violations.length + ' value(s) being outside of the defined range:\n\n';
+    violations.forEach(v => {
+        message += '- ' + v.title + '\n';
+    });
+    message += '\nRegards\nTermon API Service';
+
+    // Replace all occurrences of newlines
+    var messageHtml = message.replace(/\n/g, '<br/>');
+    mailer.sendMail(usersMailAddress, 'Termon: Measuring value(s) outside of range', message, messageHtml);
 };
 
 /**
  * Check the given Thingy for violations and update them.
  * Newly added violations will be passed to the processNewViolation function.
  */
-let updateThresholds = function (thingy) {
+let updateThresholds = function (thingy, usersMailAddress) {
     let thresholds = thingy.targetConfiguration.thresholds;
 
     let current = {
@@ -78,7 +87,7 @@ let updateThresholds = function (thingy) {
         }
     }
 
-    // new thingies have no threshold violation list defined. create it if it is missing
+    // New Thingies have no threshold violation list defined, create one if it is missing
     if (thingy.thresholdViolations === undefined) {
         thingy.thresholdViolations = [];
     }

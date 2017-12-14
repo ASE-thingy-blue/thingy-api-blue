@@ -1,4 +1,4 @@
-const nodemailer = require("nodemailer");
+const Nodemailer = require("nodemailer");
 
 let mailer = {};
 
@@ -19,7 +19,7 @@ mailer.mailConfig = {
 };
 
 // Create reusable transporter object using the default SMTP transport
-mailer.transporter = nodemailer.createTransport(mailer.mailConfig.server);
+mailer.transporter = Nodemailer.createTransport(mailer.mailConfig.server);
 
 /**
  * Send Thingy Info Mail
@@ -40,7 +40,7 @@ mailer.sendMail = function (to, subject, message, messageHtml) {
     // Send mail with defined transport object
     mailer.transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            console.log(error);
+            console.error(error);
             return;
         }
         console.log("Message sent: %s", info.messageId);

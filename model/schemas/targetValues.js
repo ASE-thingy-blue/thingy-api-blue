@@ -1,8 +1,8 @@
 const Mongoose = require('mongoose');
 
 /**
- * Models a single target value set. this is used for ideal values as well as
- * arming-/disarming points for thresholds
+ * Models a single target value set. This is used for ideal values as well as
+ * arming / disarming points for thresholds
  */
 var targetValuesSchema = Mongoose.Schema({
 
