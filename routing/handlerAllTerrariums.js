@@ -4,19 +4,6 @@ var User = Mongoose.model('User');
 
 module.exports = {
 
-    terrariums: function (request, reply) {
-        User.findOne({name: request.auth.credentials.userName})
-            .select('terrariums._id terrariums.name terrariums.description terrariums.isDefault')
-            .exec(function (err, user) {
-                if (err) {
-                    console.error(err);
-                    return reply({'Error': 'User not found'}).code(404);
-                } else {
-                    reply(user).code(200);
-                }
-            });
-    },
-
     terrariumsValues: function (request, reply) {
         User.findOne({name: request.auth.credentials.userName})
             .select('-terrariums.thingies.targetConfiguration -terrariums.thingies.thresholdViolations')

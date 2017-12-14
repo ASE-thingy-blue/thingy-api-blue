@@ -68,36 +68,8 @@ var createPrivateAPI = (server) => {
      * ALL TERRARIUMS
      */
     server.route({
-        method: 'GET',
-        path: '/terrariums',
-        handler: HandlerAllTerrariums.terrariums,
-        config: {
-            tags: ['webclient', 'api'],
-            description: 'Gets all terrariums of a user',
-            auth: 'jwt',
-            plugins: {
-                'hapi-swagger': {
-                    responses: {
-                        200: {
-                            description: 'Success',
-                            schema: Joi.object({
-                                _id: Joi.string(),
-                                terrariums: Joi.array().items(Joi.object({
-                                    _id: Joi.string(),
-                                    name: Joi.string(),
-                                    isDefault: Joi.boolean()
-                                }))
-                            }).label('Result')
-                        }
-                    }
-                }
-            }
-        }
-    });
-
-    server.route({
         method: 'POST',
-        path: '/terrariums',
+        path: '/terrarium',
         handler: HandlerTerrarium.terrariumCreate,
         config: {
             tags: ['webclient', 'api'],
@@ -128,7 +100,7 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrariums/values',
+        path: '/terrarium',
         handler: HandlerAllTerrariums.terrariumsValues,
         config: {
             tags: ['webclient', 'api'],
@@ -197,7 +169,7 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrariums/configurations',
+        path: '/terrarium/configurations',
         handler: HandlerAllTerrariums.terrariumsConfigurations,
         config: {
             tags: ['webclient', 'api'],
@@ -220,7 +192,7 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrariums/violations',
+        path: '/terrarium/violations',
         handler: HandlerAllTerrariums.terrariumsViolations,
         config: {
             tags: ['webclient', 'api'],
@@ -243,7 +215,7 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrariums/temperature',
+        path: '/terrarium/temperature',
         handler: HandlerAllTerrariums.terrariumsTemperature,
         config: {
             tags: ['webclient', 'api'],
@@ -270,7 +242,7 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrariums/humidity',
+        path: '/terrarium/humidity',
         handler: HandlerAllTerrariums.terrariumsHumidity,
         config: {
             tags: ['webclient', 'api'],
@@ -297,7 +269,7 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrariums/airquality',
+        path: '/terrarium/airquality',
         handler: HandlerAllTerrariums.terrariumsAirquality,
         config: {
             tags: ['webclient', 'api'],
@@ -381,7 +353,7 @@ var createPrivateAPI = (server) => {
 
     server.route({
         method: 'GET',
-        path: '/terrarium/{terrariumId}/values',
+        path: '/terrarium/{terrariumId}',
         handler: HandlerTerrarium.terrariumValues,
         config: {
             tags: ['webclient', 'api'],
@@ -572,7 +544,7 @@ var createPrivateAPI = (server) => {
      */
     server.route({
         method: 'GET',
-        path: '/terrarium/{terrariumId}/thingies/{thingyId}/values',
+        path: '/terrarium/{terrariumId}/thingies/{thingyId}',
         handler: HandlerThingy.thingyValues,
         config: {
             tags: ['webclient', 'api'],

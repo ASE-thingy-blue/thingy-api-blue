@@ -25,9 +25,9 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
     $scope.loadData = function(initial) {
         $scope.showSpinner = true;
         $scope.hideDetails();
-
-        dataService.get('/terrariums').then(function(data) {
-            $scope.terrariums = data.terrariums;
+        //TODO you get now also the thingies
+        dataService.get('/terrarium').then(function(data) {
+            $scope.terrariums = data;
             let promises = [];
             angular.forEach($scope.terrariums, function(terrarium) {
                 let p = dataService.get('/terrarium/'+terrarium._id+'/thingies').then(function(data) {
@@ -62,7 +62,7 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
         $scope.showSpinner = true;
         $scope.hideDetails();
 
-        dataService.get('/terrarium/'+ter._id+'/values').then(function(data) {
+        dataService.get('/terrarium/'+ter._id).then(function(data) {
             $scope.terDetails = data;
             $scope.showSpinner = false;
         });
@@ -77,7 +77,7 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
         $scope.showSpinner = true;
         $scope.hideDetails();
 
-        dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id+'/values').then(function(data) {
+        dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id).then(function(data) {
             $scope.thingyDetails = data;
             $scope.thingyDetails.ter = ter;
             let promises = [];
@@ -115,7 +115,7 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
     $scope.createTerrarium = function(ter) {
         $scope.showSpinner = true;
 
-        dataService.post('/terrariums', ter).then(function(result) {
+        dataService.post('/terrarium', ter).then(function(result) {
             $scope.terToCreate = undefined;
             $scope.loadData();
             $('#createTerrariumModal').modal('hide');
