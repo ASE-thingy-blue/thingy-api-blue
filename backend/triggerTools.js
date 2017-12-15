@@ -28,6 +28,10 @@ let processNewViolation = function (thingy, usersMailAddress, violations) {
  * Newly added violations will be passed to the processNewViolation function.
  */
 let updateThresholds = function (thingy, usersMailAddress) {
+    // unconfigured thingies can be ignored
+    if (thingy.targetConfiguration === undefined)
+	return;
+    
     let thresholds = thingy.targetConfiguration.thresholds;
 
     let current = {
