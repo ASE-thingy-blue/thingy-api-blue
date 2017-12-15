@@ -52,6 +52,7 @@ let updateThresholds = function (thingy, usersMailAddress) {
         let hasbad = false;
         let hascentral = false;
         // Check temperature
+        if (threshold.sensor === 2) {
         if (current.temperature.value <= lower.temperature.value) {
             hasbad = ascending ? hasbad : true;
         } else if (current.temperature.value >= upper.temperature.value) {
@@ -59,7 +60,9 @@ let updateThresholds = function (thingy, usersMailAddress) {
         } else {
             hascentral = true;
         }
+        }
         // Check humidity
+        if (threshold.sensor === 1) {
         if (current.humidity.value <= lower.humidity.value) {
             hasbad = ascending ? hasbad : true;
         } else if (current.humidity.value >= upper.humidity.value) {
@@ -67,7 +70,9 @@ let updateThresholds = function (thingy, usersMailAddress) {
         } else {
             hascentral = true;
         }
+        }
         // Check CO2
+        if (threshold.sensor === 4) {
         if (current.co2.value <= lower.co2.value) {
             hasbad = ascending ? hasbad : true;
         } else if (current.co2.value >= upper.co2.value) {
@@ -75,13 +80,16 @@ let updateThresholds = function (thingy, usersMailAddress) {
         } else {
             hascentral = true;
         }
+        }
         // Check TVOC
+        if (threshold.sensor === 3) {
         if (current.tvoc.value <= lower.tvoc.value) {
             hasbad = ascending ? hasbad : true;
         } else if (current.tvoc.value >= upper.tvoc.value) {
             hasbad = ascending ? true : hasbad;
         } else {
             hascentral = true;
+        }
         }
         // Analyze
         if (hasbad) {
@@ -98,7 +106,7 @@ let updateThresholds = function (thingy, usersMailAddress) {
     // Ignore unviolated that do not occur on Thingy
     thingy.thresholdViolations.forEach( e => unviolated = unviolated.filter( u => u === e.threshold ) );
     // Remove unviolated from Thingy
-    let filtered = thingy.thresholdViolations.filter( e => !unviolated.includes(e) );
+    let filtered = thingy.thresholdViolations.filter( e => !unviolated.includes(e.threshold) );
     // Determine which violations already exist
     filtered.forEach( e => violated = violated.filter( v => v !== e.threshold ) );
     // Create violation objects
