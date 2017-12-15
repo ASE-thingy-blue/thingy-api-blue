@@ -12,7 +12,6 @@ termonWebClient.controller('historyCtrl', ['$scope', '$stateParams', '$state', '
         });    
     });
 
-
     $scope.user = {};
     $scope.terId = $stateParams.terId;
     $scope.thingyId = $stateParams.thingyId;
@@ -38,7 +37,7 @@ termonWebClient.controller('historyCtrl', ['$scope', '$stateParams', '$state', '
         limit: 100,
     };
 
-    //Get the logged in user
+    // Get the logged in user
     $scope.showSpinner = true;
     dataService.get('/user').then(function(user) {
         $scope.user = user;
@@ -59,15 +58,15 @@ termonWebClient.controller('historyCtrl', ['$scope', '$stateParams', '$state', '
                 reject('no type provided');
             }
 
-            //Use default from value
+            // Use default from value
             if (angular.isUndefined(from)) {
                 from = $scope.defaultValues.from;
             }
-            //Use default to value
+            // Use default to value
             if (angular.isUndefined(to)) {
                 to = $scope.defaultValues.to;
             }
-            //Use default limit value
+            // Use default limit value
             if (angular.isUndefined(limit)) {
                 limit = $scope.defaultValues.limit;
             }
@@ -138,7 +137,7 @@ termonWebClient.controller('historyCtrl', ['$scope', '$stateParams', '$state', '
 
         let data = google.visualization.arrayToDataTable(dataArray);
 
-        //Draw chart (create if undefined)
+        // Draw chart (create if undefined)
         if ($scope.thingyCharts[type] === undefined) {
             $scope.thingyCharts[type] = new google.visualization.AreaChart(document.getElementById('chart_'+type));
         }
@@ -151,14 +150,14 @@ termonWebClient.controller('historyCtrl', ['$scope', '$stateParams', '$state', '
      */
     $scope.timeRange = function(obj) {
         if (angular.isUndefined(obj) || angular.isUndefined(obj.from) || angular.isUndefined(obj.to)) {
-            return 'not loaded yet';
+            return 'Not loaded yet';
         }
         const format = 'dd.MM.yyyy';
         return $filter('date')(obj.from, format) + ' - ' + $filter('date')(obj.to, format);
     };
 
     /**
-     *  Go Back to Thingy or Terrarium Details
+     * Go back to Thingy or terrarium details
      * @param target: ['thingy', 'terrarium', 'overview']
      */
     $scope.goBack = function(target) {
@@ -203,7 +202,7 @@ termonWebClient.controller('historyCtrl', ['$scope', '$stateParams', '$state', '
             case 'humidity':
                 return 'Humidity';
                 break;
-            case 'Air Quality':
+            case 'airquality':
                 return 'airQualities';
                 break;
             case 'temperature':

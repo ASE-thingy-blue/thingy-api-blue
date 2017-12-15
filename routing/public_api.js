@@ -120,14 +120,14 @@ var createPublicAPI = (server) => {
                     return reply({success: false, message: 'Passwords do not match.'}).code(400);
                 }
 
-                User.find({name: request.payload.name}).count(function(err, countName) {
+                User.find({name: request.payload.name}).count(function (err, countName) {
                     if (err) {
                         return reply({success: false, message: 'Error creating new user.'}).code(500);
                     }
                     if (countName !== 0) {
                         return reply({success: false, message: 'Username already taken.'}).code(500);
                     } else {
-                        User.find({mailAddress: request.payload.email}).count(function(err, countEmail) {
+                        User.find({mailAddress: request.payload.email}).count(function (err, countEmail) {
                             if (err) {
                                 return reply({success: false, message: 'Error creating new user.'}).code(500);
                             }

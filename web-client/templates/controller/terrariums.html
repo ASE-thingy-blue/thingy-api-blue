@@ -10,7 +10,7 @@
         </div>
         <div ng-if="terDetails || thingyDetails">
             <button class="btn btn-primary" ng-click="loadData()"><i class="fa fa-fw fa-backward"></i>Terrarium list</button>
-            <button ng-if="thingyDetails" class="btn btn-primary" ng-click="showTerDetails(thingyDetails.ter)"><i class="fa fa-fw fa-info"></i>terrarium details</button>
+            <button ng-if="thingyDetails" class="btn btn-primary" ng-click="showTerDetails(thingyDetails.ter)"><i class="fa fa-fw fa-info"></i>Terrarium details</button>
         </div>
     </div>
     <br/>
@@ -51,7 +51,7 @@
                     <h3 class="panel-title">{{thingy.description}} ({{terDetails.name}})<span class="pull-right">{{thingy.macAddress}}</span></h3>
                 </div>
                 <div class="panel-body">
-                    <button class="btn btn-primary btn-corner" ng-click="showHistory(terDetails, thingy)"><i class="fa fa-fw fa-history"></i>history</button>
+                    <button class="btn btn-primary btn-corner" ng-click="showHistory(terDetails, thingy)"><i class="fa fa-fw fa-history"></i>History</button>
                     <h3>Sensor data</h3>
                     <ul>
                         <li>Humidity:</li>
@@ -86,7 +86,7 @@
                     <h3 class="panel-title">{{thingyDetails.description}} - State<span class="pull-right">{{thingyDetails.macAddress}}</span></h3>
                 </div>
                 <div class="panel-body">
-                    <button class="btn btn-primary btn-corner" ng-click="showHistory(thingyDetails.ter, thingyDetails)"><i class="fa fa-fw fa-history"></i>history</button>
+                    <button class="btn btn-primary btn-corner" ng-click="showHistory(thingyDetails.ter, thingyDetails)"><i class="fa fa-fw fa-history"></i>History</button>
                     <div class="row">
                         <div class="col-lg-6">
                             <h3>Sensor data</h3>
@@ -120,7 +120,7 @@
                                     <li><span ng-class="thingyDetails.violation.humidity.clazz">{{thingyDetails.violation.humidity.text}}</span></li>
                                 </ul>
 
-                                <li>Air Quality:</li>
+                                <li>Air quality:</li>
                                 <ul class="nobullets">
                                     <li><span ng-class="thingyDetails.violation.tvoc.clazz">TVOC: {{thingyDetails.violation.tvoc.text}}</span></li>
                                     <li><span ng-class="thingyDetails.violation.co2.clazz">CO2: {{thingyDetails.violation.co2.text}}</span></li>
