@@ -71,10 +71,10 @@ server.connection({
     routes: {cors: true}
 });
 
-// Writing access log:
+// Writing access log
 const logger = require('./backend/logger')();
 server.on('response', function (request) {
-    let entry = moment().format('YYYY-MM-DD hh:mm:ss.SSS') + " - " + request.info.remoteAddress + ' "' + request.method.toUpperCase() + ' ' + request.url.path + '" - ' + request.response.statusCode;
+    let entry = moment().format('YYYY-MM-DD hh:mm:ss.SSS') + ' - ' + request.info.remoteAddress + ' "' + request.method.toUpperCase() + ' ' + request.url.path + '" - ' + request.response.statusCode;
     logger('access', entry);
 });
 

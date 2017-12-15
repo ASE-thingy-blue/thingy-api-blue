@@ -1,12 +1,13 @@
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 const logger = {};
 
 logger.logDir = 'logs';
 logger.logFiles = {};
 
-logger.checkLogDir = function() {
+logger.checkLogDir = function () {
     const dirname = path.join(logger.logDir);
     if (fs.existsSync(dirname)) {
         return true;
@@ -14,19 +15,18 @@ logger.checkLogDir = function() {
     fs.mkdirSync(dirname);
 };
 
-logger.createLogWriter = function(file) {
-    logger.logFiles[file] = fs.createWriteStream(path.join(logger.logDir, file+'.log'));
+logger.createLogWriter = function (file) {
+    logger.logFiles[file] = fs.createWriteStream(path.join(logger.logDir, file + '.log'));
 };
 
-logger.log = function(file, data) {
+logger.log = function (file, data) {
     if (!logger.logFiles[file]) {
         logger.createLogWriter(file);
     }
-    logger.logFiles[file].write(data + '\n');
+    logger.logFiles[file].write(data + os.EOL);
 };
 
-module.exports = function() {
-    console.log('hello');
+module.exports = function () {
     logger.checkLogDir();
     return logger.log;
 };
