@@ -9,6 +9,7 @@ const Crypto = require('crypto');
 const Jwt = require('jwt-simple');
 const Fs = require('fs');
 const Path = require('path');
+const moment = require('moment');
 
 // Load model
 require('./model/makeModel');
@@ -68,6 +69,13 @@ server.connection({
     port: 8080,
     tls: tlsoptions,
     routes: {cors: true}
+});
+
+// Writing access log:
+const logger = require('./backend/logger')();
+server.on('response', function (request) {
+    let entry = moment().format('YYYY-MM-DD hh:mm:ss.SSS') + " - " + request.info.remoteAddress + ' "' + request.method.toUpperCase() + ' ' + request.url.path + '" - ' + request.response.statusCode;
+    logger('access', entry);
 });
 
 const swaggerOptions = {

@@ -32,7 +32,8 @@
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
-    "jshint": "^2.9.5"
+    "jshint": "^2.9.5",
+    "moment": "^2.19.4"
   },
   "scripts": {
     "eslint": "eslint .",
