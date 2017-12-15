@@ -119,18 +119,18 @@
                             <ul>
                                 <li>Humidity:</li>
                                 <ul class="nobullets">
-                                    <li><span class="label label-success">OK</span></li>
+                                    <li><span ng-class="thingyDetails.violation.humidity.clazz">{{thingyDetails.violation.humidity.text}}</span></li>
                                 </ul>
 
                                 <li>Air Quality:</li>
                                 <ul class="nobullets">
-                                    <li><span class="label label-danger">TVOC: DANGER</span></li>
-                                    <li><span class="label label-warning">CO2: WARNING</span></li>
+                                    <li><span ng-class="thingyDetails.violation.tvoc.clazz">TVOC: {{thingyDetails.violation.tvoc.text}}</span></li>
+                                    <li><span ng-class="thingyDetails.violation.co2.clazz">CO2: {{thingyDetails.violation.co2.text}}</span></li>
                                 </ul>
 
                                 <li>Temperature:</li>
                                 <ul class="nobullets">
-                                    <li><span class="label label-success">OK</span></li>
+                                    <li><span ng-class="thingyDetails.violation.temp.clazz">{{thingyDetails.violation.temp.text}}</span></li>
                                 </ul>
                             </ul>
                         </div>

@@ -86,15 +86,51 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
                 //console.log($scope.thingyDetails.configuration);
             });
             promises.push(p1);
-            let p2 = dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id+'/violations').then(function(data) {
+            // thingy violations. (default values)
+            $scope.thingyDetails.violation = {
+        	    	humidity: {clazz: "label label-success", text: "OK"},
+        	    	tvoc: {clazz: "label label-success", text: "OK"},
+        	    	co2: {clazz: "label label-success", text: "OK"},
+        	    	temp: {clazz: "label label-success", text: "OK"}
+            }
+           let p2 = dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id+'/violations').then(function(data) {
                 $scope.thingyDetails.violations = data;
-                //console.log($scope.thingyDetails.violations);
+                console.log($scope.thingyDetails.violations);
             });
             promises.push(p2);
 
             $q.all(promises).then(function() {
+        		// check violations
+        		console.log($scope.thingyDetails.violations.thresholdViolations);
+        		let states = {hum: 0, tvoc: 0, co2: 0, temp: 0};
+        		
+        		for (let v of $scope.thingyDetails.violations.thresholdViolations) {
+        		    switch(v.threshold.sensor) {
+        		    case 1: states.hum = 1; break;
+        		    case 2: states.temp = 1; break;
+        		    case 3: states.tvoc = 1; break;
+        		    case 4: states.co2 = 1; break;
+        		    default: break;
+        		    }
+        		}
+        		
+        		if (states.hum === 1) {
+        		    $scope.thingyDetails.violation.humidity = { clazz: "label label-danger", text: "DANGER" }
+        		}
+        		if (states.temp === 1) {
+        		    $scope.thingyDetails.violation.temp = { clazz: "label label-danger", text: "DANGER" }
+        		}
+        		if (states.tvoc === 1) {
+        		    $scope.thingyDetails.violation.tvoc = { clazz: "label label-danger", text: "DANGER" }
+        		}
+        		if (states.co2 === 1) {
+        		    $scope.thingyDetails.violation.co2 = { clazz: "label label-danger", text: "DANGER" }
+        		}
+        	
+        		// spinner off
                 $scope.showSpinner = false;
             });
+            
         });
     };
 

@@ -21,6 +21,7 @@ var User = Mongoose.model("User");
 var Unit = Mongoose.model("Unit");
 var TargetValues = Mongoose.model("TargetValues");
 var TargetConfiguration = Mongoose.model("TargetConfiguration");
+var ThresholdViolation = Mongoose.model("ThresholdViolation");
 var Threshold = Mongoose.model("Threshold");
 
 require("../model/helper/databaseConnection");
@@ -182,9 +183,9 @@ promises.push(target6.save());
 promises.push(target7.save());
 
 // Thresholds
-var threshold1 = new Threshold({title: "bad", severity: "warning", ascending: false, arm: target2, disarm: target3});
-var threshold2 = new Threshold({title: "bad", severity: "warning", ascending: true, arm: target4, disarm: target5});
-var threshold3 = new Threshold({title: "very bad", severity: "severe", ascending: true, arm: target6, disarm: target7});
+var threshold1 = new Threshold({title: "bad", severity: "warning", ascending: false, arm: target2, disarm: target3, sensor: 1});
+var threshold2 = new Threshold({title: "bad", severity: "warning", ascending: true, arm: target4, disarm: target5, sensor: 2});
+var threshold3 = new Threshold({title: "very bad", severity: "severe", ascending: true, arm: target6, disarm: target7, sensor: 3});
 promises.push(threshold1.save());
 promises.push(threshold2.save());
 promises.push(threshold3.save());
@@ -195,6 +196,9 @@ config1.thresholds.push(threshold1);
 config1.thresholds.push(threshold2);
 config1.thresholds.push(threshold3);
 promises.push(config1.save());
+
+var viol1 = new ThresholdViolation({threshold: threshold1});
+promises.push(viol1.save());
 
 // Thingy
 var thingy1 = new Thingy({macAddress: "d35a51c0de9c", description: "test thingy1", targetConfiguration: config1});
@@ -207,6 +211,7 @@ thingy1.airQualities.push(airQ3);
 thingy1.humidities.push(hum1);
 thingy1.humidities.push(hum2);
 thingy1.humidities.push(hum3);
+thingy1.thresholdViolations.push(viol1);
 promises.push(thingy1.save());
 
 var thingy2 = new Thingy({macAddress: "123", description: "test thingy2"});
