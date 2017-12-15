@@ -13,6 +13,7 @@ services:
     ports:
      - "443:8080"
     volumes:
+     - "./logs/:/usr/src/app/logs/"
      - "/etc/pki/tls/private/:/usr/src/app/certs/"
   mongo:
     image: "mongo"
