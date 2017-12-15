@@ -29,9 +29,7 @@
                             <li ng-repeat="thingy in terrarium.thingies | orderBy:'description'">
                                 <a ng-click="showThingyDetails(terrarium, thingy)" class="fakelink">{{thingy.description}} ({{thingy.macAddress}})</a>
                             </li>
-                            <li ng-if="!terrarium.thingies || terrarium.thingies.length === 0">
-                                Terrarium has no Thingies
-                            </li>
+                            <li ng-if="!terrarium.thingies || terrarium.thingies.length === 0">Terrarium has no Thingies</li>
                         </ul>
                         <button class="btn btn-primary pull-right" ng-click="showTerDetails(terrarium)"><i class="fa fa-fw fa-info"></i>Show details</button>
                         <button ng-if="!terrarium.isDefault" class="btn btn-danger pull-right" ng-click="showDeleteTerrarium(terrarium)"><i class="fa fa-fw fa-trash"></i>Delete terrarium</button>
