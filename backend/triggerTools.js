@@ -30,8 +30,9 @@ let processNewViolation = function (thingy, usersMailAddress, violations) {
 let updateThresholds = function (thingy, usersMailAddress) {
     // unconfigured thingies can be ignored
     if (thingy.targetConfiguration === undefined)
-	return;
-    
+    {
+        return;
+    }
     let thresholds = thingy.targetConfiguration.thresholds;
 
     let current = {
@@ -53,43 +54,43 @@ let updateThresholds = function (thingy, usersMailAddress) {
         let hascentral = false;
         // Check temperature
         if (threshold.sensor === 2) {
-        if (current.temperature.value <= lower.temperature.value) {
-            hasbad = ascending ? hasbad : true;
-        } else if (current.temperature.value >= upper.temperature.value) {
-            hasbad = ascending ? true : hasbad;
-        } else {
-            hascentral = true;
-        }
+            if (current.temperature.value <= lower.temperature.value) {
+                hasbad = !ascending || hasbad;
+            } else if (current.temperature.value >= upper.temperature.value) {
+                hasbad = ascending || hasbad;
+            } else {
+                hascentral = true;
+            }
         }
         // Check humidity
         if (threshold.sensor === 1) {
-        if (current.humidity.value <= lower.humidity.value) {
-            hasbad = ascending ? hasbad : true;
-        } else if (current.humidity.value >= upper.humidity.value) {
-            hasbad = ascending ? true : hasbad;
-        } else {
-            hascentral = true;
-        }
+            if (current.humidity.value <= lower.humidity.value) {
+                hasbad = !ascending || hasbad;
+            } else if (current.humidity.value >= upper.humidity.value) {
+                hasbad = ascending || hasbad;
+            } else {
+                hascentral = true;
+            }
         }
         // Check CO2
         if (threshold.sensor === 4) {
-        if (current.co2.value <= lower.co2.value) {
-            hasbad = ascending ? hasbad : true;
-        } else if (current.co2.value >= upper.co2.value) {
-            hasbad = ascending ? true : hasbad;
-        } else {
-            hascentral = true;
-        }
+            if (current.co2.value <= lower.co2.value) {
+                hasbad = !ascending || hasbad;
+            } else if (current.co2.value >= upper.co2.value) {
+                hasbad = ascending || hasbad;
+            } else {
+                hascentral = true;
+            }
         }
         // Check TVOC
         if (threshold.sensor === 3) {
-        if (current.tvoc.value <= lower.tvoc.value) {
-            hasbad = ascending ? hasbad : true;
-        } else if (current.tvoc.value >= upper.tvoc.value) {
-            hasbad = ascending ? true : hasbad;
-        } else {
-            hascentral = true;
-        }
+            if (current.tvoc.value <= lower.tvoc.value) {
+                hasbad = !ascending || hasbad;
+            } else if (current.tvoc.value >= upper.tvoc.value) {
+                hasbad = ascending || hasbad;
+            } else {
+                hascentral = true;
+            }
         }
         // Analyze
         if (hasbad) {
@@ -104,18 +105,18 @@ let updateThresholds = function (thingy, usersMailAddress) {
         thingy.thresholdViolations = [];
     }
     // Ignore unviolated that do not occur on Thingy
-    thingy.thresholdViolations.forEach( e => unviolated = unviolated.filter( u => u === e.threshold ) );
+    thingy.thresholdViolations.forEach(e => { unviolated = unviolated.filter(u => { u === e.threshold; }); });
     // Remove unviolated from Thingy
-    let filtered = thingy.thresholdViolations.filter( e => !unviolated.includes(e.threshold) );
+    let filtered = thingy.thresholdViolations.filter(e => { !unviolated.includes(e); });
     // Determine which violations already exist
-    filtered.forEach( e => violated = violated.filter( v => v !== e.threshold ) );
+    filtered.forEach(e => { violated = violated.filter(v => { v !== e.threshold; }); });
     // Create violation objects
-    violated = violated.map( e => new ThresholdViolation({threshold: e}) );
+    violated = violated.map(e => { new ThresholdViolation({threshold: e}); });
     // Add violations to Thingy
-    violated.forEach( e => thingy.thresholdViolations.push(e) );
+    violated.forEach(e => { thingy.thresholdViolations.push(e); });
     // Asynchronous violation processing
     if (violated.length > 0) {
-        setTimeout( () => processNewViolation(thingy, violated), 0);
+        setTimeout(() => { processNewViolation(thingy, usersMailAddress, violated); }, 0);
     }
 };
 
