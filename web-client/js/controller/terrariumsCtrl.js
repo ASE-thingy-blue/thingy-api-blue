@@ -27,10 +27,26 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
         $scope.hideDetails();
         dataService.get('/terrarium').then(function(data) {
             $scope.terrariums = $filter('orderBy')(data, ['-isDefault','name']);
+
             let promises = [];
             angular.forEach($scope.terrariums, function(terrarium) {
-                let p = dataService.get('/terrarium/'+terrarium._id+'/thingies').then(function(data) {
-                    terrarium.thingies = data.thingies;
+                let p = $q(function(resolve, reject) {
+
+                    dataService.get('/terrarium/'+terrarium._id+'/thingies').then(function(data) {
+                        terrarium.thingies = data.thingies;
+
+                        let tPromises = [];
+                        angular.forEach(terrarium.thingies, function(thingy) {
+                            let p = dataService.get('/terrarium/'+terrarium._id+'/thingies/'+thingy._id+'/violations').then(function(data) {
+                                thingy.violations = data;
+                            });
+                            tPromises.push(p);
+                        });
+
+                        $q.all(tPromises).then(function() {
+                            resolve();
+                        });
+                    });
                 });
                 promises.push(p);
             });
@@ -65,7 +81,18 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
 
         dataService.get('/terrarium/'+ter._id).then(function(data) {
             $scope.terDetails = data;
-            $scope.showSpinner = false;
+
+            let promises = [];
+            angular.forEach($scope.terDetails.thingies, function(thingy) {
+                let p = dataService.get('/terrarium/'+$scope.terDetails._id+'/thingies/'+thingy._id+'/violations').then(function(data) {
+                    thingy.violations = data;
+                });
+                promises.push(p);
+            });
+
+            $q.all().then(function() {
+                $scope.showSpinner = false;
+            });
         });
     };
 
