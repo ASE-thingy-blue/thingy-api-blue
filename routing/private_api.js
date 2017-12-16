@@ -609,6 +609,39 @@ var createPrivateAPI = (server) => {
     });
 
     server.route({
+        method: 'PATCH',
+        path: '/terrarium/{terrariumId}/thingies/{thingyId}',
+        handler: HandlerThingy.thingyMove,
+        config: {
+            tags: ['webclient', 'api'],
+            description: 'Moves a certain thingy to another terrarium',
+            validate: {
+                params: {
+                    terrariumId: Joi.string()
+                        .required()
+                        .description('ID of the terrarium'),
+                    thingyId: Joi.string()
+                        .required()
+                        .description('ID of the Thingy I want to update')
+                },
+                payload: {
+                    terrarium: Joi.string().description('The new terrarium of the thingy').required()
+                }
+            },
+            auth: 'jwt',
+            plugins: {
+                'hapi-swagger': {
+                    responses: {
+                        200: {
+                            description: 'Success'
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    server.route({
         method: 'PUT',
         path: '/terrarium/{terrariumId}/thingies/{thingyId}',
         handler: HandlerThingy.thingyUpdate,

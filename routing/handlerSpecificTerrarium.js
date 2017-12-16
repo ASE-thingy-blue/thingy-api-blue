@@ -54,15 +54,19 @@ module.exports = {
                     return reply({"error": "No terrarium with this id", "id": request.params.terrariumId}).code(404);
                 }
 
-                terra.name = request.payload.name;
-                terra.description = request.payload.description;
+                if(request.payload.name) {
+                    terra.name = request.payload.name;
+                }
 
+                if(request.payload.description) {
+                    terra.description = request.payload.description;
+                }
 
                 user.save();
 
                 return reply({
                     "success": true,
-                    message: "New terrarium updated"
+                    message: "Terrarium updated"
                 }).code(200);
             });
     },

@@ -44,6 +44,54 @@ module.exports = {
             });
     },
 
+    thingyMove: function (request, reply) {
+        User.findOne({name: request.auth.credentials.userName})
+            .exec(function (err, user) {
+                let terraOld = user.terrariums.id(request.params.terrariumId);
+                if (!terraOld) {
+                    return reply({
+                        "Error": "User has no terrarium with the given ID",
+                        id: request.params.terrariumId
+                    }).code(404);
+                }
+
+                let thingy = terraOld.thingies.id(request.params.thingyId);
+                if (!thingy) {
+                    return reply({
+                        "Error": "Terrarium has no Thingy with the given ID",
+                        id: request.params.thingyId
+                    }).code(404);
+                }
+
+                if (err) {
+                    console.error(err);
+                    return reply({"Error": "User not found"}).code(404);
+                }
+
+                let terraNew = user.terrariums.id(request.payload.terrarium);
+                if(!terraNew){
+                    return reply({
+                        "Error": "User has no terrarium with the given ID",
+                        id: request.payload.terrarium
+                    }).code(404);
+                }
+
+                terraOld.thingies.splice(terraOld.thingies.indexOf(thingy), 1);
+                terraNew.thingies.push(thingy);
+
+                user.save((err) => {
+                    if (err) {
+                        return reply({"message": "Something went wrong! Terrarium not saved"}).code(500);
+                    }
+
+                    return reply({
+                        "success": true,
+                        message: "Thingy moved"
+                    }).code(200);
+                });
+            });
+    },
+
     thingyDelete: function (request, reply) {
         User.findOne({name: request.auth.credentials.userName})
         .exec(function (err, user) {
