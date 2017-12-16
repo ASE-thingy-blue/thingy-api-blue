@@ -97,3 +97,7 @@ button.btn-corner {
     position: absolute;
     right: 30px;
 }
+
+.well.no-margin {
+    margin-bottom: 0;
+}

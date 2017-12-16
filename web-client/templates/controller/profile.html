@@ -11,8 +11,12 @@
                 </div>
                 <div class="panel-body">
 
-                    <div ng-if="successMsg" class="alert alert-success">{{successMsg}}</div>
-                    <div ng-if="errorMsg" class="alert alert-danger">{{errorMsg}}</div>
+                    <div ng-if="successMsg" class="alert alert-success">
+                        {{successMsg}}
+                    </div>
+                    <div ng-if="errorMsg" class="alert alert-danger">
+                        {{errorMsg}}
+                    </div>
 
                     <form method="POST" ng-submit="updateProfile()">
                         <input type="text" name="username" class="form-control" placeholder="Username" ng-model="user.name" disabled="disabled">
