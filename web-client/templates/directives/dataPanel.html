@@ -1,0 +1,36 @@
+<div class="panel-body no-padding-bottom">
+
+    <form ng-if="chartdata" class="row">
+        <div class="form-group col-lg-4">
+            <div class="dropdownFrom">
+                <a class="dropdown-toggle" id="dropdownFrom" role="button" data-toggle="dropdown" data-target=".dropdownFrom">
+                    <div class="input-group">
+                        <input type="text" name="from" class="form-control" data-ng-model="chartdata.from" ng-disabled="spinner">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <datetimepicker data-ng-model="chartdata.from" data-datetimepicker-config="{ dropdownSelector: '#dropdownFrom', minView: 'hour' }"></datetimepicker>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group col-lg-4">
+            <div class="dropdownTo">
+                <a class="dropdown-toggle" id="dropdownTo" role="button" data-toggle="dropdown" data-target=".dropdownTo">
+                    <div class="input-group">
+                        <input type="text" name="to" class="form-control" data-ng-model="chartdata.to" ng-disabled="spinner">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <datetimepicker data-ng-model="chartdata.to" data-datetimepicker-config="{ dropdownSelector: '#dropdownTo', minView: 'hour'  }"></datetimepicker>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group col-lg-4">
+            <select class="form-control" name="limit" ng-model="chartdata.limit" ng-disabled="spinner" ng-options="o.value as (o.name) for o in options" >
+            </select>
+        </div>
+    </form>
+
+</div>

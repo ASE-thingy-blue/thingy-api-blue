@@ -101,3 +101,7 @@ button.btn-corner {
 .well.no-margin {
     margin-bottom: 0;
 }
+
+.panel-body.no-padding-bottom {
+    padding-bottom: 0;
+}

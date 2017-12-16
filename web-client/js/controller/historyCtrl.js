@@ -32,8 +32,8 @@ termonWebClient.controller('historyCtrl', ['$scope', '$stateParams', '$state', '
     from.setDate(from.getDate() - 7);
     let to = new Date();
     $scope.defaultValues = {
-        from: from.getTime(),
-        to: to.getTime(),
+        from: from,
+        to: to,
         limit: 100,
     };
 
@@ -49,7 +49,7 @@ termonWebClient.controller('historyCtrl', ['$scope', '$stateParams', '$state', '
      * @param type: ['humidity', 'airquality', 'temperature']
      * @param from: Date|undefined
      * @param to: Date|undefined
-     * @param limit: Integer|undefined
+     * @param limit: String|undefined (because of select)
      * @returns {*}
      */
     $scope.loadData = function(type, from, to, limit) {
@@ -73,8 +73,8 @@ termonWebClient.controller('historyCtrl', ['$scope', '$stateParams', '$state', '
 
             const uri = '/terrarium/' + $scope.terId + '/thingies/' + $scope.thingyId + '/' + type;
             let params = {
-                from: new Date(from).toISOString(),
-                to: new Date(to).toISOString(),
+                from: from.toISOString(),
+                to: to.toISOString(),
                 limit: limit
             };
 
@@ -95,28 +95,51 @@ termonWebClient.controller('historyCtrl', ['$scope', '$stateParams', '$state', '
      * Initialize all data
      */
     $scope.initialize = function() {
-        $scope.loadData('humidity').then(function(result) {
+        $scope.updateTemperature();
+        $scope.updateHumidity();
+        $scope.updateAirquality();
+    };
+
+    $scope.updateTemperature = function(from, to, limit) {
+        $scope.showSpinner = true;
+        $scope.loadData('temperature', from, to, limit).then(function(result) {
             googleChartPromise.then(function() {
-                $scope.thingyValues.humidity = result;
-                $scope.drawChart('humidity');
-            });
-        });
-        $scope.loadData('airquality').then(function(result) {
-            googleChartPromise.then(function() {
-                $scope.thingyValues.airquality = result;
-                $scope.drawChart('airquality', ['tvoc', 'co2']);
-            });
-        });
-        $scope.loadData('temperature').then(function(result) {
-            googleChartPromise.then(function() {
+                $scope.showSpinner = false;
                 $scope.thingyValues.temperature = result;
                 $scope.drawChart('temperature');
             });
         });
     };
+
+    $scope.updateHumidity = function(from, to, limit) {
+        $scope.showSpinner = true;
+        $scope.loadData('humidity', from, to, limit).then(function(result) {
+            googleChartPromise.then(function() {
+                $scope.showSpinner = false;
+                $scope.thingyValues.humidity = result;
+                $scope.drawChart('humidity');
+            });
+        });
+    };
+
+    $scope.updateAirquality = function(from, to, limit) {
+        $scope.showSpinner = true;
+        $scope.loadData('airquality', from, to, limit).then(function(result) {
+            googleChartPromise.then(function() {
+                $scope.showSpinner = false;
+                $scope.thingyValues.airquality = result;
+                $scope.drawChart('airquality', ['tvoc', 'co2']);
+            });
+        });
+    };
+
+    //Start data display
     $scope.initialize();
 
     $scope.drawChart = function(type, subKeys) {
+        if (angular.isUndefined($scope.thingyValues[type].data) || $scope.thingyValues[type].data.length === 0) {
+            return;
+        }
 
         let dataArray = [];
 
@@ -152,7 +175,7 @@ termonWebClient.controller('historyCtrl', ['$scope', '$stateParams', '$state', '
         if (angular.isUndefined(obj) || angular.isUndefined(obj.from) || angular.isUndefined(obj.to)) {
             return 'Not loaded yet';
         }
-        const format = 'dd.MM.yyyy';
+        const format = 'dd.MM.yyyy HH:mm';
         return $filter('date')(obj.from, format) + ' - ' + $filter('date')(obj.to, format);
     };
 
@@ -203,7 +226,7 @@ termonWebClient.controller('historyCtrl', ['$scope', '$stateParams', '$state', '
                 return 'Humidity';
                 break;
             case 'airquality':
-                return 'airQualities';
+                return 'Air Qualitiy';
                 break;
             case 'temperature':
                 return 'Temperature';
