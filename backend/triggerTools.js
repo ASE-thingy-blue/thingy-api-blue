@@ -115,8 +115,7 @@ let updateThresholds = function (thingy, usersMailAddress) {
     violated.forEach( e => {
 	e.save();
 	thingy.thresholdViolations.push(e);
-	});
-    }
+    });
     // Asynchronous violation processing
     if (violated.length > 0) {
         setTimeout(() => { processNewViolation(thingy, usersMailAddress, violated); }, 0);
