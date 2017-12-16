@@ -3,7 +3,7 @@
 /**
  * Controller - terrariumsCtrl
  */
-termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state', '$q', 'dataService', 'ngToast', function($scope, $stateParams, $state, $q, dataService, ngToast) {
+termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state', '$q', '$filter', 'dataService', 'ngToast', function($scope, $stateParams, $state, $q, $filter, dataService, ngToast) {
 
     $scope.terrariums = [];
 
@@ -26,7 +26,7 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
         $scope.showSpinner = true;
         $scope.hideDetails();
         dataService.get('/terrarium').then(function(data) {
-            $scope.terrariums = data;
+            $scope.terrariums = $filter('orderBy')(data, ['-isDefault','name']);
             let promises = [];
             angular.forEach($scope.terrariums, function(terrarium) {
                 let p = dataService.get('/terrarium/'+terrarium._id+'/thingies').then(function(data) {
@@ -36,6 +36,8 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
             });
 
             $q.all(promises).then(function() {
+                //Split to chunks
+                $scope.terrariums = $filter('lineFilter')($scope.terrariums);
                 //Thingy or Terrarium detail view
                 if (initial) {
                     if (angular.isDefined($stateParams.thingyId) && angular.isDefined($stateParams.terId)) {
@@ -239,6 +241,28 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
             thingy.uDescription = '';
             $scope.showSpinner = false;
         });
+    };
+
+    /**
+     * Move Thingy with drag and drop to an other terrarium
+     * @param data
+     * @param evt
+     * @param targetTerri
+     */
+    $scope.onDropComplete = function(data, evt, targetTerri){
+        if (data.terri._id === targetTerri._id) {
+            console.log('same terri');
+            return;
+        }
+
+        $scope.showSpinner = true;
+        dataService.patch('/terrarium/'+data.terri._id+'/thingies/'+data.thingy._id, {terrarium:targetTerri._id}).then(function(result) {
+            $scope.loadData();
+
+        }).catch(function(err) {
+            $scope.showSpinner = false;
+        });
+
     };
 
 }]);

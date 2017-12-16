@@ -3,7 +3,7 @@
 /**
  * Module - termonWebClient
  */
-var termonWebClient = angular.module('termonWebClient', ['ui.router', 'ngAnimate', 'ngAria', 'ngCookies', 'ngMessages', 'ngResource', 'ngRoute', 'ngSanitize', 'ngTouch', 'ngToast'])
+var termonWebClient = angular.module('termonWebClient', ['ui.router', 'ngAnimate', 'ngAria', 'ngCookies', 'ngMessages', 'ngResource', 'ngRoute', 'ngSanitize', 'ngTouch', 'ngDraggable', 'ngToast'])
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider){
 
         // Router Konfiguration

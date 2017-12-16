@@ -17,43 +17,46 @@
     <br/>
 
     <div ng-if="!showSpinner">
-        <div ng-if="!terDetails && !thingyDetails" class="row">
-            <div ng-repeat="terrarium in terrariums | orderBy:['-isDefault','name']" class="col-lg-6">
-                <div class="panel" ng-class="{'panel-info':!terrarium.isDefault, 'panel-success':terrarium.isDefault}">
-                    <div ng-click="showTerDetails(terrarium)" class="panel-heading">
-                        <h3 class="panel-title">{{terrarium.name}}</h3>
-                    </div>
-                    <div class="panel-body">
-                        <button ng-if="!terrarium.showForm && !terrarium.isDefault" class="btn btn-warning btn-corner" ng-click="terrarium.showForm = true; terrarium.uName = terrarium.name; terrarium.uDescription = terrarium.description"><i class="fa fa-fw fa-gear"></i>Edit</button>
-                        <div ng-if="terrarium.showForm && !terrarium.isDefault" class="well">
-                            <form method="POST" ng-submit="updateTerri(terrarium)">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="name" ng-model="terrarium.uName" placeholder="Name" required="required" />
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="description" ng-model="terrarium.uDescription" placeholder="Description" />
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-success" ><i class="fa fa-fw fa-save" ng-disabled="showSpinner"></i>Update</button>
-                                    <button type="button" class="btn btn-default" ng-click="terrarium.showForm = false; terrarium.uName = ''; terrarium.uDescription = ''" ng-disabled="showSpinner">Cancel</button>
-                                    <span ng-if="showSpinner"><i class="fa fa-spinner fa-spin"></i></span>
-                                </div>
-                            </form>
+        <div ng-if="!terDetails && !thingyDetails">
+            <div class="row" ng-repeat="terrariumsRow in terrariums">
+                <div ng-repeat="terrarium in terrariumsRow" class="col-lg-6">
+                    <div class="panel" ng-class="{'panel-info':!terrarium.isDefault, 'panel-success':terrarium.isDefault}">
+                        <div ng-click="showTerDetails(terrarium)" class="panel-heading">
+                            <h3 class="panel-title">{{terrarium.name}}</h3>
                         </div>
-                        <div ng-if="!terrarium.showForm">
-                            <p>{{terrarium.description}}</p>
+                        <div class="panel-body" ng-drop="true" ng-drop-success="onDropComplete($data, $event, terrarium)">
+                            <button ng-if="!terrarium.showForm && !terrarium.isDefault" class="btn btn-warning btn-corner" ng-click="terrarium.showForm = true; terrarium.uName = terrarium.name; terrarium.uDescription = terrarium.description"><i class="fa fa-fw fa-gear"></i>Edit</button>
+                            <div ng-if="terrarium.showForm && !terrarium.isDefault" class="well">
+                                <form method="POST" ng-submit="updateTerri(terrarium)">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="name" ng-model="terrarium.uName" placeholder="Name" required="required" />
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="description" ng-model="terrarium.uDescription" placeholder="Description" />
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success" ><i class="fa fa-fw fa-save" ng-disabled="showSpinner"></i>Update</button>
+                                        <button type="button" class="btn btn-default" ng-click="terrarium.showForm = false; terrarium.uName = ''; terrarium.uDescription = ''" ng-disabled="showSpinner">Cancel</button>
+                                        <span ng-if="showSpinner"><i class="fa fa-spinner fa-spin"></i></span>
+                                    </div>
+                                </form>
+                            </div>
+                            <div ng-if="!terrarium.showForm">
+                                <p>{{terrarium.description}}</p>
+                            </div>
+                            <h3>Thingies</h3>
+                            <ul>
+                                <li ng-if="!terrarium.thingies || terrarium.thingies.length === 0">
+                                    Terrarium has no Thingies
+                                </li>
+                                <li ng-repeat="thingy in terrarium.thingies | orderBy:'description'">
+                                    <a ng-click="showThingyDetails(terrarium, thingy)" class="fakelink">{{thingy.description}} ({{thingy.macAddress}})</a>
+                                    &nbsp;<span ng-drag="true" ng-drag-data="{terri:terrarium, thingy:thingy}" ng-center-anchor="true"><i class="fa fa-arrows"></i></span>
+                                </li>
+                            </ul>
+                            <button class="btn btn-primary pull-right" ng-click="showTerDetails(terrarium)"><i class="fa fa-fw fa-info"></i>Details</button>
+                            <button ng-if="!terrarium.isDefault" class="btn btn-danger pull-right" ng-click="showDeleteTerrarium(terrarium)"><i class="fa fa-fw fa-trash"></i>Delete</button>
                         </div>
-                        <h3>Thingies</h3>
-                        <ul>
-                            <li ng-if="!terrarium.thingies || terrarium.thingies.length === 0">
-                                Terrarium has no Thingies
-                            </li>
-                            <li ng-repeat="thingy in terrarium.thingies | orderBy:'description'">
-                                <a ng-click="showThingyDetails(terrarium, thingy)" class="fakelink">{{thingy.description}} ({{thingy.macAddress}})</a>
-                            </li>
-                        </ul>
-                        <button class="btn btn-primary pull-right" ng-click="showTerDetails(terrarium)"><i class="fa fa-fw fa-info"></i>Details</button>
-                        <button ng-if="!terrarium.isDefault" class="btn btn-danger pull-right" ng-click="showDeleteTerrarium(terrarium)"><i class="fa fa-fw fa-trash"></i>Delete</button>
                     </div>
                 </div>
             </div>

@@ -47,6 +47,16 @@ termonWebClient.factory('dataService', ['$rootScope', '$q', '$http', '$filter', 
         });
     };
 
+    dataService.patch = function(putUri, payloadData) {
+        return $q(function(resolve, reject) {
+            $http.patch(dataService.api + putUri, payloadData).then(function(result) {
+                resolve(result.data);
+            }).catch(function(error){
+                reject(error);
+            });
+        });
+    };
+
     dataService.delete = function(deleteUri) {
         return $q(function(resolve, reject) {
             $http.delete(dataService.api + deleteUri).then(function(result) {
@@ -67,6 +77,9 @@ termonWebClient.factory('dataService', ['$rootScope', '$q', '$http', '$filter', 
         },
         put : function(putUri, payloadData) {
             return dataService.put(putUri, payloadData);
+        },
+        patch : function(patchUri, payloadData) {
+            return dataService.patch(patchUri, payloadData);
         },
         delete : function(deleteUri) {
             return dataService.delete(deleteUri);
