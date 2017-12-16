@@ -50,7 +50,7 @@
                                     Terrarium has no Thingies
                                 </li>
                                 <li ng-repeat="thingy in terrarium.thingies | orderBy:'description'">
-                                    <a ng-click="showThingyDetails(terrarium, thingy)" class="fakelink">{{thingy.description}} ({{thingy.macAddress}}) {{thingy.state}}</a>
+                                    <a ng-click="showThingyDetails(terrarium, thingy)" class="fakelink">{{thingy.description}} ({{thingy.macAddress}})</a> <span ng-class="thingy.triggerLabel.clazz">{{thingy.triggerLabel.text}}</span>
                                     &nbsp;<span ng-drag="true" ng-drag-data="{terri:terrarium, thingy:thingy}" ng-center-anchor="true"><i class="fa fa-arrows"></i></span>
                                 </li>
                             </ul>
@@ -80,20 +80,20 @@
                     <ul>
                         <li>Humidity:</li>
                         <ul class="nobullets">
-                            <li>{{thingy.humidities[0].value}} {{thingy.humidities[0].unit.short}}</li>
+                            <li>{{thingy.humidities[0].value}} {{thingy.humidities[0].unit.short}} <span ng-class="thingy.trigger.humidity.clazz">{{thingy.trigger.humidity.text}}</span></li>
                             <li>Date: {{thingy.humidities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
                         </ul>
 
-                        <li>Air quality:</li>
+                        <li>Air Quality:</li>
                         <ul class="nobullets">
-                            <li>TVOC: {{thingy.airQualities[0].tvoc.value}} {{thingy.airQualities[0].tvoc.unit.short}}</li>
-                            <li>CO2: {{thingy.airQualities[0].co2.value}} {{thingy.airQualities[0].co2.unit.short}}</li>
+                            <li>TVOC: {{thingy.airQualities[0].tvoc.value}} {{thingy.airQualities[0].tvoc.unit.short}} <span ng-class="thingy.trigger.tvoc.clazz">{{thingy.trigger.tvoc.text}}</span></li>
+                            <li>CO2: {{thingy.airQualities[0].co2.value}} {{thingy.airQualities[0].co2.unit.short}} <span ng-class="thingy.trigger.co2.clazz">{{thingy.trigger.co2.text}}</span></li>
                             <li>Date: {{thingy.airQualities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
                         </ul>
 
                         <li>Temperature:</li>
                         <ul class="nobullets">
-                            <li>{{thingy.temperatures[0].value}} {{thingy.temperatures[0].unit.short}}</li>
+                            <li>{{thingy.temperatures[0].value}} {{thingy.temperatures[0].unit.short}} <span ng-class="thingy.trigger.temp.clazz">{{thingy.trigger.temp.text}}</span></li>
                             <li>Date: {{thingy.temperatures[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
                         </ul>
                     </ul>
@@ -139,7 +139,7 @@
                                     <li>Date: {{thingyDetails.humidities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
                                 </ul>
 
-                                <li>Air quality:</li>
+                                <li>Air Quality:</li>
                                 <ul class="nobullets">
                                     <li>TVOC: {{thingyDetails.airQualities[0].tvoc.value}} {{thingyDetails.airQualities[0].tvoc.unit.short}}</li>
                                     <li>CO2: {{thingyDetails.airQualities[0].co2.value}} {{thingyDetails.airQualities[0].co2.unit.short}}</li>
@@ -162,7 +162,7 @@
                                     <li><span ng-class="thingyDetails.violation.humidity.clazz">{{thingyDetails.violation.humidity.text}}</span></li>
                                 </ul>
 
-                                <li>Air quality:</li>
+                                <li>Air Quality:</li>
                                 <ul class="nobullets">
                                     <li><span ng-class="thingyDetails.violation.tvoc.clazz">TVOC: {{thingyDetails.violation.tvoc.text}}</span></li>
                                     <li><span ng-class="thingyDetails.violation.co2.clazz">CO2: {{thingyDetails.violation.co2.text}}</span></li>

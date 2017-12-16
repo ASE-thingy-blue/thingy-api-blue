@@ -39,6 +39,34 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
                         angular.forEach(terrarium.thingies, function(thingy) {
                             let p = dataService.get('/terrarium/'+terrarium._id+'/thingies/'+thingy._id+'/violations').then(function(data) {
                                 thingy.violations = data;
+                                // determine label category
+                                let violationState = 0;
+                                //console.log(thingy.violations);
+                                if (thingy.violations !== undefined) {
+                                for (let violation of thingy.violations.thresholdViolations) {
+                                    if (violation.threshold.severity === "warning") {
+                                	if (violationState < 2) {
+                                	    violationState = 1;
+                                	}
+                                    } else {
+                                	violationState = 2;
+                                    }
+                                }
+                                // create label
+                                let trigger = {
+                                	clazz: "label label-success",
+                                	text: "OK"
+                                };
+                                if (violationState === 1) {
+                                    trigger.clazz = "label label-warning";
+                                    trigger.text = "WARNING";
+                                }
+                                if (violationState === 2) {
+                                    trigger.clazz = "label label-danger";
+                                    trigger.text = "DANGER";
+                                }
+                                thingy.triggerLabel = trigger;
+                                }
                             });
                             tPromises.push(p);
                         });
@@ -86,6 +114,58 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
             angular.forEach($scope.terDetails.thingies, function(thingy) {
                 let p = dataService.get('/terrarium/'+$scope.terDetails._id+'/thingies/'+thingy._id+'/violations').then(function(data) {
                     thingy.violations = data;
+                    
+                    // process violations
+                    let states = {hum: 0, tvoc: 0, co2: 0, temp: 0};
+    		
+                if (thingy.violations !== undefined) {
+    		for (let v of thingy.violations.thresholdViolations) {
+    		    let state = 0;
+    		    if (v.threshold.severity === "warning") {
+    			state = 1;
+    		    } else {
+    			state = 2;
+    		    }
+    		    switch(v.threshold.sensor) {
+    		    case 1: states.hum = Math.max(states.hum, state); break;
+    		    case 2: states.temp = Math.max(states.temp, state); break;
+    		    case 3: states.tvoc = Math.max(states.tvoc, state); break;
+    		    case 4: states.co2 = Math.max(states.co2, state); break;
+    		    default: break;
+    		    }
+    		}
+    		
+    		thingy.trigger = {
+        	    	humidity: {clazz: "label label-success", text: "OK"},
+        	    	tvoc: {clazz: "label label-success", text: "OK"},
+        	    	co2: {clazz: "label label-success", text: "OK"},
+        	    	temp: {clazz: "label label-success", text: "OK"}
+    		};
+    		
+    		if (states.hum === 1) {
+    		thingy.trigger.humidity = { clazz: "label label-warning", text: "WARNING" }
+    		} else if (states.hum === 2) {
+    		thingy.trigger.humidity = { clazz: "label label-danger", text: "DANGER" }    
+    		}
+    		if (states.temp === 1) {
+    		thingy.trigger.temp = { clazz: "label label-warning", text: "WARNING" }
+    		} else if (states.temp === 2) {
+    		thingy.trigger.temp = { clazz: "label label-danger", text: "DANGER" }
+    		}
+    		if (states.tvoc === 1) {
+    		thingy.trigger.tvoc = { clazz: "label label-warning", text: "WARNING" }
+    		} else if (states.tvoc === 2) {
+    		thingy.trigger.tvoc = { clazz: "label label-danger", text: "DANGER" }
+    		}
+    		if (states.co2 === 1) {
+    		thingy.trigger.co2 = { clazz: "label label-warning", text: "WARNING" }
+    		} else if (states.co2 === 2) {
+    		    thingy.trigger.co2 = { clazz: "label label-danger", text: "DANGER" }
+    		}
+                }
+                    
+                    
+                    
                 });
                 promises.push(p);
             });
@@ -130,7 +210,7 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
 
             $q.all(promises).then(function() {
         		// check violations
-        		console.log($scope.thingyDetails.violations.thresholdViolations);
+        		
         		let states = {hum: 0, tvoc: 0, co2: 0, temp: 0};
         		
         		for (let v of $scope.thingyDetails.violations.thresholdViolations) {
