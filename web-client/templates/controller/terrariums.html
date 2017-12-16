@@ -50,7 +50,7 @@
                                     Terrarium has no Thingies
                                 </li>
                                 <li ng-repeat="thingy in terrarium.thingies | orderBy:'description'">
-                                    <a ng-click="showThingyDetails(terrarium, thingy)" class="fakelink">{{thingy.description}} ({{thingy.macAddress}})</a>
+                                    <a ng-click="showThingyDetails(terrarium, thingy)" class="fakelink">{{thingy.description}} ({{thingy.macAddress}}) {{thingy.state}}</a>
                                     &nbsp;<span ng-drag="true" ng-drag-data="{terri:terrarium, thingy:thingy}" ng-center-anchor="true"><i class="fa fa-arrows"></i></span>
                                 </li>
                             </ul>
