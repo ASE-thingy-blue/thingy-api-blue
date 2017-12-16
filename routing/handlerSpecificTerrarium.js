@@ -36,6 +36,37 @@ module.exports = {
         });
     },
 
+    terrariumUpdate: (request, reply) => {
+        User.findOne({name: request.auth.credentials.userName})
+            .exec((err, user) => {
+                if (err) {
+                    console.error(err);
+                    return reply({"error": "Server error"}).code(500);
+                }
+
+                if(!user){
+                    return reply({"error": "User not found"}).code(404);
+                }
+
+                let terra = user.terrariums.id(request.params.terrariumId);
+
+                if(!terra){
+                    return reply({"error": "No terrarium with this id", "id": request.params.terrariumId}).code(404);
+                }
+
+                terra.name = request.payload.name;
+                terra.description = request.payload.description;
+
+
+                user.save();
+
+                return reply({
+                    "success": true,
+                    message: "New terrarium updated"
+                }).code(200);
+            });
+    },
+
     terrariumDelete: (request, reply) => {
         User.findOne({name: request.auth.credentials.userName})
             .exec((err, user) => {
