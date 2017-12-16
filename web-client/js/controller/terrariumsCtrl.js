@@ -92,8 +92,8 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
         	    	tvoc: {clazz: "label label-success", text: "OK"},
         	    	co2: {clazz: "label label-success", text: "OK"},
         	    	temp: {clazz: "label label-success", text: "OK"}
-            }
-           let p2 = dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id+'/violations').then(function(data) {
+            };
+            let p2 = dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id+'/violations').then(function(data) {
                 $scope.thingyDetails.violations = data;
                 console.log($scope.thingyDetails.violations);
             });
@@ -197,6 +197,48 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
 
     $scope.showHistory = function(ter, thingy) {
         $state.go('private.history', {terId: ter._id, thingyId: thingy._id})
-    }
+    };
+
+    /**
+     * Update name and description of a terrarium
+     * @param terrarium
+     */
+    $scope.updateTerri = function(terrarium) {
+        $scope.showSpinner = true;
+
+        dataService.put('/terrarium/'+terrarium._id, {name:terrarium.uName,  description:terrarium.uDescription}).then(function(result) {
+            terrarium.description = terrarium.uDescription;
+            terrarium.name = terrarium.uName;
+            terrarium.showForm = false;
+            terrarium.uName = '';
+            terrarium.uDescription = '';
+            $scope.showSpinner = false;
+        }).catch(function(err) {
+            terrarium.showForm = false;
+            terrarium.uName = '';
+            terrarium.uDescription = '';
+            $scope.showSpinner = false;
+        });
+    };
+
+    /**
+     * Update name of a thingy
+     * @param terrarium
+     * @param thingy
+     */
+    $scope.updateThingy = function(terrarium, thingy) {
+        $scope.showSpinner = true;
+
+        dataService.put('/terrarium/'+terrarium._id+'/thingies/'+thingy._id, {description:thingy.uDescription}).then(function(result) {
+            thingy.description = thingy.uDescription;
+            thingy.showForm = false;
+            thingy.uDescription = '';
+            $scope.showSpinner = false;
+        }).catch(function(err) {
+            thingy.showForm = false;
+            thingy.uDescription = '';
+            $scope.showSpinner = false;
+        });
+    };
 
 }]);
