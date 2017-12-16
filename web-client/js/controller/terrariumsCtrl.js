@@ -107,25 +107,39 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
         		let states = {hum: 0, tvoc: 0, co2: 0, temp: 0};
         		
         		for (let v of $scope.thingyDetails.violations.thresholdViolations) {
+        		    let state = 0;
+        		    if (v.threshold.severity === "warning") {
+        			state = 1;
+        		    } else {
+        			state = 2;
+        		    }
         		    switch(v.threshold.sensor) {
-        		    case 1: states.hum = 1; break;
-        		    case 2: states.temp = 1; break;
-        		    case 3: states.tvoc = 1; break;
-        		    case 4: states.co2 = 1; break;
+        		    case 1: states.hum = Math.max(states.hum, state); break;
+        		    case 2: states.temp = Math.max(states.temp, state); break;
+        		    case 3: states.tvoc = Math.max(states.tvoc, state); break;
+        		    case 4: states.co2 = Math.max(states.co2, state); break;
         		    default: break;
         		    }
         		}
         		
         		if (states.hum === 1) {
-        		    $scope.thingyDetails.violation.humidity = { clazz: "label label-danger", text: "DANGER" }
+        		    $scope.thingyDetails.violation.humidity = { clazz: "label label-warning", text: "WARNING" }
+        		} else if (states.hum === 2) {
+        		    $scope.thingyDetails.violation.humidity = { clazz: "label label-danger", text: "DANGER" }    
         		}
         		if (states.temp === 1) {
+        		    $scope.thingyDetails.violation.temp = { clazz: "label label-warning", text: "WARNING" }
+        		} else if (states.temp === 2) {
         		    $scope.thingyDetails.violation.temp = { clazz: "label label-danger", text: "DANGER" }
         		}
         		if (states.tvoc === 1) {
+        		    $scope.thingyDetails.violation.tvoc = { clazz: "label label-warning", text: "WARNING" }
+        		} else if (states.tvoc === 2) {
         		    $scope.thingyDetails.violation.tvoc = { clazz: "label label-danger", text: "DANGER" }
         		}
         		if (states.co2 === 1) {
+        		    $scope.thingyDetails.violation.co2 = { clazz: "label label-warning", text: "WARNING" }
+        		} else if (states.co2 === 2) {
         		    $scope.thingyDetails.violation.co2 = { clazz: "label label-danger", text: "DANGER" }
         		}
         	
