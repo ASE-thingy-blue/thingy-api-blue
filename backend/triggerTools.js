@@ -49,8 +49,8 @@ let updateThresholds = function (thingy, usersMailAddress) {
     let current = {
         temperature: thingy.temperatures[thingy.temperatures.length - 1],
         humidity: thingy.humidities[thingy.humidities.length - 1],
-        co2: thingy.airQualities[thingy.airQualities.length - 1].co2,
-        tvoc: thingy.airQualities[thingy.airQualities.length - 1].tvoc
+        co2: thingy.airQualities[thingy.airQualities.length - 1]?thingy.airQualities[thingy.airQualities.length - 1].co2:undefined,
+        tvoc: thingy.airQualities[thingy.airQualities.length - 1]?thingy.airQualities[thingy.airQualities.length - 1].tvoc:undefined
     };
 
     let violated = [];

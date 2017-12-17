@@ -64,26 +64,36 @@ const createThingyAPI = (server) => {
                         terri.save();
                         thingy.save();
                     } else {
-                        Thingy.findOne({macAddress: thingyId}, function (err, thingy) {
-                            if (err) {
-                                console.error(err);
-                                return reply({'Error': 'Database error'}).code(500);
-                            }
-                            if (thingy === null) {
-                                let newThingy = new Thingy({macAddress: data.thingy, callbackAddress: data.cb});
-                                user.terrariums.forEach((terra) =>{
-                                    if(terra.isDefault){
-                                        terra.thingies.push(newThingy);
-                                        user.save();
-                                    }
-                                });
-                            }
+                        let thingyFound = false;
+                        user.terrariums.forEach((ter)=>{
+                            ter.thingies.forEach((thi)=>{
+                                if(thi.macAddress === thingyId){
+                                    thingyFound = true;
+                                }
+                            });
                         });
+
+                        if(thingyFound){
+                            reply({success: true}).code(200);
+                        } else {
+                            let newThingy = new Thingy({macAddress: data.thingy, callbackAddress: data.cb});
+                            newThingy.save();
+                            user.terrariums.forEach((terra) =>{
+                                if(terra.isDefault){
+                                    Terri.findById(terra._id, function(err, ter){
+                                        ter.thingies.push(newThingy);
+                                        terra.thingies.push(newThingy);
+                                        ter.save();
+                                        user.save();
+                                        reply({success: true}).code(200);
+                                    });
+                                }
+                            });
+                        }
                     }
                 }
             });
 
-            reply({success: true}).code(200);
         },
         config: {
             tags: ['thingy'],

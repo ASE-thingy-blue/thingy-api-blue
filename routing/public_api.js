@@ -144,6 +144,7 @@ var createPublicAPI = (server) => {
                                 });
 
                                 let defTerra = new Terrarium({name: "Default terrarium", isDefault: true});
+                                defTerra.save();
                                 newUser.terrariums.push(defTerra);
                                 // Save the user
                                 newUser.save(function (err) {
