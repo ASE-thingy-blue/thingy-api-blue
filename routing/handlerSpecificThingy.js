@@ -1,9 +1,51 @@
 const Mongoose = require("mongoose");
 
 var User = Mongoose.model("User");
+var TargetConfiguration = Mongoose.model("TargetConfiguration");
+var Threshold = Mongoose.model("Threshold");
 
 module.exports = {
 
+    configUpdate: function (request, reply) {
+	User.findOne({name: request.auth.credentials.userName})
+	.exec(function (err, user) {
+	    let terra = user.terrariums.id(request.params.terrariumId);
+            if (!terra) {
+                return reply({
+                    "Error": "User has no terrarium with the given ID",
+                    id: request.params.terrariumId
+                }).code(404);
+            }
+
+            let thingy = terra.thingies.id(request.params.thingyId);
+            if (!thingy) {
+                return reply({
+                    "Error": "Terrarium has no Thingy with the given ID",
+                    id: request.params.thingyId
+                }).code(404);
+            }
+
+            if (err) {
+                console.error(err);
+                return reply({"Error": "User not found"}).code(404);
+            }
+
+            console.log("save request");
+            console.log(request.payload.config);
+            
+            
+            
+            // create new configuration
+            
+            
+            
+            
+            
+            
+            return reply({"ok": "ok"}).code(200);
+	});
+    },
+	
     thingyUpdate: function (request, reply) {
         User.findOne({name: request.auth.credentials.userName})
             .exec(function (err, user) {
@@ -219,45 +261,37 @@ module.exports = {
                 	    	    danger: {
                 	    		humidity: {
                 	    		    enabled: false,
-                	    		    arm: 0,
-                	    		    disarm: 0
+                	    		    arm: 0
                 	    		},
                 	    		temp: {
                 	    		    enabled: false,
-                	    		    arm: 0,
-                	    		    disarm: 0
+                	    		    arm: 0
                 	    		},
                 	    		tvoc: {
                 	    		    enabled: false,
-                	    		    arm: 0,
-                	    		    disarm: 0
+                	    		    arm: 0
                 	    		},
                 	    		co2: {
                 	    		    enabled: false,
-                	    		    arm: 0,
-                	    		    disarm: 0
+                	    		    arm: 0
                 	    		}
                 	    	    },
                 	    	    warning: {
                 	    		humidity: {
                 	    		    enabled: false,
-                	    		    arm: 0,
-                	    		    disarm: 0
+                	    		    arm: 0
                 	    		},
                 	    		temp: {
                 	    		    enabled: false,
-                	    		    arm: 0,
-                	    		    disarm: 0
+                	    		    arm: 0
                 	    		},
                 	    		tvoc: {
                 	    		    enabled: false,
-                	    		    arm: 0,
-                	    		    disarm: 0
+                	    		    arm: 0
                 	    		},
                 	    		co2: {
                 	    		    enabled: false,
-                	    		    arm: 0,
-                	    		    disarm: 0
+                	    		    arm: 0
                 	    		}
                 	    	    }
             	    	},
@@ -265,45 +299,37 @@ module.exports = {
                 	    	    warning: {
                 	    		humidity: {
                 	    		    enabled: false,
-                	    		    arm: 0,
-                	    		    disarm: 0
+                	    		    arm: 0
                 	    		},
                 	    		temp: {
                 	    		    enabled: false,
-                	    		    arm: 0,
-                	    		    disarm: 0
+                	    		    arm: 0
                 	    		},
                 	    		tvoc: {
                 	    		    enabled: false,
-                	    		    arm: 0,
-                	    		    disarm: 0
+                	    		    arm: 0
                 	    		},
                 	    		co2: {
                 	    		    enabled: false,
-                	    		    arm: 0,
-                	    		    disarm: 0
+                	    		    arm: 0
                 	    		}
                 	    	    },
                 	    	    danger: {
                 	    		humidity: {
                 	    		    enabled: false,
-                	    		    arm: 0,
-                	    		    disarm: 0
+                	    		    arm: 0
                 	    		},
                 	    		temp: {
                 	    		    enabled: false,
-                	    		    arm: 0,
-                	    		    disarm: 0
+                	    		    arm: 0
                 	    		},
                 	    		tvoc: {
                 	    		    enabled: false,
-                	    		    arm: 0,
-                	    		    disarm: 0
+                	    		    arm: 0
                 	    		},
                 	    		co2: {
                 	    		    enabled: false,
-                	    		    arm: 0,
-                	    		    disarm: 0
+                	    		    arm: 0
                 	    		}
                 	    	    }
                 	    	}
@@ -314,29 +340,22 @@ module.exports = {
                 		    let direction = threshold.ascending ? result.upper : result.lower;
                 		    let block = (threshold.severity === "warning") ? direction.warning : direction.danger;
                 		    // apply sensor (1: hum, 2: temp, 3: tvoc, 4: co2)
-                		    let slot = undefined;
-                		    let arm = undefined;
-                		    let disarm = undefined;
                 		    switch(threshold.sensor) {
                 		    case 1:
                 			block.humidity.enabled = true;
-                			block.humidity.arm = threshold.arm.humidity.value;
-                			block.humidity.disarm = threshold.disarm.humidity.value;
+                			block.humidity.arm = threshold.arm;
                 			break;
                 		    case 2:
                 			block.temp.enabled = true;
-                			block.temp.arm = threshold.arm.temperature.value;
-                			block.temp.disarm = threshold.disarm.temperature.value;
+                			block.temp.arm = threshold.arm;
                 			break;
                 		    case 3:
                 			block.tvoc.enabled = true;
-                			block.tvoc.arm = threshold.arm.tvoc.value;
-                			block.tvoc.disarm = threshold.disarm.tvoc.value;
+                			block.tvoc.arm = threshold.arm;
                 			break;
                 		    case 4:
                 			block.co2.enabled = true;
-                			block.co2.arm = threshold.arm.co2.value;
-                			block.co2.disarm = threshold.disarm.co2.value;
+                			block.co2.arm = threshold.arm;
                 			break;
                 		    default:
                 			break;

@@ -19,7 +19,6 @@ var Tvoc = Mongoose.model("TVOC");
 var Carbon = Mongoose.model("Carbondioxide");
 var User = Mongoose.model("User");
 var Unit = Mongoose.model("Unit");
-var TargetValues = Mongoose.model("TargetValues");
 var TargetConfiguration = Mongoose.model("TargetConfiguration");
 var ThresholdViolation = Mongoose.model("ThresholdViolation");
 var Threshold = Mongoose.model("Threshold");
@@ -166,32 +165,16 @@ promises.push(airQ10.save());
 promises.push(airQ11.save());
 promises.push(airQ12.save());
 
-// Target Values
-var target1 = new TargetValues({temperature: {value: 30, unit: celsius}, humidity: {value: 40, unit: percent}, co2: {value: 2, unit: gPerQ}, tvoc: {value: 3, unit: mgPerQ}});
-var target2 = new TargetValues({temperature: {value: 25, unit: celsius}, humidity: {value: 35, unit: percent}, co2: {value: 1, unit: gPerQ}, tvoc: {value: 2, unit: mgPerQ}});
-var target3 = new TargetValues({temperature: {value: 28, unit: celsius}, humidity: {value: 36, unit: percent}, co2: {value: 1, unit: gPerQ}, tvoc: {value: 2, unit: mgPerQ}});
-var target4 = new TargetValues({temperature: {value: 35, unit: celsius}, humidity: {value: 45, unit: percent}, co2: {value: 3, unit: gPerQ}, tvoc: {value: 5, unit: mgPerQ}});
-var target5 = new TargetValues({temperature: {value: 33, unit: celsius}, humidity: {value: 42, unit: percent}, co2: {value: 3, unit: gPerQ}, tvoc: {value: 4, unit: mgPerQ}});
-var target6 = new TargetValues({temperature: {value: 40, unit: celsius}, humidity: {value: 50, unit: percent}, co2: {value: 10, unit: gPerQ}, tvoc: {value: 10, unit: mgPerQ}});
-var target7 = new TargetValues({temperature: {value: 38, unit: celsius}, humidity: {value: 47, unit: percent}, co2: {value: 6, unit: gPerQ}, tvoc: {value: 7, unit: mgPerQ}});
-promises.push(target1.save());
-promises.push(target2.save());
-promises.push(target3.save());
-promises.push(target4.save());
-promises.push(target5.save());
-promises.push(target6.save());
-promises.push(target7.save());
-
 // Thresholds
-var threshold1 = new Threshold({title: "bad", severity: "warning", ascending: false, arm: target2, disarm: target3, sensor: 1});
-var threshold2 = new Threshold({title: "bad", severity: "warning", ascending: true, arm: target4, disarm: target5, sensor: 2});
-var threshold3 = new Threshold({title: "very bad", severity: "severe", ascending: true, arm: target6, disarm: target7, sensor: 3});
+var threshold1 = new Threshold({severity: "warning", ascending: false, sensor: 1, arm: 40});
+var threshold2 = new Threshold({severity: "warning", ascending: true, sensor: 2, arm: 35});
+var threshold3 = new Threshold({severity: "severe", ascending: true, sensor: 3, arm: 10});
 promises.push(threshold1.save());
 promises.push(threshold2.save());
 promises.push(threshold3.save());
 
 // TargetConfiguration
-var config1 = new TargetConfiguration({title: "default", ideal: target1});
+var config1 = new TargetConfiguration({title: "default"});
 config1.thresholds.push(threshold1);
 config1.thresholds.push(threshold2);
 config1.thresholds.push(threshold3);

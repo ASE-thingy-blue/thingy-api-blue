@@ -342,7 +342,18 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
             $scope.showSpinner = false;
         });
     };
-
+    $scope.updateConfig = function() {
+	let thingy = $scope.thingyDetails;
+	let terrarium = $scope.thingyDetails.ter;
+	$scope.showSpinner = true;
+	
+	// send request
+	dataService.put('/terrarium/'+terrarium._id+'/thingies/'+thingy._id+'/configuration', {config: $scope.config}).then(function(result) {
+	    $scope.showSpinner = false;
+	});
+	
+    }
+    
     /**
      * Update name of a thingy
      * @param terrarium

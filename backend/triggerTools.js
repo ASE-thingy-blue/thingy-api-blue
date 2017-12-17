@@ -47,54 +47,44 @@ let updateThresholds = function (thingy, usersMailAddress) {
     // Iterate through thresholds
     for (let threshold of thresholds) {
         let ascending = threshold.ascending;
-        let lower = threshold.ascending ? threshold.disarm : threshold.arm;
-        let upper = threshold.ascending ? threshold.arm : threshold.disarm;
+        let limit = threshold.arm;
         let hasbad = false;
-        let hascentral = false;
         // Check temperature
         if (threshold.sensor === 2) {
-            if (current.temperature.value <= lower.temperature.value) {
+            if (current.temperature.value < limit) {
                 hasbad = !ascending || hasbad;
-            } else if (current.temperature.value >= upper.temperature.value) {
+            } else if (current.temperature.value > limit) {
                 hasbad = ascending || hasbad;
-            } else {
-                hascentral = true;
             }
         }
         // Check humidity
         if (threshold.sensor === 1) {
-            if (current.humidity.value <= lower.humidity.value) {
+            if (current.humidity.value < limit) {
                 hasbad = !ascending || hasbad;
-            } else if (current.humidity.value >= upper.humidity.value) {
+            } else if (current.humidity.value > limit) {
                 hasbad = ascending || hasbad;
-            } else {
-                hascentral = true;
             }
         }
         // Check CO2
         if (threshold.sensor === 4) {
-            if (current.co2.value <= lower.co2.value) {
+            if (current.co2.value < limit) {
                 hasbad = !ascending || hasbad;
-            } else if (current.co2.value >= upper.co2.value) {
+            } else if (current.co2.value > limit) {
                 hasbad = ascending || hasbad;
-            } else {
-                hascentral = true;
             }
         }
         // Check TVOC
         if (threshold.sensor === 3) {
-            if (current.tvoc.value <= lower.tvoc.value) {
+            if (current.tvoc.value < limit) {
                 hasbad = !ascending || hasbad;
-            } else if (current.tvoc.value >= upper.tvoc.value) {
+            } else if (current.tvoc.value > limit) {
                 hasbad = ascending || hasbad;
-            } else {
-                hascentral = true;
             }
         }
         // Analyze
         if (hasbad) {
             violated.push(threshold);
-        } else if (!hascentral) {
+        } else {
             unviolated.push(threshold);
         }
     }

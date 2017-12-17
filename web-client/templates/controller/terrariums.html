@@ -290,7 +290,7 @@
 										ng-model="config.upper.danger.humidity.enabled">&nbsp;<span
 										class="label label-danger">DANGER</span> if above <br />
 										<ul class="nobullets">
-											<li><input type="text" name="humidity-upper-danger-text"
+											<li><input type="number" name="humidity-upper-danger-number"
 												ng-model="config.upper.danger.humidity.arm"></li>
 										</ul></li>
 									<li><input type="checkbox"
@@ -298,8 +298,8 @@
 										ng-model="config.upper.warning.humidity.enabled">&nbsp;<span
 										class="label label-warning">WARNING</span> if above <br />
 										<ul class="nobullets">
-											<li><input type="text"
-												name="humidity-upper-warning-text"
+											<li><input type="number"
+												name="humidity-upper-warning-number"
 												ng-model="config.upper.warning.humidity.arm"></li>
 										</ul></li>
 									<li><input type="checkbox"
@@ -307,8 +307,8 @@
 										ng-model="config.lower.warning.humidity.enabled">&nbsp;<span
 										class="label label-warning">WARNING</span> if below <br />
 										<ul class="nobullets">
-											<li><input type="text"
-												name="humidity-lower-warning-text"
+											<li><input type="number"
+												name="humidity-lower-warning-number"
 												ng-model="config.lower.warning.humidity.arm"></li>
 										</ul></li>
 									<li><input type="checkbox"
@@ -316,7 +316,7 @@
 										ng-model="config.lower.danger.humidity.enabled">&nbsp;<span
 										class="label label-danger">DANGER</span> if below <br />
 										<ul class="nobullets">
-											<li><input type="text" name="humidity-lower-danger-text"
+											<li><input type="number" name="humidity-lower-danger-number"
 												ng-model="config.lower.danger.humidity.arm"></li>
 										</ul></li>
 								</ul>
@@ -330,7 +330,7 @@
 										ng-model="config.upper.danger.temp.enabled">&nbsp;<span
 										class="label label-danger">DANGER</span> if above <br />
 										<ul class="nobullets">
-											<li><input type="text" name="temp-upper-danger-text"
+											<li><input type="number" name="temp-upper-danger-number"
 												ng-model="config.upper.danger.temp.arm"></li>
 										</ul></li>
 									<li><input type="checkbox"
@@ -338,8 +338,8 @@
 										ng-model="config.upper.warning.temp.enabled">&nbsp;<span
 										class="label label-warning">WARNING</span> if above <br />
 										<ul class="nobullets">
-											<li><input type="text"
-												name="temp-upper-warning-text"
+											<li><input type="number"
+												name="temp-upper-warning-number"
 												ng-model="config.upper.warning.temp.arm"></li>
 										</ul></li>
 									<li><input type="checkbox"
@@ -347,8 +347,8 @@
 										ng-model="config.lower.warning.temp.enabled">&nbsp;<span
 										class="label label-warning">WARNING</span> if below <br />
 										<ul class="nobullets">
-											<li><input type="text"
-												name="temp-lower-warning-text"
+											<li><input type="number"
+												name="temp-lower-warning-number"
 												ng-model="config.lower.warning.temp.arm"></li>
 										</ul></li>
 									<li><input type="checkbox"
@@ -356,7 +356,7 @@
 										ng-model="config.lower.danger.temp.enabled">&nbsp;<span
 										class="label label-danger">DANGER</span> if below <br />
 										<ul class="nobullets">
-											<li><input type="text" name="temp-lower-danger-text"
+											<li><input type="number" name="temp-lower-danger-number"
 												ng-model="config.lower.danger.temp.arm"></li>
 										</ul></li>
 								</ul>
@@ -370,7 +370,7 @@
 										ng-model="config.upper.danger.tvoc.enabled">&nbsp;<span
 										class="label label-danger">DANGER</span> if above <br />
 										<ul class="nobullets">
-											<li><input type="text" name="tvoc-upper-danger-text"
+											<li><input type="number" name="tvoc-upper-danger-number"
 												ng-model="config.upper.danger.tvoc.arm"></li>
 										</ul></li>
 									<li><input type="checkbox"
@@ -378,8 +378,8 @@
 										ng-model="config.upper.warning.tvoc.enabled">&nbsp;<span
 										class="label label-warning">WARNING</span> if above <br />
 										<ul class="nobullets">
-											<li><input type="text"
-												name="tvoc-upper-warning-text"
+											<li><input type="number"
+												name="tvoc-upper-warning-number"
 												ng-model="config.upper.warning.tvoc.arm"></li>
 										</ul></li>
 									<li><input type="checkbox"
@@ -387,8 +387,8 @@
 										ng-model="config.lower.warning.tvoc.enabled">&nbsp;<span
 										class="label label-warning">WARNING</span> if below <br />
 										<ul class="nobullets">
-											<li><input type="text"
-												name="tvoc-lower-warning-text"
+											<li><input type="number"
+												name="tvoc-lower-warning-number"
 												ng-model="config.lower.warning.tvoc.arm"></li>
 										</ul></li>
 									<li><input type="checkbox"
@@ -396,7 +396,7 @@
 										ng-model="config.lower.danger.tvoc.enabled">&nbsp;<span
 										class="label label-danger">DANGER</span> if below <br />
 										<ul class="nobullets">
-											<li><input type="text" name="tvoc-lower-danger-text"
+											<li><input type="number" name="tvoc-lower-danger-number"
 												ng-model="config.lower.danger.tvoc.arm"></li>
 										</ul></li>
 								</ul>
@@ -410,7 +410,7 @@
 										ng-model="config.upper.danger.co2.enabled">&nbsp;<span
 										class="label label-danger">DANGER</span> if above <br />
 										<ul class="nobullets">
-											<li><input type="text" name="co2-upper-danger-text"
+											<li><input type="number" name="co2-upper-danger-number"
 												ng-model="config.upper.danger.co2.arm"></li>
 										</ul></li>
 									<li><input type="checkbox"
@@ -418,8 +418,8 @@
 										ng-model="config.upper.warning.co2.enabled">&nbsp;<span
 										class="label label-warning">WARNING</span> if above <br />
 										<ul class="nobullets">
-											<li><input type="text"
-												name="co2-upper-warning-text"
+											<li><input type="number"
+												name="co2-upper-warning-number"
 												ng-model="config.upper.warning.co2.arm"></li>
 										</ul></li>
 									<li><input type="checkbox"
@@ -427,8 +427,8 @@
 										ng-model="config.lower.warning.co2.enabled">&nbsp;<span
 										class="label label-warning">WARNING</span> if below <br />
 										<ul class="nobullets">
-											<li><input type="text"
-												name="co2-lower-warning-text"
+											<li><input type="number"
+												name="co2-lower-warning-number"
 												ng-model="config.lower.warning.co2.arm"></li>
 										</ul></li>
 									<li><input type="checkbox"
@@ -436,7 +436,7 @@
 										ng-model="config.lower.danger.co2.enabled">&nbsp;<span
 										class="label label-danger">DANGER</span> if below <br />
 										<ul class="nobullets">
-											<li><input type="text" name="co2-lower-danger-text"
+											<li><input type="number" name="co2-lower-danger-number"
 												ng-model="config.lower.danger.co2.arm"></li>
 										</ul></li>
 								</ul>
