@@ -34,7 +34,10 @@ module.exports = {
             let raw = request.payload.config;
             let tconf = new TargetConfiguration({title:"default"});
             
-            
+            /*
+             * The following code is duplicated 16 times.
+             * This was necessary since iterating intelligently over the nested data structure would be hell.
+             */
             // HUMIDITY
             if (raw.upper.danger.humidity.enabled) {
 		let t =  new Threshold({severity: "danger", ascending: true, sensor: 1, arm: raw.upper.danger.humidity.arm});
@@ -104,6 +107,7 @@ module.exports = {
         		tconf.thresholds.push(t);
             }
             
+            // save configuration
             thingy.targetConfiguration = tconf;
            
             user.save((err) => {
@@ -333,81 +337,26 @@ module.exports = {
                     let result = {
                 	    	upper: {
                 	    	    danger: {
-                	    		humidity: {
-                	    		    enabled: false,
-                	    		    arm: 0
-                	    		},
-                	    		temp: {
-                	    		    enabled: false,
-                	    		    arm: 0
-                	    		},
-                	    		tvoc: {
-                	    		    enabled: false,
-                	    		    arm: 0
-                	    		},
-                	    		co2: {
-                	    		    enabled: false,
-                	    		    arm: 0
-                	    		}
-                	    	    },
+                	    		humidity: { enabled: false, arm: 0 },
+                	    		temp: { enabled: false, arm: 0 },
+                	    		tvoc: { enabled: false, arm: 0 },
+                	    		co2: { enabled: false, arm: 0 }},
                 	    	    warning: {
-                	    		humidity: {
-                	    		    enabled: false,
-                	    		    arm: 0
-                	    		},
-                	    		temp: {
-                	    		    enabled: false,
-                	    		    arm: 0
-                	    		},
-                	    		tvoc: {
-                	    		    enabled: false,
-                	    		    arm: 0
-                	    		},
-                	    		co2: {
-                	    		    enabled: false,
-                	    		    arm: 0
-                	    		}
-                	    	    }
-            	    	},
+                	    		humidity: { enabled: false, arm: 0 },
+                	    		temp: { enabled: false, arm: 0 },
+                	    		tvoc: { enabled: false, arm: 0 },
+                	    		co2: { enabled: false, arm: 0 }}},
                 	    	lower: {
-                	    	    warning: {
-                	    		humidity: {
-                	    		    enabled: false,
-                	    		    arm: 0
-                	    		},
-                	    		temp: {
-                	    		    enabled: false,
-                	    		    arm: 0
-                	    		},
-                	    		tvoc: {
-                	    		    enabled: false,
-                	    		    arm: 0
-                	    		},
-                	    		co2: {
-                	    		    enabled: false,
-                	    		    arm: 0
-                	    		}
-                	    	    },
                 	    	    danger: {
-                	    		humidity: {
-                	    		    enabled: false,
-                	    		    arm: 0
-                	    		},
-                	    		temp: {
-                	    		    enabled: false,
-                	    		    arm: 0
-                	    		},
-                	    		tvoc: {
-                	    		    enabled: false,
-                	    		    arm: 0
-                	    		},
-                	    		co2: {
-                	    		    enabled: false,
-                	    		    arm: 0
-                	    		}
-                	    	    }
-                	    	}
-                    };
+                	    		humidity: { enabled: false, arm: 0 },
+                	    		temp: { enabled: false, arm: 0 },
+                	    		tvoc: { enabled: false, arm: 0 },
+                	    		co2: { enabled: false, arm: 0 }},
+                	    	    warning: {
+                	    		humidity: { enabled: false, arm: 0 },
+                	    		temp: { enabled: false, arm: 0 },
+                	    		tvoc: { enabled: false, arm: 0 },
+                	    		co2: { enabled: false, arm: 0 }}}};
                     // fill structure
                     if (config !== undefined) {
                 		for (let threshold of config.thresholds) {
