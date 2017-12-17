@@ -5,6 +5,8 @@ const HandlerTerrarium = require('./handlerSpecificTerrarium');
 const HandlerThingy = require('./handlerSpecificThingy');
 const HandlerUser = require('./handlerUser');
 
+const schemas = require('./helper/responseSchemas');
+
 var createPrivateAPI = (server) => {
     /**
      * USER
@@ -118,47 +120,11 @@ var createPrivateAPI = (server) => {
                     responses: {
                         200: {
                             description: 'Success',
-                            schema: Joi.object({
-                                '_id': Joi.string(),
-                                'name': Joi.string(),
-                                'thingies': Joi.array().items(Joi.object({
-                                    '_id': Joi.string(),
-                                    'description': Joi.string(),
-                                    'macAddress': Joi.string(),
-                                    'humidities': Joi.array().items(Joi.object({
-                                        '_id': Joi.string(),
-                                        'unit': Joi.array().items(Joi.object({
-                                            'name': Joi.string(),
-                                            'short': Joi.string(),
-                                            '_id': Joi.string()
-                                        })),
-                                        'value': Joi.number(),
-                                        'timestamp': Joi.date().timestamp()
-                                    })),
-                                    'airQualities': Joi.array().items(Joi.object({
-                                        '_id': Joi.string(),
-                                        'tvoc': Joi.array().items(Joi.object({
-                                            '_id': Joi.string(),
-                                            'value': Joi.number(),
-                                            'unit': Joi.array().items(Joi.object({
-                                                'name': Joi.string(),
-                                                'short': Joi.string(),
-                                                '_id': Joi.string()
-                                            }))
-                                        })),
-                                        'timestamp': Joi.date().timestamp()
-                                    })),
-                                    'temperatures': Joi.array().items(Joi.object({
-                                        '_id': Joi.string(),
-                                        'unit': Joi.array().items(Joi.object({
-                                            'name': Joi.string(),
-                                            'short': Joi.string(),
-                                            '_id': Joi.string()
-                                        })),
-                                        'value': Joi.number(),
-                                        'timestamp': Joi.date().timestamp()
-                                    }))
-                                }))
+                            schema: Joi.array().items({
+                                "_id": Joi.string(),
+                                "name": Joi.string(),
+                                "thingies" : Joi.array().items(schemas.thingyWithAll),
+                                "isDefault": Joi.boolean()
                             }).label('Result')
                         }
                     }
@@ -232,7 +198,13 @@ var createPrivateAPI = (server) => {
                 'hapi-swagger': {
                     responses: {
                         200: {
-                            description: 'Success'
+                            description: 'Success',
+                            schema: Joi.array().items({
+                                "_id": Joi.string(),
+                                "name": Joi.string(),
+                                "thingies": Joi.array().items(schemas.thingyWithTemperatures),
+                                "isDefault": Joi.boolean()
+                            }).label('Result')
                         }
                     }
                 }
@@ -259,7 +231,13 @@ var createPrivateAPI = (server) => {
                 'hapi-swagger': {
                     responses: {
                         200: {
-                            description: 'Success'
+                            description: 'Success',
+                            schema: Joi.array().items({
+                                "_id": Joi.string(),
+                                "name": Joi.string(),
+                                "thingies": Joi.array().items(schemas.thingyWithHumidities),
+                                "isDefault": Joi.boolean()
+                            })
                         }
                     }
                 }
@@ -286,7 +264,13 @@ var createPrivateAPI = (server) => {
                 'hapi-swagger': {
                     responses: {
                         200: {
-                            description: 'Success'
+                            description: 'Success',
+                            schema: Joi.array().items({
+                                "_id": Joi.string(),
+                                "name": Joi.string(),
+                                "thingies": Joi.array().items(schemas.thingyWithAirQualities),
+                                "isDefault": Joi.boolean()
+                            })
                         }
                     }
                 }
@@ -321,7 +305,13 @@ var createPrivateAPI = (server) => {
                 'hapi-swagger': {
                     responses: {
                         200: {
-                            description: 'Success'
+                            description: 'Success',
+                            schema: Joi.object({
+                                "_id": Joi.string(),
+                                "name": Joi.string(),
+                                "thingies": Joi.array().items(schemas.thingy),
+                                "isDefault": Joi.boolean()
+                            })
                         }
                     }
                 }
@@ -438,7 +428,13 @@ var createPrivateAPI = (server) => {
                 'hapi-swagger': {
                     responses: {
                         200: {
-                            description: 'Success'
+                            description: 'Success',
+                            schema: Joi.object({
+                            "_id": Joi.string(),
+                            "name": Joi.string(),
+                            "thingies": Joi.array().items(schemas.thingyWithTemperatures),
+                            "isDefault": Joi.boolean()
+                        })
                         }
                     }
                 }
@@ -530,7 +526,13 @@ var createPrivateAPI = (server) => {
                 'hapi-swagger': {
                     responses: {
                         200: {
-                            description: 'Success'
+                            description: 'Success',
+                            schema: Joi.object({
+                                "_id": Joi.string(),
+                                "name": Joi.string(),
+                                "thingies": Joi.array().items(schemas.thingyWithHumidities),
+                                "isDefault": Joi.boolean()
+                            })
                         }
                     }
                 }
@@ -562,7 +564,13 @@ var createPrivateAPI = (server) => {
                 'hapi-swagger': {
                     responses: {
                         200: {
-                            description: 'Success'
+                            description: 'Success',
+                            schema: Joi.object({
+                                "_id": Joi.string(),
+                                "name": Joi.string(),
+                                "thingies": Joi.array().items(schemas.thingyWithAirQualities),
+                                "isDefault": Joi.boolean()
+                            })
                         }
                     }
                 }
@@ -600,7 +608,8 @@ var createPrivateAPI = (server) => {
                 'hapi-swagger': {
                     responses: {
                         200: {
-                            description: 'Success'
+                            description: 'Success',
+                            schema: schemas.thingyWithAll
                         }
                     }
                 }
@@ -821,7 +830,8 @@ var createPrivateAPI = (server) => {
                 'hapi-swagger': {
                     responses: {
                         200: {
-                            description: 'Success'
+                            description: 'Success',
+                            schema: schemas.thingyWithTemperatures
                         }
                     }
                 }
@@ -856,7 +866,8 @@ var createPrivateAPI = (server) => {
                 'hapi-swagger': {
                     responses: {
                         200: {
-                            description: 'Success'
+                            description: 'Success',
+                            schema: schemas.thingyWithHumidities
                         }
                     }
                 }
@@ -891,7 +902,8 @@ var createPrivateAPI = (server) => {
                 'hapi-swagger': {
                     responses: {
                         200: {
-                            description: 'Success'
+                            description: 'Success',
+                            schema: schemas.thingyWithAirQualities
                         }
                     }
                 }
