@@ -247,7 +247,6 @@
 
 						<div class="col-lg-6">
 							<h3>Sensor State</h3>
-							ul>
 							<li>Humidity:</li>
 							<ul class="nobullets">
 								<li><span ng-class="thingyDetails.violation.humidity.clazz">{{thingyDetails.violation.humidity.text}}</span></li>
@@ -280,7 +279,171 @@
 				</div>
 				<div class="panel-body">
 					<h3>Sensor configuration</h3>
-
+					<form method="POST" ng-submit="updateConfig()">
+						<ul class="nobullets">
+							<!-- HUMIDITY -->
+							<li><strong>Humidity</strong></li>
+							<li>
+								<ul>
+									<li><input type="checkbox"
+										name="humidity-upper-danger-enable"
+										ng-model="config.upper.danger.humidity.enabled">&nbsp;<span
+										class="label label-danger">DANGER</span> if above <br />
+										<ul class="nobullets">
+											<li><input type="text" name="humidity-upper-danger-text"
+												ng-model="config.upper.danger.humidity.arm"></li>
+										</ul></li>
+									<li><input type="checkbox"
+										name="humidity-upper-warning-enable"
+										ng-model="config.upper.warning.humidity.enabled">&nbsp;<span
+										class="label label-warning">WARNING</span> if above <br />
+										<ul class="nobullets">
+											<li><input type="text"
+												name="humidity-upper-warning-text"
+												ng-model="config.upper.warning.humidity.arm"></li>
+										</ul></li>
+									<li><input type="checkbox"
+										name="humidity-lower-warning-enable"
+										ng-model="config.lower.warning.humidity.enabled">&nbsp;<span
+										class="label label-warning">WARNING</span> if below <br />
+										<ul class="nobullets">
+											<li><input type="text"
+												name="humidity-lower-warning-text"
+												ng-model="config.lower.warning.humidity.arm"></li>
+										</ul></li>
+									<li><input type="checkbox"
+										name="humidity-lower-warning-enable"
+										ng-model="config.lower.danger.humidity.enabled">&nbsp;<span
+										class="label label-danger">DANGER</span> if below <br />
+										<ul class="nobullets">
+											<li><input type="text" name="humidity-lower-danger-text"
+												ng-model="config.lower.danger.humidity.arm"></li>
+										</ul></li>
+								</ul>
+							</li>
+							<!-- TEMPERATURE -->
+							<li><strong>Temperature</strong></li>
+							<li>
+								<ul>
+									<li><input type="checkbox"
+										name="temp-upper-danger-enable"
+										ng-model="config.upper.danger.temp.enabled">&nbsp;<span
+										class="label label-danger">DANGER</span> if above <br />
+										<ul class="nobullets">
+											<li><input type="text" name="temp-upper-danger-text"
+												ng-model="config.upper.danger.temp.arm"></li>
+										</ul></li>
+									<li><input type="checkbox"
+										name="temp-upper-warning-enable"
+										ng-model="config.upper.warning.temp.enabled">&nbsp;<span
+										class="label label-warning">WARNING</span> if above <br />
+										<ul class="nobullets">
+											<li><input type="text"
+												name="temp-upper-warning-text"
+												ng-model="config.upper.warning.temp.arm"></li>
+										</ul></li>
+									<li><input type="checkbox"
+										name="temp-lower-warning-enable"
+										ng-model="config.lower.warning.temp.enabled">&nbsp;<span
+										class="label label-warning">WARNING</span> if below <br />
+										<ul class="nobullets">
+											<li><input type="text"
+												name="temp-lower-warning-text"
+												ng-model="config.lower.warning.temp.arm"></li>
+										</ul></li>
+									<li><input type="checkbox"
+										name="temp-lower-warning-enable"
+										ng-model="config.lower.danger.temp.enabled">&nbsp;<span
+										class="label label-danger">DANGER</span> if below <br />
+										<ul class="nobullets">
+											<li><input type="text" name="temp-lower-danger-text"
+												ng-model="config.lower.danger.temp.arm"></li>
+										</ul></li>
+								</ul>
+							</li>
+							<!-- TVOC -->
+							<li><strong>TVOC</strong></li>
+							<li>
+								<ul>
+									<li><input type="checkbox"
+										name="tvoc-upper-danger-enable"
+										ng-model="config.upper.danger.tvoc.enabled">&nbsp;<span
+										class="label label-danger">DANGER</span> if above <br />
+										<ul class="nobullets">
+											<li><input type="text" name="tvoc-upper-danger-text"
+												ng-model="config.upper.danger.tvoc.arm"></li>
+										</ul></li>
+									<li><input type="checkbox"
+										name="tvoc-upper-warning-enable"
+										ng-model="config.upper.warning.tvoc.enabled">&nbsp;<span
+										class="label label-warning">WARNING</span> if above <br />
+										<ul class="nobullets">
+											<li><input type="text"
+												name="tvoc-upper-warning-text"
+												ng-model="config.upper.warning.tvoc.arm"></li>
+										</ul></li>
+									<li><input type="checkbox"
+										name="tvoc-lower-warning-enable"
+										ng-model="config.lower.warning.tvoc.enabled">&nbsp;<span
+										class="label label-warning">WARNING</span> if below <br />
+										<ul class="nobullets">
+											<li><input type="text"
+												name="tvoc-lower-warning-text"
+												ng-model="config.lower.warning.tvoc.arm"></li>
+										</ul></li>
+									<li><input type="checkbox"
+										name="tvoc-lower-warning-enable"
+										ng-model="config.lower.danger.tvoc.enabled">&nbsp;<span
+										class="label label-danger">DANGER</span> if below <br />
+										<ul class="nobullets">
+											<li><input type="text" name="tvoc-lower-danger-text"
+												ng-model="config.lower.danger.tvoc.arm"></li>
+										</ul></li>
+								</ul>
+							</li>
+							<!-- CO2 -->
+							<li><strong>CO2</strong></li>
+							<li>
+								<ul>
+									<li><input type="checkbox"
+										name="co2-upper-danger-enable"
+										ng-model="config.upper.danger.co2.enabled">&nbsp;<span
+										class="label label-danger">DANGER</span> if above <br />
+										<ul class="nobullets">
+											<li><input type="text" name="co2-upper-danger-text"
+												ng-model="config.upper.danger.co2.arm"></li>
+										</ul></li>
+									<li><input type="checkbox"
+										name="co2-upper-warning-enable"
+										ng-model="config.upper.warning.co2.enabled">&nbsp;<span
+										class="label label-warning">WARNING</span> if above <br />
+										<ul class="nobullets">
+											<li><input type="text"
+												name="co2-upper-warning-text"
+												ng-model="config.upper.warning.co2.arm"></li>
+										</ul></li>
+									<li><input type="checkbox"
+										name="co2-lower-warning-enable"
+										ng-model="config.lower.warning.co2.enabled">&nbsp;<span
+										class="label label-warning">WARNING</span> if below <br />
+										<ul class="nobullets">
+											<li><input type="text"
+												name="co2-lower-warning-text"
+												ng-model="config.lower.warning.co2.arm"></li>
+										</ul></li>
+									<li><input type="checkbox"
+										name="co2-lower-warning-enable"
+										ng-model="config.lower.danger.co2.enabled">&nbsp;<span
+										class="label label-danger">DANGER</span> if below <br />
+										<ul class="nobullets">
+											<li><input type="text" name="co2-lower-danger-text"
+												ng-model="config.lower.danger.co2.arm"></li>
+										</ul></li>
+								</ul>
+							</li>
+							<li><button type="submit" class="btn btn-success"><i class="fa fa-fw fa-save"></i>Save Configuration</button></li>
+						</ul>
+					</form>
 				</div>
 			</div>
 		</div>

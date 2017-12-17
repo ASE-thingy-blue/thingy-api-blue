@@ -192,7 +192,7 @@ termonWebClient.controller('terrariumsCtrl', ['$scope', '$stateParams', '$state'
             //Load configuration and violations
             let p1 = dataService.get('/terrarium/'+ter._id+'/thingies/'+thingy._id+'/configuration').then(function(data) {
                 $scope.thingyDetails.configuration = data;
-                console.log($scope.thingyDetails.configuration);
+                $scope.config = data.config;
             });
             promises.push(p1);
             // thingy violations. (default values)
