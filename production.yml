@@ -22,3 +22,7 @@ services:
      - "27017:27017"
     volumes:
      - "/etc/pki/tls/private/:/mnt/"
+  redirect:
+    image: "hope/redirect-http-to-https"
+    ports:
+     - "80:80"
