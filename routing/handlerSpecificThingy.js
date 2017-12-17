@@ -29,21 +29,95 @@ module.exports = {
                 console.error(err);
                 return reply({"Error": "User not found"}).code(404);
             }
-
-            console.log("save request");
-            console.log(request.payload.config);
-            
-            
             
             // create new configuration
+            let raw = request.payload.config;
+            let tconf = new TargetConfiguration({title:"default"});
             
             
+            // HUMIDITY
+            if (raw.upper.danger.humidity.enabled) {
+		let t =  new Threshold({severity: "danger", ascending: true, sensor: 1, arm: raw.upper.danger.humidity.arm});
+		tconf.thresholds.push(t);
+            }
+            if (raw.upper.warning.humidity.enabled) {
+        		let t =  new Threshold({severity: "warning", ascending: true, sensor: 1, arm: raw.upper.warning.humidity.arm});
+        		tconf.thresholds.push(t);
+            }
+            if (raw.lower.danger.humidity.enabled) {
+        		let t =  new Threshold({severity: "danger", ascending: false, sensor: 1, arm: raw.lower.danger.humidity.arm});
+        		tconf.thresholds.push(t);
+            }
+            if (raw.lower.warning.humidity.enabled) {
+        		let t =  new Threshold({severity: "warning", ascending: false, sensor: 1, arm: raw.lower.warning.humidity.arm});
+        		tconf.thresholds.push(t);
+            }
+            // TEMP
+            if (raw.upper.danger.temp.enabled) {
+		let t =  new Threshold({severity: "danger", ascending: true, sensor: 2, arm: raw.upper.danger.temp.arm});
+		tconf.thresholds.push(t);
+            }
+            if (raw.upper.warning.temp.enabled) {
+        		let t =  new Threshold({severity: "warning", ascending: true, sensor: 2, arm: raw.upper.warning.temp.arm});
+        		tconf.thresholds.push(t);
+            }
+            if (raw.lower.danger.temp.enabled) {
+        		let t =  new Threshold({severity: "danger", ascending: false, sensor: 2, arm: raw.lower.danger.temp.arm});
+        		tconf.thresholds.push(t);
+            }
+            if (raw.lower.warning.temp.enabled) {
+        		let t =  new Threshold({severity: "warning", ascending: false, sensor: 2, arm: raw.lower.warning.temp.arm});
+        		tconf.thresholds.push(t);
+            }
+            // tvoc
+            if (raw.upper.danger.tvoc.enabled) {
+		let t =  new Threshold({severity: "danger", ascending: true, sensor: 3, arm: raw.upper.danger.tvoc.arm});
+		tconf.thresholds.push(t);
+            }
+            if (raw.upper.warning.tvoc.enabled) {
+        		let t =  new Threshold({severity: "warning", ascending: true, sensor: 3, arm: raw.upper.warning.tvoc.arm});
+        		tconf.thresholds.push(t);
+            }
+            if (raw.lower.danger.tvoc.enabled) {
+        		let t =  new Threshold({severity: "danger", ascending: false, sensor: 3, arm: raw.lower.danger.tvoc.arm});
+        		tconf.thresholds.push(t);
+            }
+            if (raw.lower.warning.tvoc.enabled) {
+        		let t =  new Threshold({severity: "warning", ascending: false, sensor: 3, arm: raw.lower.warning.tvoc.arm});
+        		tconf.thresholds.push(t);
+            }
+            // co2
+            if (raw.upper.danger.co2.enabled) {
+		let t =  new Threshold({severity: "danger", ascending: true, sensor: 4, arm: raw.upper.danger.co2.arm});
+		tconf.thresholds.push(t);
+            }
+            if (raw.upper.warning.co2.enabled) {
+        		let t =  new Threshold({severity: "warning", ascending: true, sensor: 4, arm: raw.upper.warning.co2.arm});
+        		tconf.thresholds.push(t);
+            }
+            if (raw.lower.danger.co2.enabled) {
+        		let t =  new Threshold({severity: "danger", ascending: false, sensor: 4, arm: raw.lower.danger.co2.arm});
+        		tconf.thresholds.push(t);
+            }
+            if (raw.lower.warning.co2.enabled) {
+        		let t =  new Threshold({severity: "warning", ascending: false, sensor: 4, arm: raw.lower.warning.co2.arm});
+        		tconf.thresholds.push(t);
+            }
             
-            
-            
-            
-            return reply({"ok": "ok"}).code(200);
-	});
+            thingy.targetConfiguration = tconf;
+           
+            user.save((err) => {
+                if (err) {
+                    return reply({"message": "Something went wrong! Terrarium configuration not saved"}).code(500);
+                }
+
+                return reply({
+                    "success": true,
+                    message: "Thingy configuration updated",
+                    id: request.params.terrariumId
+                }).code(200);
+            });
+        });
     },
 	
     thingyUpdate: function (request, reply) {
@@ -339,7 +413,8 @@ module.exports = {
                 		for (let threshold of config.thresholds) {
                 		    let direction = threshold.ascending ? result.upper : result.lower;
                 		    let block = (threshold.severity === "warning") ? direction.warning : direction.danger;
-                		    // apply sensor (1: hum, 2: temp, 3: tvoc, 4: co2)
+                		    // apply sensor (1: hum, 2: temp, 3: tvoc,
+				    // 4: co2)
                 		    switch(threshold.sensor) {
                 		    case 1:
                 			block.humidity.enabled = true;
