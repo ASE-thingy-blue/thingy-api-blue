@@ -1,197 +1,292 @@
 <div id="page" class="maincontent">
 
-    <h1>Terrariums<span ng-if="showSpinner"><i class="fa fa-spinner fa-spin"></i></span></h1>
-    <br/>
+	<h1>
+		Terrariums<span ng-if="showSpinner"><i
+			class="fa fa-spinner fa-spin"></i></span>
+	</h1>
+	<br />
 
-    <div>
-        <div ng-if="!terDetails && !thingyDetails">
-            <button class="btn btn-primary" ng-click="loadData()"><i class="fa fa-fw fa-refresh"></i>Reload data</button>
-            <button class="btn btn-success pull-right" ng-click="showCreateTerrarium()"><i class="fa fa-fw fa-plus"></i>Create new terrarium</button>
-        </div>
-        <div ng-if="terDetails || thingyDetails">
-            <button class="btn btn-primary" ng-click="loadData()"><i class="fa fa-fw fa-backward"></i>Terrarium list</button>
-            <button ng-if="thingyDetails" class="btn btn-primary" ng-click="showTerDetails(thingyDetails.ter)"><i class="fa fa-fw fa-info"></i>Terrarium details</button>
-            <button ng-if="thingyDetails && !thingyDetails.showForm" class="btn btn-warning pull-right" ng-click="thingyDetails.showForm = true; thingyDetails.uDescription = thingyDetails.description"><i class="fa fa-fw fa-gear"></i>Edit</button>
-        </div>
-    </div>
-    <br/>
+	<div>
+		<div ng-if="!terDetails && !thingyDetails">
+			<button class="btn btn-primary" ng-click="loadData()">
+				<i class="fa fa-fw fa-refresh"></i>Reload data
+			</button>
+			<button class="btn btn-success pull-right"
+				ng-click="showCreateTerrarium()">
+				<i class="fa fa-fw fa-plus"></i>Create new terrarium
+			</button>
+		</div>
+		<div ng-if="terDetails || thingyDetails">
+			<button class="btn btn-primary" ng-click="loadData()">
+				<i class="fa fa-fw fa-backward"></i>Terrarium list
+			</button>
+			<button ng-if="thingyDetails" class="btn btn-primary"
+				ng-click="showTerDetails(thingyDetails.ter)">
+				<i class="fa fa-fw fa-info"></i>Terrarium details
+			</button>
+			<button ng-if="thingyDetails && !thingyDetails.showForm"
+				class="btn btn-warning pull-right"
+				ng-click="thingyDetails.showForm = true; thingyDetails.uDescription = thingyDetails.description">
+				<i class="fa fa-fw fa-gear"></i>Edit
+			</button>
+		</div>
+	</div>
+	<br />
 
-    <div ng-if="!showSpinner">
-        <div ng-if="!terDetails && !thingyDetails">
-            <div class="row" ng-repeat="terrariumsRow in terrariums">
-                <div ng-repeat="terrarium in terrariumsRow" class="col-lg-6">
-                    <div class="panel" ng-class="{'panel-info':!terrarium.isDefault, 'panel-success':terrarium.isDefault}">
-                        <div ng-click="showTerDetails(terrarium)" class="panel-heading">
-                            <h3 class="panel-title">{{terrarium.name}}</h3>
-                        </div>
-                        <div class="panel-body" ng-drop="true" ng-drop-success="onDropComplete($data, $event, terrarium)">
-                            <button ng-if="!terrarium.showForm && !terrarium.isDefault" class="btn btn-warning btn-corner" ng-click="terrarium.showForm = true; terrarium.uName = terrarium.name; terrarium.uDescription = terrarium.description"><i class="fa fa-fw fa-gear"></i>Edit</button>
-                            <div ng-if="terrarium.showForm && !terrarium.isDefault" class="well">
-                                <form method="POST" ng-submit="updateTerri(terrarium)">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" name="name" ng-model="terrarium.uName" placeholder="Name" required="required" />
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" name="description" ng-model="terrarium.uDescription" placeholder="Description" />
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-success" ><i class="fa fa-fw fa-save" ng-disabled="showSpinner"></i>Update</button>
-                                        <button type="button" class="btn btn-default" ng-click="terrarium.showForm = false; terrarium.uName = ''; terrarium.uDescription = ''" ng-disabled="showSpinner">Cancel</button>
-                                        <span ng-if="showSpinner"><i class="fa fa-spinner fa-spin"></i></span>
-                                    </div>
-                                </form>
-                            </div>
-                            <div ng-if="!terrarium.showForm">
-                                <p>{{terrarium.description}}</p>
-                            </div>
-                            <h3>Thingies</h3>
-                            <ul>
-                                <li ng-if="!terrarium.thingies || terrarium.thingies.length === 0">
-                                    Terrarium has no Thingies
-                                </li>
-                                <li ng-repeat="thingy in terrarium.thingies | orderBy:'description'">
-                                    <a ng-click="showThingyDetails(terrarium, thingy)" class="fakelink">{{thingy.description}} ({{thingy.macAddress}})</a> <span ng-class="thingy.triggerLabel.clazz">{{thingy.triggerLabel.text}}</span>
-                                    &nbsp;<span ng-drag="true" ng-drag-data="{terri:terrarium, thingy:thingy}" ng-center-anchor="true"><i class="fa fa-arrows"></i></span>
-                                </li>
-                            </ul>
-                            <button class="btn btn-primary pull-right" ng-click="showTerDetails(terrarium)"><i class="fa fa-fw fa-info"></i>Details</button>
-                            <button ng-if="!terrarium.isDefault" class="btn btn-danger pull-right" ng-click="showDeleteTerrarium(terrarium)"><i class="fa fa-fw fa-trash"></i>Delete</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div ng-if="!showSpinner">
+		<div ng-if="!terDetails && !thingyDetails">
+			<div class="row" ng-repeat="terrariumsRow in terrariums">
+				<div ng-repeat="terrarium in terrariumsRow" class="col-lg-6">
+					<div class="panel"
+						ng-class="{'panel-info':!terrarium.isDefault, 'panel-success':terrarium.isDefault}">
+						<div ng-click="showTerDetails(terrarium)" class="panel-heading">
+							<h3 class="panel-title">{{terrarium.name}}</h3>
+						</div>
+						<div class="panel-body" ng-drop="true"
+							ng-drop-success="onDropComplete($data, $event, terrarium)">
+							<button ng-if="!terrarium.showForm && !terrarium.isDefault"
+								class="btn btn-warning btn-corner"
+								ng-click="terrarium.showForm = true; terrarium.uName = terrarium.name; terrarium.uDescription = terrarium.description">
+								<i class="fa fa-fw fa-gear"></i>Edit
+							</button>
+							<div ng-if="terrarium.showForm && !terrarium.isDefault"
+								class="well">
+								<form method="POST" ng-submit="updateTerri(terrarium)">
+									<div class="form-group">
+										<input type="text" class="form-control" name="name"
+											ng-model="terrarium.uName" placeholder="Name"
+											required="required" />
+									</div>
+									<div class="form-group">
+										<input type="text" class="form-control" name="description"
+											ng-model="terrarium.uDescription" placeholder="Description" />
+									</div>
+									<div class="form-group">
+										<button type="submit" class="btn btn-success">
+											<i class="fa fa-fw fa-save" ng-disabled="showSpinner"></i>Update
+										</button>
+										<button type="button" class="btn btn-default"
+											ng-click="terrarium.showForm = false; terrarium.uName = ''; terrarium.uDescription = ''"
+											ng-disabled="showSpinner">Cancel</button>
+										<span ng-if="showSpinner"><i
+											class="fa fa-spinner fa-spin"></i></span>
+									</div>
+								</form>
+							</div>
+							<div ng-if="!terrarium.showForm">
+								<p>{{terrarium.description}}</p>
+							</div>
+							<h3>Thingies</h3>
+							<ul>
+								<li
+									ng-if="!terrarium.thingies || terrarium.thingies.length === 0">
+									Terrarium has no Thingies</li>
+								<li
+									ng-repeat="thingy in terrarium.thingies | orderBy:'description'">
+									<a ng-click="showThingyDetails(terrarium, thingy)"
+									class="fakelink">{{thingy.description}}
+										({{thingy.macAddress}})</a> <span
+									ng-class="thingy.triggerLabel.clazz">{{thingy.triggerLabel.text}}</span>
+									&nbsp;<span ng-drag="true"
+									ng-drag-data="{terri:terrarium, thingy:thingy}"
+									ng-center-anchor="true"><i class="fa fa-arrows"></i></span>
+								</li>
+							</ul>
+							<button class="btn btn-primary pull-right"
+								ng-click="showTerDetails(terrarium)">
+								<i class="fa fa-fw fa-info"></i>Details
+							</button>
+							<button ng-if="!terrarium.isDefault"
+								class="btn btn-danger pull-right"
+								ng-click="showDeleteTerrarium(terrarium)">
+								<i class="fa fa-fw fa-trash"></i>Delete
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <div ng-if="terDetails" class="row">
-        <div ng-if="!showSpinner && terDetails.thingies.length === 0" class="col-lg-12">
-            <div class="alert alert-warning">
-                <p>Terrarium has no Thingies.</p>
-            </div>
-        </div>
-        <div ng-repeat="thingy in terDetails.thingies | orderBy:'description'" class="col-lg-6">
-            <div class="panel panel-info">
-                <div ng-click="showThingyDetails(terDetails, thingy)" class="panel-heading">
-                    <h3 class="panel-title">{{thingy.description}} ({{terDetails.name}})<span class="pull-right">{{thingy.macAddress}}</span></h3>
-                </div>
-                <div class="panel-body">
-                    <button class="btn btn-primary btn-corner" ng-click="showHistory(terDetails, thingy)"><i class="fa fa-fw fa-history"></i>History</button>
-                    <h3>Sensor data</h3>
-                    <ul>
-                        <li>Humidity:</li>
-                        <ul class="nobullets">
-                            <li>{{thingy.humidities[0].value}} {{thingy.humidities[0].unit.short}} <span ng-class="thingy.trigger.humidity.clazz">{{thingy.trigger.humidity.text}}</span></li>
-                            <li>Date: {{thingy.humidities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
-                        </ul>
+	<div ng-if="terDetails" class="row">
+		<div ng-if="!showSpinner && terDetails.thingies.length === 0"
+			class="col-lg-12">
+			<div class="alert alert-warning">
+				<p>Terrarium has no Thingies.</p>
+			</div>
+		</div>
+		<div ng-repeat="thingy in terDetails.thingies | orderBy:'description'"
+			class="col-lg-6">
+			<div class="panel panel-info">
+				<div ng-click="showThingyDetails(terDetails, thingy)"
+					class="panel-heading">
+					<h3 class="panel-title">
+						{{thingy.description}} ({{terDetails.name}})<span
+							class="pull-right">{{thingy.macAddress}}</span>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<button class="btn btn-primary btn-corner"
+						ng-click="showHistory(terDetails, thingy)">
+						<i class="fa fa-fw fa-history"></i>History
+					</button>
+					<h3>Sensor data</h3>
+					<ul>
+						<li>Humidity:</li>
+						<ul class="nobullets">
+							<li>{{thingy.humidities[0].value}}
+								{{thingy.humidities[0].unit.short}} <span
+								ng-class="thingy.trigger.humidity.clazz">{{thingy.trigger.humidity.text}}</span>
+							</li>
+							<li>Date: {{thingy.humidities[0].timestamp | date :
+								'dd.MM.yyyy - HH:mm'}}</li>
+						</ul>
 
-                        <li>Air Quality:</li>
-                        <ul class="nobullets">
-                            <li>TVOC: {{thingy.airQualities[0].tvoc.value}} {{thingy.airQualities[0].tvoc.unit.short}} <span ng-class="thingy.trigger.tvoc.clazz">{{thingy.trigger.tvoc.text}}</span></li>
-                            <li>CO2: {{thingy.airQualities[0].co2.value}} {{thingy.airQualities[0].co2.unit.short}} <span ng-class="thingy.trigger.co2.clazz">{{thingy.trigger.co2.text}}</span></li>
-                            <li>Date: {{thingy.airQualities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
-                        </ul>
+						<li>Air Quality:</li>
+						<ul class="nobullets">
+							<li>TVOC: {{thingy.airQualities[0].tvoc.value}}
+								{{thingy.airQualities[0].tvoc.unit.short}} <span
+								ng-class="thingy.trigger.tvoc.clazz">{{thingy.trigger.tvoc.text}}</span>
+							</li>
+							<li>CO2: {{thingy.airQualities[0].co2.value}}
+								{{thingy.airQualities[0].co2.unit.short}} <span
+								ng-class="thingy.trigger.co2.clazz">{{thingy.trigger.co2.text}}</span>
+							</li>
+							<li>Date: {{thingy.airQualities[0].timestamp | date :
+								'dd.MM.yyyy - HH:mm'}}</li>
+						</ul>
 
-                        <li>Temperature:</li>
-                        <ul class="nobullets">
-                            <li>{{thingy.temperatures[0].value}} {{thingy.temperatures[0].unit.short}} <span ng-class="thingy.trigger.temp.clazz">{{thingy.trigger.temp.text}}</span></li>
-                            <li>Date: {{thingy.temperatures[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
-                        </ul>
-                    </ul>
-                    <button class="btn btn-primary pull-right" ng-click="showThingyDetails(terDetails, thingy)"><i class="fa fa-fw fa-info"></i>Details</button>
-                </div>
-            </div>
-        </div>
-    </div>
+						<li>Temperature:</li>
+						<ul class="nobullets">
+							<li>{{thingy.temperatures[0].value}}
+								{{thingy.temperatures[0].unit.short}} <span
+								ng-class="thingy.trigger.temp.clazz">{{thingy.trigger.temp.text}}</span>
+							</li>
+							<li>Date: {{thingy.temperatures[0].timestamp | date :
+								'dd.MM.yyyy - HH:mm'}}</li>
+						</ul>
+					</ul>
+					<button class="btn btn-primary pull-right"
+						ng-click="showThingyDetails(terDetails, thingy)">
+						<i class="fa fa-fw fa-info"></i>Details
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <div ng-if="thingyDetails" class="row">
-        <div ng-if="thingyDetails.showForm" class="col-lg-12">
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    <div class="well no-margin">
-                        <form method="POST" ng-submit="updateThingy(thingyDetails.ter, thingyDetails)">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="description" ng-model="thingyDetails.uDescription" placeholder="Description" />
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-success" ><i class="fa fa-fw fa-save" ng-disabled="showSpinner"></i>Update</button>
-                                <button type="button" class="btn btn-default" ng-click="thingyDetails.showForm = false; thingyDetails.uDescription = ''" ng-disabled="showSpinner">Cancel</button>
-                                <span ng-if="showSpinner"><i class="fa fa-spinner fa-spin"></i></span>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-12">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{thingyDetails.description}} - State<span class="pull-right">{{thingyDetails.macAddress}}</span></h3>
-                </div>
-                <div class="panel-body">
-                    <button class="btn btn-primary btn-corner" ng-click="showHistory(thingyDetails.ter, thingyDetails)"><i class="fa fa-fw fa-history"></i>History</button>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <h3>Sensor data</h3>
-                            <ul>
-                                <li>Humidity:</li>
-                                <ul class="nobullets">
-                                    <li>{{thingyDetails.humidities[0].value}} {{thingyDetails.humidities[0].unit.short}}</li>
-                                    <li>Date: {{thingyDetails.humidities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
-                                </ul>
+	<div ng-if="thingyDetails" class="row">
+		<div ng-if="thingyDetails.showForm" class="col-lg-12">
+			<div class="panel panel-info">
+				<div class="panel-body">
+					<div class="well no-margin">
+						<form method="POST"
+							ng-submit="updateThingy(thingyDetails.ter, thingyDetails)">
+							<div class="form-group">
+								<input type="text" class="form-control" name="description"
+									ng-model="thingyDetails.uDescription" placeholder="Description" />
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-success">
+									<i class="fa fa-fw fa-save" ng-disabled="showSpinner"></i>Update
+								</button>
+								<button type="button" class="btn btn-default"
+									ng-click="thingyDetails.showForm = false; thingyDetails.uDescription = ''"
+									ng-disabled="showSpinner">Cancel</button>
+								<span ng-if="showSpinner"><i
+									class="fa fa-spinner fa-spin"></i></span>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-12">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						{{thingyDetails.description}} - State<span class="pull-right">{{thingyDetails.macAddress}}</span>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<button class="btn btn-primary btn-corner"
+						ng-click="showHistory(thingyDetails.ter, thingyDetails)">
+						<i class="fa fa-fw fa-history"></i>History
+					</button>
+					<div class="row">
+						<div class="col-lg-6">
+							<h3>Sensor data</h3>
+							<ul>
+								<li>Humidity:</li>
+								<ul class="nobullets">
+									<li>{{thingyDetails.humidities[0].value}}
+										{{thingyDetails.humidities[0].unit.short}}</li>
+									<li>Date: {{thingyDetails.humidities[0].timestamp | date :
+										'dd.MM.yyyy - HH:mm'}}</li>
+								</ul>
 
-                                <li>Air Quality:</li>
-                                <ul class="nobullets">
-                                    <li>TVOC: {{thingyDetails.airQualities[0].tvoc.value}} {{thingyDetails.airQualities[0].tvoc.unit.short}}</li>
-                                    <li>CO2: {{thingyDetails.airQualities[0].co2.value}} {{thingyDetails.airQualities[0].co2.unit.short}}</li>
-                                    <li>Date: {{thingyDetails.airQualities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
-                                </ul>
+								<li>Air Quality:</li>
+								<ul class="nobullets">
+									<li>TVOC: {{thingyDetails.airQualities[0].tvoc.value}}
+										{{thingyDetails.airQualities[0].tvoc.unit.short}}</li>
+									<li>CO2: {{thingyDetails.airQualities[0].co2.value}}
+										{{thingyDetails.airQualities[0].co2.unit.short}}</li>
+									<li>Date: {{thingyDetails.airQualities[0].timestamp | date
+										: 'dd.MM.yyyy - HH:mm'}}</li>
+								</ul>
 
-                                <li>Temperature:</li>
-                                <ul class="nobullets">
-                                    <li>{{thingyDetails.temperatures[0].value}} {{thingyDetails.temperatures[0].unit.short}}</li>
-                                    <li>Date: {{thingyDetails.temperatures[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}</li>
-                                </ul>
-                            </ul>
-                        </div>
+								<li>Temperature:</li>
+								<ul class="nobullets">
+									<li>{{thingyDetails.temperatures[0].value}}
+										{{thingyDetails.temperatures[0].unit.short}}</li>
+									<li>Date: {{thingyDetails.temperatures[0].timestamp | date
+										: 'dd.MM.yyyy - HH:mm'}}</li>
+								</ul>
+							</ul>
+						</div>
 
-                        <div class="col-lg-6">
-                            <h3>Sensor State</h3>
-                            <ul>
-                                <li>Humidity:</li>
-                                <ul class="nobullets">
-                                    <li><span ng-class="thingyDetails.violation.humidity.clazz">{{thingyDetails.violation.humidity.text}}</span></li>
-                                </ul>
+						<div class="col-lg-6">
+							<h3>Sensor State</h3>
+							ul>
+							<li>Humidity:</li>
+							<ul class="nobullets">
+								<li><span ng-class="thingyDetails.violation.humidity.clazz">{{thingyDetails.violation.humidity.text}}</span></li>
+							</ul>
 
-                                <li>Air Quality:</li>
-                                <ul class="nobullets">
-                                    <li><span ng-class="thingyDetails.violation.tvoc.clazz">TVOC: {{thingyDetails.violation.tvoc.text}}</span></li>
-                                    <li><span ng-class="thingyDetails.violation.co2.clazz">CO2: {{thingyDetails.violation.co2.text}}</span></li>
-                                </ul>
+							<li>Air Quality:</li>
+							<ul class="nobullets">
+								<li><span ng-class="thingyDetails.violation.tvoc.clazz">TVOC:
+										{{thingyDetails.violation.tvoc.text}}</span></li>
+								<li><span ng-class="thingyDetails.violation.co2.clazz">CO2:
+										{{thingyDetails.violation.co2.text}}</span></li>
+							</ul>
 
-                                <li>Temperature:</li>
-                                <ul class="nobullets">
-                                    <li><span ng-class="thingyDetails.violation.temp.clazz">{{thingyDetails.violation.temp.text}}</span></li>
-                                </ul>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+							<li>Temperature:</li>
+							<ul class="nobullets">
+								<li><span ng-class="thingyDetails.violation.temp.clazz">{{thingyDetails.violation.temp.text}}</span></li>
+							</ul>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-        <div class="col-lg-12">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{thingyDetails.description}} - Settings</h3>
-                </div>
-                <div class="panel-body">
-                    <h3>Sensor configuration</h3>
-                </div>
-            </div>
-        </div>
-    </div>
+		<div class="col-lg-12">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">{{thingyDetails.description}} -
+						Settings</h3>
+				</div>
+				<div class="panel-body">
+					<h3>Sensor configuration</h3>
 
-    <div ng-include="'static/templates/modals/createTerrariumModal.html'"></div>
-    <div ng-include="'static/templates/modals/deleteTerrariumModal.html'"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div ng-include="'static/templates/modals/createTerrariumModal.html'"></div>
+	<div ng-include="'static/templates/modals/deleteTerrariumModal.html'"></div>
 
 </div>

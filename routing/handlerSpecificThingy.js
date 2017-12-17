@@ -212,12 +212,151 @@ module.exports = {
                     }
 
                     let thingy = terra.thingies.id(request.params.thingyId);
+                    let config = thingy.targetConfiguration;
+                    // base structure
+                    let result = {
+                	    	upper: {
+                	    	    danger: {
+                	    		humidity: {
+                	    		    enabled: false,
+                	    		    arm: 0,
+                	    		    disarm: 0
+                	    		},
+                	    		temp: {
+                	    		    enabled: false,
+                	    		    arm: 0,
+                	    		    disarm: 0
+                	    		},
+                	    		tvoc: {
+                	    		    enabled: false,
+                	    		    arm: 0,
+                	    		    disarm: 0
+                	    		},
+                	    		co2: {
+                	    		    enabled: false,
+                	    		    arm: 0,
+                	    		    disarm: 0
+                	    		}
+                	    	    },
+                	    	    warning: {
+                	    		humidity: {
+                	    		    enabled: false,
+                	    		    arm: 0,
+                	    		    disarm: 0
+                	    		},
+                	    		temp: {
+                	    		    enabled: false,
+                	    		    arm: 0,
+                	    		    disarm: 0
+                	    		},
+                	    		tvoc: {
+                	    		    enabled: false,
+                	    		    arm: 0,
+                	    		    disarm: 0
+                	    		},
+                	    		co2: {
+                	    		    enabled: false,
+                	    		    arm: 0,
+                	    		    disarm: 0
+                	    		}
+                	    	    }
+            	    	},
+                	    	lower: {
+                	    	    warning: {
+                	    		humidity: {
+                	    		    enabled: false,
+                	    		    arm: 0,
+                	    		    disarm: 0
+                	    		},
+                	    		temp: {
+                	    		    enabled: false,
+                	    		    arm: 0,
+                	    		    disarm: 0
+                	    		},
+                	    		tvoc: {
+                	    		    enabled: false,
+                	    		    arm: 0,
+                	    		    disarm: 0
+                	    		},
+                	    		co2: {
+                	    		    enabled: false,
+                	    		    arm: 0,
+                	    		    disarm: 0
+                	    		}
+                	    	    },
+                	    	    danger: {
+                	    		humidity: {
+                	    		    enabled: false,
+                	    		    arm: 0,
+                	    		    disarm: 0
+                	    		},
+                	    		temp: {
+                	    		    enabled: false,
+                	    		    arm: 0,
+                	    		    disarm: 0
+                	    		},
+                	    		tvoc: {
+                	    		    enabled: false,
+                	    		    arm: 0,
+                	    		    disarm: 0
+                	    		},
+                	    		co2: {
+                	    		    enabled: false,
+                	    		    arm: 0,
+                	    		    disarm: 0
+                	    		}
+                	    	    }
+                	    	}
+                    };
+                    // fill structure
+                    if (config !== undefined) {
+                		for (let threshold of config.thresholds) {
+                		    let direction = threshold.ascending ? result.upper : result.lower;
+                		    let block = (threshold.severity === "warning") ? direction.warning : direction.danger;
+                		    // apply sensor (1: hum, 2: temp, 3: tvoc, 4: co2)
+                		    let slot = undefined;
+                		    let arm = undefined;
+                		    let disarm = undefined;
+                		    switch(threshold.sensor) {
+                		    case 1:
+                			block.humidity.enabled = true;
+                			block.humidity.arm = threshold.arm.humidity.value;
+                			block.humidity.disarm = threshold.disarm.humidity.value;
+                			break;
+                		    case 2:
+                			block.temp.enabled = true;
+                			block.temp.arm = threshold.arm.temperature.value;
+                			block.temp.disarm = threshold.disarm.temperature.value;
+                			break;
+                		    case 3:
+                			block.tvoc.enabled = true;
+                			block.tvoc.arm = threshold.arm.tvoc.value;
+                			block.tvoc.disarm = threshold.disarm.tvoc.value;
+                			break;
+                		    case 4:
+                			block.co2.enabled = true;
+                			block.co2.arm = threshold.arm.co2.value;
+                			block.co2.disarm = threshold.disarm.co2.value;
+                			break;
+                		    default:
+                			break;
+                		    }
+                		}
+                    }
+                    
+                    let fullResult = {
+                	    	_id: thingy._id,
+                	    	macAddress: thingy.macAddress,
+                	    	description: thingy.description,
+                	    	config: result
+                    };
+                    
                     if (!thingy) {
                         return reply({"Error": "Terrarium has no Thingy with the given ID",
                             id: request.params.thingyId}).code(404);
                     }
 
-                    reply(thingy).code(200);
+                    reply(fullResult).code(200);
                 }
         });
     },
