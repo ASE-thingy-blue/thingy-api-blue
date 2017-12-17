@@ -256,13 +256,13 @@
 						Settings</h3>
 				</div>
 				<div class="panel-body">
-					<h3>Sensor configuration</h3>
+					<h3>Sensor configuration<span ng-if="showSpinner"> <i class="fa fa-spinner fa-spin"></i></span></h3>
 					<form method="POST" ng-submit="updateConfig()">
 
 						<div class="row">
 							<!-- TEMPERATURE -->
 							<div class="col-lg-5">
-								<h4 class="left no-padding">Temperature</h4>
+								<h4 class="left no-padding">Temperature<span ng-if="showSpinner"> <i class="fa fa-spinner fa-spin"></i></span></h4>
 
 								<div class="checkbox">
 									<label>
@@ -307,7 +307,7 @@
 
 							<!-- HUMIDITY -->
 							<div class="col-lg-5 col-lg-offset-1">
-								<h4 class="left no-padding">Humidity</h4>
+								<h4 class="left no-padding">Humidity<span ng-if="showSpinner"> <i class="fa fa-spinner fa-spin"></i></span></h4>
 
 								<div class="checkbox">
 									<label>
@@ -355,7 +355,7 @@
 						<div class="row">
 							<!-- TVOC -->
 							<div class="col-lg-5">
-								<h4 class="left no-padding">TVOC</h4>
+								<h4 class="left no-padding">TVOC<span ng-if="showSpinner"> <i class="fa fa-spinner fa-spin"></i></span></h4>
 
 								<div class="checkbox">
 									<label>
@@ -400,7 +400,7 @@
 
 							<!-- CO2 -->
 							<div class="col-lg-5 col-lg-offset-1">
-								<h4 class="left no-padding">CO2</h4>
+								<h4 class="left no-padding">CO2<span ng-if="showSpinner"> <i class="fa fa-spinner fa-spin"></i></span></h4>
 
 								<div class="checkbox">
 									<label>

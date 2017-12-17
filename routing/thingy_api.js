@@ -53,7 +53,7 @@ const createThingyAPI = (server) => {
                 } else {
                     if (user === null) {
                         let newUser = new User({name: data.user});
-                        let terri = new Terri({name: 'My first terrarium', isDefault: true});
+                        let terri = new Terri({name: 'Default terrarium', isDefault: true});
                         let thingy = new Thingy({macAddress: data.thingy, callbackAddress: data.cb});
 
                         newUser.save();
@@ -71,7 +71,8 @@ const createThingyAPI = (server) => {
                             }
                             if (thingy === null) {
                                 let newThingy = new Thingy({macAddress: data.thingy, callbackAddress: data.cb});
-                                let terri = new Terri({name: 'My first terrarium', isDefault: true});
+                                //TODO: lars, please check if default Terrarium exists.
+                                let terri = new Terri({name: 'Default terrarium', isDefault: true});
 
                                 newThingy.save();
                                 terri.thingies.push(newThingy);
@@ -107,16 +108,16 @@ const createThingyAPI = (server) => {
 
             let setup = {
                 temperature: {
-                    interval: 5000
+                    interval: 15000
                 },
                 pressure: {
-                    interval: 5000
+                    interval: 15000
                 },
                 humidity: {
-                    interval: 5000
+                    interval: 15000
                 },
                 color: {
-                    interval: 5000
+                    interval: 15000
                 },
                 gas: {
                     mode: 3
@@ -215,7 +216,7 @@ const createThingyAPI = (server) => {
                                     newHmu.save();
 
                                     uthingy.humidities.push(newHmu);
-                                    //triggerTools.updateThresholds(uthingy, user.mailAddress);
+                                    triggerTools.updateThresholds(uthingy, user.mailAddress);
                                     user.save();
                                     break;
                                 case 'temperature':
@@ -229,7 +230,7 @@ const createThingyAPI = (server) => {
 
                                     newTemp.save();
                                     uthingy.temperatures.push(newTemp);
-                                    //triggerTools.updateThresholds(uthingy, user.mailAddress);
+                                    triggerTools.updateThresholds(uthingy, user.mailAddress);
                                     user.save();
                                     break;
                                 case 'gas':
@@ -250,7 +251,7 @@ const createThingyAPI = (server) => {
                                     newAirQ.save();
 
                                     uthingy.airQualities.push(newAirQ);
-                                    //triggerTools.updateThresholds(uthingy, user.mailAddress);
+                                    triggerTools.updateThresholds(uthingy, user.mailAddress);
                                     user.save();
                                     break;
                             }
