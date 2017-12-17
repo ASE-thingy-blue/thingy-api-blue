@@ -20,21 +20,23 @@ const sensorIdSchema = Joi.string().required().description('The Thingy Sensor');
 /*
  * Reads a unit from the DB by name or creates it if it does not exist
  */
-let getOrCreateUnit = (name, short, reply) => {
-    let result;
-    Unit.find({name: name}, function (err, unit) {
-        if (err) {
-            console.error(err);
-            return reply({'Error': 'Unit not in database'}).code(500);
-        }
-        if (unit === null) {
-            let newUnit = new Unit({name: name, short: short});
-            newUnit.save();
-            result = newUnit;
-        } else {
-            result = unit;
-        }
-        return result;
+const getOrCreateUnit = function(name, short, reply) {
+    return new Promise(resolve => {
+        let result;
+        Unit.findOne({name: name}, function (err, unit) {
+            if (err) {
+                console.error(err);
+                return reply({'Error': 'Unit not in database'}).code(500);
+            }
+            if (unit === null) {
+                let newUnit = new Unit({name: name, short: short});
+                newUnit.save();
+                result = newUnit;
+            } else {
+                result = unit;
+            }
+            resolve(result);
+        });
     });
 };
 
@@ -212,53 +214,56 @@ const createThingyAPI = (server) => {
 
                             switch (sensorId) {
                                 case 'humidity':
-                                    let unitPercent = getOrCreateUnit('Percent', '%', reply);
-
-                                    let newHmu = new Hum({
-                                        value: data.humidity,
-                                        unit: unitPercent,
-                                        timestamp: new Date(data.timestamp).toISOString()
+                                    getOrCreateUnit('Percent', '%', reply).then(function(unitPercent) {
+                                        let newHmu = new Hum({
+                                            value: data.humidity,
+                                            unit: unitPercent,
+                                            timestamp: new Date(data.timestamp).toISOString()
+                                        });
+                                        newHmu.save();
+                                        uthingy.humidities.push(newHmu);
+                                        uthingy.save();
+                                        triggerTools.updateThresholds(uthingy, user.mailAddress);
+                                        user.save();
                                     });
-                                    newHmu.save();
-
-                                    uthingy.humidities.push(newHmu);
-                                    triggerTools.updateThresholds(uthingy, user.mailAddress);
-                                    user.save();
                                     break;
                                 case 'temperature':
-                                    let unitCels = getOrCreateUnit('Celsius', 'C', reply);
-
-                                    let newTemp = new Temp({
-                                        value: data.temperature,
-                                        unit: unitCels,
-                                        timestamp: new Date(data.timestamp).toISOString()
+                                    getOrCreateUnit('Celsius', 'C', reply).then(function(unitCels) {
+                                        let newTemp = new Temp({
+                                            value: data.temperature,
+                                            unit: unitCels,
+                                            timestamp: new Date(data.timestamp).toISOString()
+                                        });
+                                        newTemp.save();
+                                        uthingy.temperatures.push(newTemp);
+                                        uthingy.save();
+                                        triggerTools.updateThresholds(uthingy, user.mailAddress);
                                     });
 
-                                    newTemp.save();
-                                    uthingy.temperatures.push(newTemp);
-                                    triggerTools.updateThresholds(uthingy, user.mailAddress);
                                     user.save();
                                     break;
                                 case 'gas':
-                                    let unit1Db = getOrCreateUnit('gram per cubic meter', 'g/m3', reply);
-                                    let unit2Db = getOrCreateUnit('microgram per cubic meter', 'mg/m3', reply);
+                                    getOrCreateUnit('gram per cubic meter', 'g/m3', reply).then(function(unit1Db) {
+                                        getOrCreateUnit('microgram per cubic meter', 'mg/m3', reply).then(function(unit2Db) {
+                                            let carb = new Carbon({value: data.gas.eco2, unit: unit1Db});
+                                            let tvoc = new Tvoc({value: data.gas.tvoc, unit: unit2Db});
 
-                                    let carb = new Carbon({value: data.gas.eco2, unit: unit1Db});
-                                    let tvoc = new Tvoc({value: data.gas.tvoc, unit: unit2Db});
+                                            carb.save();
+                                            tvoc.save();
 
-                                    carb.save();
-                                    tvoc.save();
-
-                                    let newAirQ = new AirQ({
-                                        co2: carb,
-                                        tvoc: tvoc,
-                                        timestamp: new Date(data.timestamp).toISOString()
+                                            let newAirQ = new AirQ({
+                                                co2: carb,
+                                                tvoc: tvoc,
+                                                timestamp: new Date(data.timestamp).toISOString()
+                                            });
+                                            newAirQ.save();
+                                            uthingy.airQualities.push(newAirQ);
+                                            uthingy.save();
+                                            triggerTools.updateThresholds(uthingy, user.mailAddress);
+                                            user.save();
+                                        });
                                     });
-                                    newAirQ.save();
 
-                                    uthingy.airQualities.push(newAirQ);
-                                    triggerTools.updateThresholds(uthingy, user.mailAddress);
-                                    user.save();
                                     break;
                             }
                             reply({success: true}).code(200);
