@@ -1,7 +1,9 @@
 const Mongoose = require('mongoose');
-const User = Mongoose.model('User');
 const Jwt = require('jwt-simple');
 const Joi = require('joi');
+
+const User = Mongoose.model('User');
+const Terrarium = Mongoose.model('Terrarium');
 
 // Returns a promise. Use it as:
 /*
@@ -140,6 +142,9 @@ var createPublicAPI = (server) => {
                                     mailAddress: request.payload.email,
                                     password: request.payload.password
                                 });
+
+                                let defTerra = new Terrarium({name: "Default terrarium", isDefault: true});
+                                newUser.terrariums.push(defTerra);
                                 // Save the user
                                 newUser.save(function (err) {
                                     if (err) {

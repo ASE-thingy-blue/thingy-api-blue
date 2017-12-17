@@ -56,13 +56,13 @@ const createThingyAPI = (server) => {
                         let terri = new Terri({name: 'Default terrarium', isDefault: true});
                         let thingy = new Thingy({macAddress: data.thingy, callbackAddress: data.cb});
 
-                        newUser.save();
-                        terri.save();
-                        thingy.save();
-
                         terri.thingies.push(thingy);
                         newUser.terrariums.push(terri);
                         user = newUser;
+
+                        newUser.save();
+                        terri.save();
+                        thingy.save();
                     } else {
                         Thingy.findOne({macAddress: thingyId}, function (err, thingy) {
                             if (err) {
@@ -71,16 +71,12 @@ const createThingyAPI = (server) => {
                             }
                             if (thingy === null) {
                                 let newThingy = new Thingy({macAddress: data.thingy, callbackAddress: data.cb});
-                                //TODO: lars, please check if default Terrarium exists.
-                                let terri = new Terri({name: 'Default terrarium', isDefault: true});
-
-                                newThingy.save();
-                                terri.thingies.push(newThingy);
-
-                                terri.save();
-                                user.terrariums.push(terri);
-
-                                user.save();
+                                user.terrariums.forEach((terra) =>{
+                                    if(terra.isDefault){
+                                        terra.thingies.push(newThingy);
+                                        user.save();
+                                    }
+                                });
                             }
                         });
                     }
