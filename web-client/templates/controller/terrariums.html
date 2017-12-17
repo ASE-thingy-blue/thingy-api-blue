@@ -1,9 +1,6 @@
 <div id="page" class="maincontent">
 
-	<h1>
-		Terrariums<span ng-if="showSpinner"><i
-			class="fa fa-spinner fa-spin"></i></span>
-	</h1>
+	<h1>Terrariums<span ng-if="showSpinner"><i class="fa fa-spinner fa-spin"></i></span></h1>
 	<br />
 
 	<div>
@@ -11,8 +8,7 @@
 			<button class="btn btn-primary" ng-click="loadData()">
 				<i class="fa fa-fw fa-refresh"></i>Reload data
 			</button>
-			<button class="btn btn-success pull-right"
-				ng-click="showCreateTerrarium()">
+			<button class="btn btn-success pull-right" ng-click="showCreateTerrarium()">
 				<i class="fa fa-fw fa-plus"></i>Create new terrarium
 			</button>
 		</div>
@@ -20,13 +16,10 @@
 			<button class="btn btn-primary" ng-click="loadData()">
 				<i class="fa fa-fw fa-backward"></i>Terrarium list
 			</button>
-			<button ng-if="thingyDetails" class="btn btn-primary"
-				ng-click="showTerDetails(thingyDetails.ter)">
+			<button ng-if="thingyDetails" class="btn btn-primary" ng-click="showTerDetails(thingyDetails.ter)">
 				<i class="fa fa-fw fa-info"></i>Terrarium details
 			</button>
-			<button ng-if="thingyDetails && !thingyDetails.showForm"
-				class="btn btn-warning pull-right"
-				ng-click="thingyDetails.showForm = true; thingyDetails.uDescription = thingyDetails.description">
+			<button ng-if="thingyDetails && !thingyDetails.showForm" class="btn btn-warning pull-right" ng-click="thingyDetails.showForm = true; thingyDetails.uDescription = thingyDetails.description">
 				<i class="fa fa-fw fa-gear"></i>Edit
 			</button>
 		</div>
@@ -37,39 +30,28 @@
 		<div ng-if="!terDetails && !thingyDetails">
 			<div class="row" ng-repeat="terrariumsRow in terrariums">
 				<div ng-repeat="terrarium in terrariumsRow" class="col-lg-6">
-					<div class="panel"
-						ng-class="{'panel-info':!terrarium.isDefault, 'panel-success':terrarium.isDefault}">
+					<div class="panel" ng-class="{'panel-info':!terrarium.isDefault, 'panel-success':terrarium.isDefault}">
 						<div ng-click="showTerDetails(terrarium)" class="panel-heading">
 							<h3 class="panel-title">{{terrarium.name}}</h3>
 						</div>
-						<div class="panel-body" ng-drop="true"
-							ng-drop-success="onDropComplete($data, $event, terrarium)">
-							<button ng-if="!terrarium.showForm && !terrarium.isDefault"
-								class="btn btn-warning btn-corner"
-								ng-click="terrarium.showForm = true; terrarium.uName = terrarium.name; terrarium.uDescription = terrarium.description">
+						<div class="panel-body" ng-drop="true" ng-drop-success="onDropComplete($data, $event, terrarium)">
+							<button ng-if="!terrarium.showForm && !terrarium.isDefault" class="btn btn-warning btn-corner" ng-click="terrarium.showForm = true; terrarium.uName = terrarium.name; terrarium.uDescription = terrarium.description">
 								<i class="fa fa-fw fa-gear"></i>Edit
 							</button>
-							<div ng-if="terrarium.showForm && !terrarium.isDefault"
-								class="well">
+							<div ng-if="terrarium.showForm && !terrarium.isDefault" class="well">
 								<form method="POST" ng-submit="updateTerri(terrarium)">
 									<div class="form-group">
-										<input type="text" class="form-control" name="name"
-											ng-model="terrarium.uName" placeholder="Name"
-											required="required" />
+										<input type="text" class="form-control" name="name" ng-model="terrarium.uName" placeholder="Name" required="required" />
 									</div>
 									<div class="form-group">
-										<input type="text" class="form-control" name="description"
-											ng-model="terrarium.uDescription" placeholder="Description" />
+										<input type="text" class="form-control" name="description" ng-model="terrarium.uDescription" placeholder="Description" />
 									</div>
 									<div class="form-group">
 										<button type="submit" class="btn btn-success">
 											<i class="fa fa-fw fa-save" ng-disabled="showSpinner"></i>Update
 										</button>
-										<button type="button" class="btn btn-default"
-											ng-click="terrarium.showForm = false; terrarium.uName = ''; terrarium.uDescription = ''"
-											ng-disabled="showSpinner">Cancel</button>
-										<span ng-if="showSpinner"><i
-											class="fa fa-spinner fa-spin"></i></span>
+										<button type="button" class="btn btn-default" ng-click="terrarium.showForm = false; terrarium.uName = ''; terrarium.uDescription = ''" ng-disabled="showSpinner">Cancel</button>
+										<span ng-if="showSpinner"><i class="fa fa-spinner fa-spin"></i></span>
 									</div>
 								</form>
 							</div>
@@ -78,27 +60,18 @@
 							</div>
 							<h3>Thingies</h3>
 							<ul>
-								<li
-									ng-if="!terrarium.thingies || terrarium.thingies.length === 0">
+								<li ng-if="!terrarium.thingies || terrarium.thingies.length === 0">
 									Terrarium has no Thingies</li>
-								<li
-									ng-repeat="thingy in terrarium.thingies | orderBy:'description'">
-									<a ng-click="showThingyDetails(terrarium, thingy)"
-									class="fakelink">{{thingy.description}}
-										({{thingy.macAddress}})</a> <span
-									ng-class="thingy.triggerLabel.clazz">{{thingy.triggerLabel.text}}</span>
-									&nbsp;<span ng-drag="true"
-									ng-drag-data="{terri:terrarium, thingy:thingy}"
-									ng-center-anchor="true"><i class="fa fa-arrows"></i></span>
+								<li ng-repeat="thingy in terrarium.thingies | orderBy:'description'">
+									<a ng-click="showThingyDetails(terrarium, thingy)" class="fakelink">{{thingy.description}} ({{thingy.macAddress}})</a>
+									<span ng-class="thingy.triggerLabel.clazz">{{thingy.triggerLabel.text}}</span>
+									<span ng-drag="true" ng-drag-data="{terri:terrarium, thingy:thingy}" ng-center-anchor="true"><i class="fa fa-arrows"></i></span>
 								</li>
 							</ul>
-							<button class="btn btn-primary pull-right"
-								ng-click="showTerDetails(terrarium)">
+							<button class="btn btn-primary pull-right"ng-click="showTerDetails(terrarium)">
 								<i class="fa fa-fw fa-info"></i>Details
 							</button>
-							<button ng-if="!terrarium.isDefault"
-								class="btn btn-danger pull-right"
-								ng-click="showDeleteTerrarium(terrarium)">
+							<button ng-if="!terrarium.isDefault" class="btn btn-danger pull-right" ng-click="showDeleteTerrarium(terrarium)">
 								<i class="fa fa-fw fa-trash"></i>Delete
 							</button>
 						</div>
@@ -118,56 +91,53 @@
 		<div ng-repeat="thingy in terDetails.thingies | orderBy:'description'"
 			class="col-lg-6">
 			<div class="panel panel-info">
-				<div ng-click="showThingyDetails(terDetails, thingy)"
-					class="panel-heading">
-					<h3 class="panel-title">
-						{{thingy.description}} ({{terDetails.name}})<span
-							class="pull-right">{{thingy.macAddress}}</span>
-					</h3>
+				<div ng-click="showThingyDetails(terDetails, thingy)" class="panel-heading">
+					<h3 class="panel-title">{{thingy.description}} ({{terDetails.name}})<span class="pull-right">{{thingy.macAddress}}</span></h3>
 				</div>
 				<div class="panel-body">
-					<button class="btn btn-primary btn-corner"
-						ng-click="showHistory(terDetails, thingy)">
+					<button class="btn btn-primary btn-corner" ng-click="showHistory(terDetails, thingy)">
 						<i class="fa fa-fw fa-history"></i>History
 					</button>
 					<h3>Sensor data</h3>
 					<ul>
+						<li>Temperature:</li>
+						<ul class="nobullets">
+							<li>
+								{{thingy.temperatures[0].value}} {{thingy.temperatures[0].unit.short}}
+								<span ng-class="thingy.trigger.temp.clazz">{{thingy.trigger.temp.text}}</span>
+							</li>
+							<li>
+								Date: {{thingy.temperatures[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}
+							</li>
+						</ul>
+						
 						<li>Humidity:</li>
 						<ul class="nobullets">
-							<li>{{thingy.humidities[0].value}}
-								{{thingy.humidities[0].unit.short}} <span
-								ng-class="thingy.trigger.humidity.clazz">{{thingy.trigger.humidity.text}}</span>
+							<li>
+								{{thingy.humidities[0].value}} {{thingy.humidities[0].unit.short}}
+								<span ng-class="thingy.trigger.humidity.clazz">{{thingy.trigger.humidity.text}}</span>
 							</li>
-							<li>Date: {{thingy.humidities[0].timestamp | date :
-								'dd.MM.yyyy - HH:mm'}}</li>
+							<li>
+								Date: {{thingy.humidities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}
+							</li>
 						</ul>
 
 						<li>Air Quality:</li>
 						<ul class="nobullets">
-							<li>TVOC: {{thingy.airQualities[0].tvoc.value}}
-								{{thingy.airQualities[0].tvoc.unit.short}} <span
-								ng-class="thingy.trigger.tvoc.clazz">{{thingy.trigger.tvoc.text}}</span>
+							<li>
+								TVOC: {{thingy.airQualities[0].tvoc.value}} {{thingy.airQualities[0].tvoc.unit.short}}
+								<span ng-class="thingy.trigger.tvoc.clazz">{{thingy.trigger.tvoc.text}}</span>
 							</li>
-							<li>CO2: {{thingy.airQualities[0].co2.value}}
-								{{thingy.airQualities[0].co2.unit.short}} <span
-								ng-class="thingy.trigger.co2.clazz">{{thingy.trigger.co2.text}}</span>
+							<li>
+								CO2: {{thingy.airQualities[0].co2.value}} {{thingy.airQualities[0].co2.unit.short}}
+								<span ng-class="thingy.trigger.co2.clazz">{{thingy.trigger.co2.text}}</span>
 							</li>
-							<li>Date: {{thingy.airQualities[0].timestamp | date :
-								'dd.MM.yyyy - HH:mm'}}</li>
-						</ul>
-
-						<li>Temperature:</li>
-						<ul class="nobullets">
-							<li>{{thingy.temperatures[0].value}}
-								{{thingy.temperatures[0].unit.short}} <span
-								ng-class="thingy.trigger.temp.clazz">{{thingy.trigger.temp.text}}</span>
+							<li>
+								Date: {{thingy.airQualities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}
 							</li>
-							<li>Date: {{thingy.temperatures[0].timestamp | date :
-								'dd.MM.yyyy - HH:mm'}}</li>
 						</ul>
 					</ul>
-					<button class="btn btn-primary pull-right"
-						ng-click="showThingyDetails(terDetails, thingy)">
+					<button class="btn btn-primary pull-right" ng-click="showThingyDetails(terDetails, thingy)">
 						<i class="fa fa-fw fa-info"></i>Details
 					</button>
 				</div>
@@ -180,21 +150,18 @@
 			<div class="panel panel-info">
 				<div class="panel-body">
 					<div class="well no-margin">
-						<form method="POST"
-							ng-submit="updateThingy(thingyDetails.ter, thingyDetails)">
+						<form method="POST" ng-submit="updateThingy(thingyDetails.ter, thingyDetails)">
 							<div class="form-group">
-								<input type="text" class="form-control" name="description"
-									ng-model="thingyDetails.uDescription" placeholder="Description" />
+								<input type="text" class="form-control" name="description" ng-model="thingyDetails.uDescription" placeholder="Description" />
 							</div>
 							<div class="form-group">
 								<button type="submit" class="btn btn-success">
 									<i class="fa fa-fw fa-save" ng-disabled="showSpinner"></i>Update
 								</button>
-								<button type="button" class="btn btn-default"
-									ng-click="thingyDetails.showForm = false; thingyDetails.uDescription = ''"
-									ng-disabled="showSpinner">Cancel</button>
-								<span ng-if="showSpinner"><i
-									class="fa fa-spinner fa-spin"></i></span>
+								<button type="button" class="btn btn-default" ng-click="thingyDetails.showForm = false; thingyDetails.uDescription = ''" ng-disabled="showSpinner">
+									Cancel
+								</button>
+								<span ng-if="showSpinner"><i class="fa fa-spinner fa-spin"></i></span>
 							</div>
 						</form>
 					</div>
@@ -204,66 +171,77 @@
 		<div class="col-lg-12">
 			<div class="panel panel-info">
 				<div class="panel-heading">
-					<h3 class="panel-title">
-						{{thingyDetails.description}} - State<span class="pull-right">{{thingyDetails.macAddress}}</span>
-					</h3>
+					<h3 class="panel-title">{{thingyDetails.description}} - State<span class="pull-right">{{thingyDetails.macAddress}}</span></h3>
 				</div>
 				<div class="panel-body">
-					<button class="btn btn-primary btn-corner"
-						ng-click="showHistory(thingyDetails.ter, thingyDetails)">
+					<button class="btn btn-primary btn-corner" ng-click="showHistory(thingyDetails.ter, thingyDetails)">
 						<i class="fa fa-fw fa-history"></i>History
 					</button>
 					<div class="row">
 						<div class="col-lg-6">
 							<h3>Sensor data</h3>
 							<ul>
+								<li>Temperature:</li>
+								<ul class="nobullets">
+									<li>
+										{{thingyDetails.temperatures[0].value}} {{thingyDetails.temperatures[0].unit.short}}
+									</li>
+									<li>
+										Date: {{thingyDetails.temperatures[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}
+									</li>
+								</ul>
+								
 								<li>Humidity:</li>
 								<ul class="nobullets">
-									<li>{{thingyDetails.humidities[0].value}}
-										{{thingyDetails.humidities[0].unit.short}}</li>
-									<li>Date: {{thingyDetails.humidities[0].timestamp | date :
-										'dd.MM.yyyy - HH:mm'}}</li>
+									<li>
+										{{thingyDetails.humidities[0].value}} {{thingyDetails.humidities[0].unit.short}}
+									</li>
+									<li>
+										Date: {{thingyDetails.humidities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}
+									</li>
 								</ul>
 
 								<li>Air Quality:</li>
 								<ul class="nobullets">
-									<li>TVOC: {{thingyDetails.airQualities[0].tvoc.value}}
-										{{thingyDetails.airQualities[0].tvoc.unit.short}}</li>
-									<li>CO2: {{thingyDetails.airQualities[0].co2.value}}
-										{{thingyDetails.airQualities[0].co2.unit.short}}</li>
-									<li>Date: {{thingyDetails.airQualities[0].timestamp | date
-										: 'dd.MM.yyyy - HH:mm'}}</li>
-								</ul>
-
-								<li>Temperature:</li>
-								<ul class="nobullets">
-									<li>{{thingyDetails.temperatures[0].value}}
-										{{thingyDetails.temperatures[0].unit.short}}</li>
-									<li>Date: {{thingyDetails.temperatures[0].timestamp | date
-										: 'dd.MM.yyyy - HH:mm'}}</li>
+									<li>
+										TVOC: {{thingyDetails.airQualities[0].tvoc.value}} {{thingyDetails.airQualities[0].tvoc.unit.short}}
+									</li>
+									<li>
+										CO2: {{thingyDetails.airQualities[0].co2.value}} {{thingyDetails.airQualities[0].co2.unit.short}}
+									</li>
+									<li>
+										Date: {{thingyDetails.airQualities[0].timestamp | date : 'dd.MM.yyyy - HH:mm'}}
+									</li>
 								</ul>
 							</ul>
 						</div>
 
 						<div class="col-lg-6">
 							<h3>Sensor State</h3>
-							<li>Humidity:</li>
-							<ul class="nobullets">
-								<li><span ng-class="thingyDetails.violation.humidity.clazz">{{thingyDetails.violation.humidity.text}}</span></li>
-							</ul>
+							<ul>
+								<li>Temperature:</li>
+								<ul class="nobullets">
+									<li>
+										<span ng-class="thingyDetails.violation.temp.clazz">{{thingyDetails.violation.temp.text}}</span>
+									</li>
+								</ul>
 
-							<li>Air Quality:</li>
-							<ul class="nobullets">
-								<li><span ng-class="thingyDetails.violation.tvoc.clazz">TVOC:
-										{{thingyDetails.violation.tvoc.text}}</span></li>
-								<li><span ng-class="thingyDetails.violation.co2.clazz">CO2:
-										{{thingyDetails.violation.co2.text}}</span></li>
-							</ul>
+								<li>Humidity:</li>
+								<ul class="nobullets">
+									<li>
+										<span ng-class="thingyDetails.violation.humidity.clazz">{{thingyDetails.violation.humidity.text}}</span>
+									</li>
+								</ul>
 
-							<li>Temperature:</li>
-							<ul class="nobullets">
-								<li><span ng-class="thingyDetails.violation.temp.clazz">{{thingyDetails.violation.temp.text}}</span></li>
-							</ul>
+								<li>Air Quality:</li>
+								<ul class="nobullets">
+									<li>
+										<span ng-class="thingyDetails.violation.tvoc.clazz">TVOC: {{thingyDetails.violation.tvoc.text}}</span>
+									</li>
+									<li>
+										<span ng-class="thingyDetails.violation.co2.clazz">CO2: {{thingyDetails.violation.co2.text}}</span>
+									</li>
+								</ul>
 							</ul>
 						</div>
 					</div>
@@ -280,169 +258,197 @@
 				<div class="panel-body">
 					<h3>Sensor configuration</h3>
 					<form method="POST" ng-submit="updateConfig()">
-						<ul class="nobullets">
-							<!-- HUMIDITY -->
-							<li><strong>Humidity</strong></li>
-							<li>
-								<ul>
-									<li><input type="checkbox"
-										name="humidity-upper-danger-enable"
-										ng-model="config.upper.danger.humidity.enabled">&nbsp;<span
-										class="label label-danger">DANGER</span> if above <br />
-										<ul class="nobullets">
-											<li><input type="text" name="humidity-upper-danger-text"
-												ng-model="config.upper.danger.humidity.arm"></li>
-										</ul></li>
-									<li><input type="checkbox"
-										name="humidity-upper-warning-enable"
-										ng-model="config.upper.warning.humidity.enabled">&nbsp;<span
-										class="label label-warning">WARNING</span> if above <br />
-										<ul class="nobullets">
-											<li><input type="text"
-												name="humidity-upper-warning-text"
-												ng-model="config.upper.warning.humidity.arm"></li>
-										</ul></li>
-									<li><input type="checkbox"
-										name="humidity-lower-warning-enable"
-										ng-model="config.lower.warning.humidity.enabled">&nbsp;<span
-										class="label label-warning">WARNING</span> if below <br />
-										<ul class="nobullets">
-											<li><input type="text"
-												name="humidity-lower-warning-text"
-												ng-model="config.lower.warning.humidity.arm"></li>
-										</ul></li>
-									<li><input type="checkbox"
-										name="humidity-lower-warning-enable"
-										ng-model="config.lower.danger.humidity.enabled">&nbsp;<span
-										class="label label-danger">DANGER</span> if below <br />
-										<ul class="nobullets">
-											<li><input type="text" name="humidity-lower-danger-text"
-												ng-model="config.lower.danger.humidity.arm"></li>
-										</ul></li>
-								</ul>
-							</li>
+
+						<div class="row">
 							<!-- TEMPERATURE -->
-							<li><strong>Temperature</strong></li>
-							<li>
-								<ul>
-									<li><input type="checkbox"
-										name="temp-upper-danger-enable"
-										ng-model="config.upper.danger.temp.enabled">&nbsp;<span
-										class="label label-danger">DANGER</span> if above <br />
-										<ul class="nobullets">
-											<li><input type="text" name="temp-upper-danger-text"
-												ng-model="config.upper.danger.temp.arm"></li>
-										</ul></li>
-									<li><input type="checkbox"
-										name="temp-upper-warning-enable"
-										ng-model="config.upper.warning.temp.enabled">&nbsp;<span
-										class="label label-warning">WARNING</span> if above <br />
-										<ul class="nobullets">
-											<li><input type="text"
-												name="temp-upper-warning-text"
-												ng-model="config.upper.warning.temp.arm"></li>
-										</ul></li>
-									<li><input type="checkbox"
-										name="temp-lower-warning-enable"
-										ng-model="config.lower.warning.temp.enabled">&nbsp;<span
-										class="label label-warning">WARNING</span> if below <br />
-										<ul class="nobullets">
-											<li><input type="text"
-												name="temp-lower-warning-text"
-												ng-model="config.lower.warning.temp.arm"></li>
-										</ul></li>
-									<li><input type="checkbox"
-										name="temp-lower-warning-enable"
-										ng-model="config.lower.danger.temp.enabled">&nbsp;<span
-										class="label label-danger">DANGER</span> if below <br />
-										<ul class="nobullets">
-											<li><input type="text" name="temp-lower-danger-text"
-												ng-model="config.lower.danger.temp.arm"></li>
-										</ul></li>
-								</ul>
-							</li>
+							<div class="col-lg-5">
+								<h4 class="left no-padding">Temperature</h4>
+
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="temp-upper-danger-enable" ng-model="config.upper.danger.temp.enabled" />
+										<span class="label label-danger">DANGER</span> if above
+									</label>
+								</div>
+								<div class="form-group">
+									<input type="number" class="form-control" name="temp-upper-danger-text" ng-model="config.upper.danger.temp.arm" />
+								</div>
+
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="temp-upper-warning-enable" ng-model="config.upper.warning.temp.enabled" />
+										<span class="label label-warning">WARNING</span> if above
+									</label>
+								</div>
+								<div class="form-group">
+									<input type="number" class="form-control" name="temp-upper-warning-text" ng-model="config.upper.warning.temp.arm" />
+								</div>
+
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="temp-lower-warning-enable" ng-model="config.lower.warning.temp.enabled" />
+										<span class="label label-warning">WARNING</span> if below
+									</label>
+								</div>
+								<div class="form-group">
+									<input type="number" class="form-control" name="temp-lower-warning-text" ng-model="config.lower.warning.temp.arm" />
+								</div>
+
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="temp-lower-warning-enable" ng-model="config.lower.danger.temp.enabled" />
+										<span class="label label-danger">DANGER</span> if below
+									</label>
+								</div>
+								<div class="form-group">
+									<input type="number" class="form-control" name="temp-lower-danger-text" ng-model="config.lower.danger.temp.arm" />
+								</div>
+							</div>
+
+							<!-- HUMIDITY -->
+							<div class="col-lg-5 col-lg-offset-1">
+								<h4 class="left no-padding">Humidity</h4>
+
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="humidity-upper-danger-enable" ng-model="config.upper.danger.humidity.enabled" />
+										<span class="label label-danger">DANGER</span> if above
+									</label>
+								</div>
+								<div class="form-group">
+									<input type="number" class="form-control" name="humidity-upper-danger-text" ng-model="config.upper.danger.humidity.arm" />
+								</div>
+
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="humidity-upper-warning-enable" ng-model="config.upper.warning.humidity.enabled" />
+										<span class="label label-warning">WARNING</span> if above
+									</label>
+								</div>
+								<div class="form-group">
+									<input type="number" class="form-control" name="humidity-upper-warning-text" ng-model="config.upper.warning.humidity.arm" />
+								</div>
+
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="humidity-lower-warning-enable" ng-model="config.lower.warning.humidity.enabled" />
+										<span class="label label-warning">WARNING</span> if below
+									</label>
+								</div>
+								<div class="form-group">
+									<input type="number" class="form-control" name="humidity-lower-warning-text" ng-model="config.lower.warning.humidity.arm" />
+								</div>
+
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="humidity-lower-warning-enable" ng-model="config.lower.danger.humidity.enabled" />
+										<span class="label label-danger">DANGER</span> if below
+									</label>
+								</div>
+								<div class="form-group">
+									<input type="number" class="form-control" name="humidity-lower-danger-text" ng-model="config.lower.danger.humidity.arm" />
+								</div>
+							</div>
+						</div>
+						<br/><br/>
+
+						<div class="row">
 							<!-- TVOC -->
-							<li><strong>TVOC</strong></li>
-							<li>
-								<ul>
-									<li><input type="checkbox"
-										name="tvoc-upper-danger-enable"
-										ng-model="config.upper.danger.tvoc.enabled">&nbsp;<span
-										class="label label-danger">DANGER</span> if above <br />
-										<ul class="nobullets">
-											<li><input type="text" name="tvoc-upper-danger-text"
-												ng-model="config.upper.danger.tvoc.arm"></li>
-										</ul></li>
-									<li><input type="checkbox"
-										name="tvoc-upper-warning-enable"
-										ng-model="config.upper.warning.tvoc.enabled">&nbsp;<span
-										class="label label-warning">WARNING</span> if above <br />
-										<ul class="nobullets">
-											<li><input type="text"
-												name="tvoc-upper-warning-text"
-												ng-model="config.upper.warning.tvoc.arm"></li>
-										</ul></li>
-									<li><input type="checkbox"
-										name="tvoc-lower-warning-enable"
-										ng-model="config.lower.warning.tvoc.enabled">&nbsp;<span
-										class="label label-warning">WARNING</span> if below <br />
-										<ul class="nobullets">
-											<li><input type="text"
-												name="tvoc-lower-warning-text"
-												ng-model="config.lower.warning.tvoc.arm"></li>
-										</ul></li>
-									<li><input type="checkbox"
-										name="tvoc-lower-warning-enable"
-										ng-model="config.lower.danger.tvoc.enabled">&nbsp;<span
-										class="label label-danger">DANGER</span> if below <br />
-										<ul class="nobullets">
-											<li><input type="text" name="tvoc-lower-danger-text"
-												ng-model="config.lower.danger.tvoc.arm"></li>
-										</ul></li>
-								</ul>
-							</li>
+							<div class="col-lg-5">
+								<h4 class="left no-padding">TVOC</h4>
+
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="tvoc-upper-danger-enable" ng-model="config.upper.danger.tvoc.enabled" />
+										<span class="label label-danger">DANGER</span> if above
+									</label>
+								</div>
+								<div class="form-group">
+									<input type="number" class="form-control" name="tvoc-upper-danger-text" ng-model="config.upper.danger.tvoc.arm" />
+								</div>
+
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="tvoc-upper-warning-enable" ng-model="config.upper.warning.tvoc.enabled" />
+										<span class="label label-warning">WARNING</span> if above
+									</label>
+								</div>
+								<div class="form-group">
+									<input type="number" class="form-control" name="tvoc-upper-warning-text" ng-model="config.upper.warning.tvoc.arm" />
+								</div>
+
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="tvoc-lower-warning-enable" ng-model="config.lower.warning.tvoc.enabled" />
+										<span class="label label-warning">WARNING</span> if below
+									</label>
+								</div>
+								<div class="form-group">
+									<input type="number" class="form-control" name="tvoc-lower-warning-text" ng-model="config.lower.warning.tvoc.arm" />
+								</div>
+
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="tvoc-lower-warning-enable" ng-model="config.lower.danger.tvoc.enabled" />
+										<span class="label label-danger">DANGER</span> if below
+									</label>
+								</div>
+								<div class="form-group">
+									<input type="number" class="form-control" name="tvoc-lower-danger-text" ng-model="config.lower.danger.tvoc.arm" />
+								</div>
+							</div>
+
 							<!-- CO2 -->
-							<li><strong>CO2</strong></li>
-							<li>
-								<ul>
-									<li><input type="checkbox"
-										name="co2-upper-danger-enable"
-										ng-model="config.upper.danger.co2.enabled">&nbsp;<span
-										class="label label-danger">DANGER</span> if above <br />
-										<ul class="nobullets">
-											<li><input type="text" name="co2-upper-danger-text"
-												ng-model="config.upper.danger.co2.arm"></li>
-										</ul></li>
-									<li><input type="checkbox"
-										name="co2-upper-warning-enable"
-										ng-model="config.upper.warning.co2.enabled">&nbsp;<span
-										class="label label-warning">WARNING</span> if above <br />
-										<ul class="nobullets">
-											<li><input type="text"
-												name="co2-upper-warning-text"
-												ng-model="config.upper.warning.co2.arm"></li>
-										</ul></li>
-									<li><input type="checkbox"
-										name="co2-lower-warning-enable"
-										ng-model="config.lower.warning.co2.enabled">&nbsp;<span
-										class="label label-warning">WARNING</span> if below <br />
-										<ul class="nobullets">
-											<li><input type="text"
-												name="co2-lower-warning-text"
-												ng-model="config.lower.warning.co2.arm"></li>
-										</ul></li>
-									<li><input type="checkbox"
-										name="co2-lower-warning-enable"
-										ng-model="config.lower.danger.co2.enabled">&nbsp;<span
-										class="label label-danger">DANGER</span> if below <br />
-										<ul class="nobullets">
-											<li><input type="text" name="co2-lower-danger-text"
-												ng-model="config.lower.danger.co2.arm"></li>
-										</ul></li>
-								</ul>
-							</li>
-							<li><button type="submit" class="btn btn-success"><i class="fa fa-fw fa-save"></i>Save Configuration</button></li>
-						</ul>
+							<div class="col-lg-5 col-lg-offset-1">
+								<h4 class="left no-padding">CO2</h4>
+
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="co2-upper-danger-enable" ng-model="config.upper.danger.co2.enabled" />
+										<span class="label label-danger">DANGER</span> if above
+									</label>
+								</div>
+								<div class="form-group">
+									<input type="number" class="form-control" name="co2-upper-danger-text" ng-model="config.upper.danger.co2.arm" />
+								</div>
+
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="co2-upper-warning-enable" ng-model="config.upper.warning.co2.enabled" />
+										<span class="label label-warning">WARNING</span> if above
+									</label>
+								</div>
+								<div class="form-group">
+									<input type="number" class="form-control" name="co2-upper-warning-text" ng-model="config.upper.warning.co2.arm" />
+								</div>
+
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="co2-lower-warning-enable" ng-model="config.lower.warning.co2.enabled" />
+										<span class="label label-warning">WARNING</span> if below
+									</label>
+								</div>
+								<div class="form-group">
+									<input type="number" class="form-control" name="co2-lower-warning-text" ng-model="config.lower.warning.co2.arm" />
+								</div>
+
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" name="co2-lower-warning-enable" ng-model="config.lower.danger.co2.enabled" />
+										<span class="label label-danger">DANGER</span> if below
+									</label>
+								</div>
+								<div class="form-group">
+									<input type="number" class="form-control" name="co2-lower-danger-text" ng-model="config.lower.danger.co2.arm" />
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-lg-12">
+								<button type="submit" class="btn btn-success"><i class="fa fa-fw fa-save"></i>Save Configuration</button>
+							</div>
+						</div>
 					</form>
 				</div>
 			</div>

@@ -39,6 +39,9 @@ h4 {
 h4.left {
     text-align: left;
 }
+h4.no-padding {
+    padding: 0;
+}
 h5 {
     font-weight: bold;
 }
