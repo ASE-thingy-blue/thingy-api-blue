@@ -228,7 +228,11 @@ const createThingyAPI = (server) => {
                                         newHmu.save();
                                         uthingy.humidities.push(newHmu);
                                         uthingy.save();
-                                        user.save();
+                                        user.save(function(err) {
+                                            if (err) {
+                                                console.log(err);
+                                            }
+                                        });
                                     });
                                     break;
                                 case 'temperature':
@@ -241,10 +245,13 @@ const createThingyAPI = (server) => {
                                         newTemp.save();
                                         uthingy.temperatures.push(newTemp);
                                         uthingy.save();
-                                        triggerTools.updateThresholds(uthingy, user.mailAddress);
+                                        user.save(function(err) {
+                                            if (err) {
+                                                console.log(err);
+                                            }
+                                            triggerTools.updateThresholds(uthingy, user);
+                                        });
                                     });
-
-                                    user.save();
                                     break;
                                 case 'gas':
                                     getOrCreateUnit('gram per cubic meter', 'g/m3', reply).then(function(unit1Db) {
@@ -263,7 +270,11 @@ const createThingyAPI = (server) => {
                                             newAirQ.save();
                                             uthingy.airQualities.push(newAirQ);
                                             uthingy.save();
-                                            user.save();
+                                            user.save(function(err) {
+                                                if (err) {
+                                                    console.log(err);
+                                                }
+                                            });
                                         });
                                     });
 
