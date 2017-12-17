@@ -228,7 +228,6 @@ const createThingyAPI = (server) => {
                                         newHmu.save();
                                         uthingy.humidities.push(newHmu);
                                         uthingy.save();
-                                        triggerTools.updateThresholds(uthingy, user.mailAddress);
                                         user.save();
                                     });
                                     break;
@@ -264,7 +263,6 @@ const createThingyAPI = (server) => {
                                             newAirQ.save();
                                             uthingy.airQualities.push(newAirQ);
                                             uthingy.save();
-                                            triggerTools.updateThresholds(uthingy, user.mailAddress);
                                             user.save();
                                         });
                                     });
