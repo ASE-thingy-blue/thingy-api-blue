@@ -39,7 +39,7 @@ let processNewViolation = function (thingy, usersMailAddress, violations) {
  * Check the given Thingy for violations and update them.
  * Newly added violations will be passed to the processNewViolation function.
  */
-let updateThresholds = function (thingy, usersMailAddress) {
+let updateThresholds = function (thingy, user) {
     // unconfigured thingies can be ignored
     if (thingy.targetConfiguration === undefined) {
         return;
@@ -107,28 +107,44 @@ let updateThresholds = function (thingy, usersMailAddress) {
     }
     
     // throw out old violations
-    thingy.thresholdViolations = thingy.thresholdViolations.filter( e => violated.includes(e.threshold) );
+    let violatedThresholdIds = violated.map(v => v._id.toString());
+    thingy.thresholdViolations = thingy.thresholdViolations.filter( e => (violatedThresholdIds.indexOf(e.threshold._id.toString()) >= 0) );
+
     // get list of old thresholds
     let currentThresholds = thingy.thresholdViolations.map( e => e.threshold );
+    let currentThresholdIds = currentThresholds.map(ct => ct._id.toString());
+
     // build list of new thresholds
     let newThresholds = [];
-    for (let v of violations) {
-	if (!currentThresholds.includes(v)) {
-	    newThresholds.push(v);
-	}
+    for (let v of violated) {
+        if (currentThresholdIds.indexOf(v._id.toString()) < 0) {
+            newThresholds.push(v);
+        }
     }
+
     // create violations for thresholds
-    let newViolations = newThresholds.map( e => new ThresholdViolation({threshold: e}) );
+    let newViolations = newThresholds.map( e => {
+        let newThresholdViolation = new ThresholdViolation({threshold: e});
+        newThresholdViolation.save();
+        return newThresholdViolation;
+    });
+
     // add new violations to thingy
     for (let v of newViolations) {
-	thingy.thresholdViolations.push(v);
+	    thingy.thresholdViolations.push(v);
     }
+
+    thingy.save(function() {
+        user.save(function() {
+            // Asynchronous violation processing
+            if (newViolations.length > 0) {
+                setTimeout(() => {
+                    processNewViolation(thingy, user.mailAddress, thingy.thresholdViolations);
+                }, 0);
+            }
+        });
+    });
     
-    thingy.save();
-    // Asynchronous violation processing
-    if (newViolations.length > 0) {
-        setTimeout(() => { processNewViolation(thingy, usersMailAddress, thingy.thresholdViolations); }, 0);
-    }
 };
 
 module.exports = {
