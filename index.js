@@ -151,3 +151,5 @@ server.views({
     relativeTo: __dirname,
     path: Path.join(__dirname, 'templates')
 });
+
+module.exports = server;
