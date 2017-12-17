@@ -151,7 +151,7 @@ const createThingyAPI = (server) => {
         handler: function (request, reply) {
             let thingyId = request.params.thingyId;
 
-            //COLORS:
+            // COLORS:
             // 1 - red
             // 2 - light green
             // 3 - yellow
@@ -191,8 +191,9 @@ const createThingyAPI = (server) => {
                 .exec(function (err, terra) {
                     if (err) {
                         return reply({
-                            'Error': 'We have a problem.'
-                        }).code(500);
+                            'Error': 'No terrarium with this Thingy',
+                            'thingy': thingyId
+                        }).code(404);
                     }
 
                     if (!terra) {
@@ -205,6 +206,10 @@ const createThingyAPI = (server) => {
                     User.findOne()
                         .where({'terrariums': {$elemMatch: {_id: terra._id}}})
                         .exec(function (err, user) {
+                            if (err) {
+                                console.error(err);
+                                return reply({'Error': 'No user with this Thingy', _id: terra._id}).code(404);
+                            }
                             let uTerri = user.terrariums.id(terra.id);
                             let uthingy = uTerri.thingies.find(function(elem) {
                                 return elem.macAddress === thingyId;
