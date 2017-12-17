@@ -105,22 +105,29 @@ let updateThresholds = function (thingy, usersMailAddress) {
     if (thingy.thresholdViolations === undefined) {
         thingy.thresholdViolations = [];
     }
-    // Ignore unviolated that do not occur on Thingy
-    thingy.thresholdViolations.forEach( e => unviolated = unviolated.filter( u => u === e.threshold ) );
-    // Remove unviolated from Thingy
-    let filtered = thingy.thresholdViolations.filter( e => !unviolated.includes(e.threshold) );
-    // Determine which violations already exist
-    filtered.forEach( e => violated = violated.filter( v => v !== e.threshold ) );
-    // Create violation objects
-    violated = violated.map( e => new ThresholdViolation({threshold: e}) );
-    // Add violations to Thingy
-    violated.forEach( e => {
-	e.save();
-	thingy.thresholdViolations.push(e);
-    });
+    
+    // throw out old violations
+    thingy.thresholdViolations = thingy.thresholdViolations.filter( e => violated.includes(e.threshold) );
+    // get list of old thresholds
+    let currentThresholds = thingy.thresholdViolations.map( e => e.threshold );
+    // build list of new thresholds
+    let newThresholds = [];
+    for (let v of violations) {
+	if (!currentThresholds.includes(v)) {
+	    newThresholds.push(v);
+	}
+    }
+    // create violations for thresholds
+    let newViolations = newThresholds.map( e => new ThresholdViolation({threshold: e}) );
+    // add new violations to thingy
+    for (let v of newViolations) {
+	thingy.thresholdViolations.push(v);
+    }
+    
+    thingy.save();
     // Asynchronous violation processing
-    if (violated.length > 0) {
-        setTimeout(() => { processNewViolation(thingy, usersMailAddress, violated); }, 0);
+    if (newViolations.length > 0) {
+        setTimeout(() => { processNewViolation(thingy, usersMailAddress, thingy.thresholdViolations); }, 0);
     }
 };
 
