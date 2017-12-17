@@ -11,15 +11,27 @@ let ThresholdViolation = Mongoose.model('ThresholdViolation');
  * @param violations: The list of new violations on that Thingy.
  */
 let processNewViolation = function (thingy, usersMailAddress, violations) {
-    // TODO: Mail and other triggers here
-    var message = 'A sensor of the Thingy "' + thingy.macAddress + '" (' + thingy.description + ') registered ' + violations.length + ' value(s) being outside of the defined range:\n\n';
+    const sensors = {
+        0: 'No Sensor defined',
+        1: 'Humidity Sensor',
+        2: 'Temperature Sensor',
+        3: 'TVOC Sensor',
+        4: 'CO2 Sensor'
+    };
+
+    let message = 'A sensor of the Thingy "' + thingy.macAddress + '" (' + thingy.description + ') registered ' + violations.length + ' value(s) being outside of the defined range:\n\n';
     violations.forEach(v => {
-        message += '- ' + v.title + '\n';
+        let sensorName = sensors[v.threshold.sensor];
+        let description = v.threshold.ascending?'Value is too high':'Value is too low';
+        message += '- ' + sensorName + ' (since: ' + v.since + ') \n';
+        message += '--- Level: ' + v.threshold.severity + '\n';
+        message += '--- ' + description + '\n';
+        message += '\n';
     });
     message += '\nRegards\nTermon API Service';
 
     // Replace all occurrences of newlines
-    var messageHtml = message.replace(/\n/g, '<br/>');
+    let messageHtml = message.replace(/\n/g, '<br/>');
     mailer.sendMail(usersMailAddress, 'Termon: Measuring value(s) outside of range', message, messageHtml);
 };
 
