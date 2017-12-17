@@ -271,7 +271,7 @@
 									</label>
 								</div>
 								<div class="form-group">
-									<input type="number" class="form-control" name="temp-upper-danger-number" ng-model="config.upper.danger.temp.arm" />
+									<input type="number" class="form-control" name="temp-upper-danger-number" ng-model="config.upper.danger.temp.arm" ng-disabled="!config.upper.danger.temp.enabled" />
 								</div>
 
 								<div class="checkbox">
@@ -281,7 +281,7 @@
 									</label>
 								</div>
 								<div class="form-group">
-									<input type="number" class="form-control" name="temp-upper-warning-number" ng-model="config.upper.warning.temp.arm" />
+									<input type="number" class="form-control" name="temp-upper-warning-number" ng-model="config.upper.warning.temp.arm" ng-disabled="!config.upper.warning.temp.enabled" />
 								</div>
 
 								<div class="checkbox">
@@ -291,7 +291,7 @@
 									</label>
 								</div>
 								<div class="form-group">
-									<input type="number" class="form-control" name="temp-lower-warning-number" ng-model="config.lower.warning.temp.arm" />
+									<input type="number" class="form-control" name="temp-lower-warning-number" ng-model="config.lower.warning.temp.arm" ng-disabled="!config.lower.warning.temp.enabled" />
 								</div>
 
 								<div class="checkbox">
@@ -301,7 +301,7 @@
 									</label>
 								</div>
 								<div class="form-group">
-									<input type="number" class="form-control" name="temp-lower-danger-number" ng-model="config.lower.danger.temp.arm" />
+									<input type="number" class="form-control" name="temp-lower-danger-number" ng-model="config.lower.danger.temp.arm" ng-disabled="!config.lower.danger.temp.enabled" />
 								</div>
 							</div>
 
@@ -316,7 +316,7 @@
 									</label>
 								</div>
 								<div class="form-group">
-									<input type="number" class="form-control" name="humidity-upper-danger-number" ng-model="config.upper.danger.humidity.arm" />
+									<input type="number" class="form-control" name="humidity-upper-danger-number" ng-model="config.upper.danger.humidity.arm" ng-disabled="!config.upper.danger.humidity.enabled" />
 								</div>
 
 								<div class="checkbox">
@@ -326,7 +326,7 @@
 									</label>
 								</div>
 								<div class="form-group">
-									<input type="number" class="form-control" name="humidity-upper-warning-number" ng-model="config.upper.warning.humidity.arm" />
+									<input type="number" class="form-control" name="humidity-upper-warning-number" ng-model="config.upper.warning.humidity.arm" ng-disabled="!config.upper.warning.humidity.enabled" />
 								</div>
 
 								<div class="checkbox">
@@ -336,7 +336,7 @@
 									</label>
 								</div>
 								<div class="form-group">
-									<input type="number" class="form-control" name="humidity-lower-warning-number" ng-model="config.lower.warning.humidity.arm" />
+									<input type="number" class="form-control" name="humidity-lower-warning-number" ng-model="config.lower.warning.humidity.arm" ng-disabled="!config.lower.warning.humidity.enabled" />
 								</div>
 
 								<div class="checkbox">
@@ -346,7 +346,7 @@
 									</label>
 								</div>
 								<div class="form-group">
-									<input type="number" class="form-control" name="humidity-lower-danger-number" ng-model="config.lower.danger.humidity.arm" />
+									<input type="number" class="form-control" name="humidity-lower-danger-number" ng-model="config.lower.danger.humidity.arm" ng-disabled="!config.lower.danger.humidity.enabled" />
 								</div>
 							</div>
 						</div>
@@ -364,7 +364,7 @@
 									</label>
 								</div>
 								<div class="form-group">
-									<input type="number" class="form-control" name="tvoc-upper-danger-number" ng-model="config.upper.danger.tvoc.arm" />
+									<input type="number" class="form-control" name="tvoc-upper-danger-number" ng-model="config.upper.danger.tvoc.arm" ng-disabled="!config.upper.danger.tvoc.enabled" />
 								</div>
 
 								<div class="checkbox">
@@ -374,7 +374,7 @@
 									</label>
 								</div>
 								<div class="form-group">
-									<input type="number" class="form-control" name="tvoc-upper-warning-number" ng-model="config.upper.warning.tvoc.arm" />
+									<input type="number" class="form-control" name="tvoc-upper-warning-number" ng-model="config.upper.warning.tvoc.arm" ng-disabled="!config.upper.warning.tvoc.enabled" />
 								</div>
 
 								<div class="checkbox">
@@ -384,7 +384,7 @@
 									</label>
 								</div>
 								<div class="form-group">
-									<input type="number" class="form-control" name="tvoc-lower-warning-number" ng-model="config.lower.warning.tvoc.arm" />
+									<input type="number" class="form-control" name="tvoc-lower-warning-number" ng-model="config.lower.warning.tvoc.arm" ng-disabled="!config.lower.warning.tvoc.enabled" />
 								</div>
 
 								<div class="checkbox">
@@ -394,7 +394,7 @@
 									</label>
 								</div>
 								<div class="form-group">
-									<input type="number" class="form-control" name="tvoc-lower-danger-number" ng-model="config.lower.danger.tvoc.arm" />
+									<input type="number" class="form-control" name="tvoc-lower-danger-number" ng-model="config.lower.danger.tvoc.arm" ng-disabled="!config.lower.danger.tvoc.enabled" />
 								</div>
 							</div>
 
@@ -409,7 +409,7 @@
 									</label>
 								</div>
 								<div class="form-group">
-									<input type="number" class="form-control" name="co2-upper-danger-number" ng-model="config.upper.danger.co2.arm" />
+									<input type="number" class="form-control" name="co2-upper-danger-number" ng-model="config.upper.danger.co2.arm" ng-disabled="!config.upper.danger.co2.enabled" />
 								</div>
 
 								<div class="checkbox">
@@ -419,7 +419,7 @@
 									</label>
 								</div>
 								<div class="form-group">
-									<input type="number" class="form-control" name="co2-upper-warning-number" ng-model="config.upper.warning.co2.arm" />
+									<input type="number" class="form-control" name="co2-upper-warning-number" ng-model="config.upper.warning.co2.arm" ng-disabled="!config.upper.warning.co2.enabled" />
 								</div>
 
 								<div class="checkbox">
@@ -429,7 +429,7 @@
 									</label>
 								</div>
 								<div class="form-group">
-									<input type="number" class="form-control" name="co2-lower-warning-number" ng-model="config.lower.warning.co2.arm" />
+									<input type="number" class="form-control" name="co2-lower-warning-number" ng-model="config.lower.warning.co2.arm" ng-disabled="!config.lower.warning.co2.enabled" />
 								</div>
 
 								<div class="checkbox">
@@ -439,14 +439,16 @@
 									</label>
 								</div>
 								<div class="form-group">
-									<input type="number" class="form-control" name="co2-lower-danger-number" ng-model="config.lower.danger.co2.arm" />
+									<input type="number" class="form-control" name="co2-lower-danger-number" ng-model="config.lower.danger.co2.arm" ng-disabled="!config.lower.danger.co2.enabled" />
 								</div>
 							</div>
 						</div>
+						<br/><br/>
 
 						<div class="row">
 							<div class="col-lg-12">
-								<button type="submit" class="btn btn-success"><i class="fa fa-fw fa-save"></i>Save Configuration</button>
+								<button type="submit" class="btn btn-success"><i class="fa fa-fw fa-save" ng-disabled="showSpinner"></i>Save Configuration</button>
+								<span ng-if="showSpinner"><i class="fa fa-spinner fa-spin"></i></span>
 							</div>
 						</div>
 					</form>
