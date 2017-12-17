@@ -138,6 +138,10 @@ termonWebClient.controller('historyCtrl', ['$scope', '$stateParams', '$state', '
 
     $scope.drawChart = function(type, subKeys) {
         if (angular.isUndefined($scope.thingyValues[type].data) || $scope.thingyValues[type].data.length === 0) {
+            //remove chart
+            if ($scope.thingyCharts[type] !== undefined) {
+                $scope.thingyCharts[type].clearChart();
+            }
             return;
         }
 
@@ -160,11 +164,22 @@ termonWebClient.controller('historyCtrl', ['$scope', '$stateParams', '$state', '
 
         let data = google.visualization.arrayToDataTable(dataArray);
 
+        let date_formatter = new google.visualization.DateFormat({
+            pattern: "dd.MM.yyyy - HH:mm:ss"
+        });
+        date_formatter.format(data, 0);
+
         // Draw chart (create if undefined)
         if ($scope.thingyCharts[type] === undefined) {
             $scope.thingyCharts[type] = new google.visualization.AreaChart(document.getElementById('chart_'+type));
         }
-        $scope.thingyCharts[type].draw(data);
+
+        let options = {
+            hAxis: {
+                format: 'HH:mm'
+            }
+        };
+        $scope.thingyCharts[type].draw(data, options);
 
     };
 
