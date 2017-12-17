@@ -36,8 +36,8 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Humidity</h3>
                 </div>
+                <div datapanel type="humidity" chartdata="thingyValues.humidity" onchangecallback="updateHumidity" spinner="showSpinner"></div>
                 <div class="panel-body">
-                    <div datapanel type="humidity" chartdata="thingyValues.humidity" onchangecallback="updateHumidity" spinner="showSpinner"></div>
                     <div ng-if="!thingyValues.humidity || thingyValues.humidity.data.length === 0" class="alert alert-warning">
                         <p>No data to display in selected time range.</p>
                         <p ng-if="thingyValues.humidity.from && thingyValues.humidity.to">{{ timeRange(thingyValues.humidity) }}</p>
@@ -55,8 +55,8 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Air Quality</h3>
                 </div>
+                <div datapanel type="airquality" chartdata="thingyValues.airquality" onchangecallback="updateAirquality" spinner="showSpinner"></div>
                 <div class="panel-body">
-                    <div datapanel type="airquality" chartdata="thingyValues.airquality" onchangecallback="updateAirquality" spinner="showSpinner"></div>
                     <div ng-if="!thingyValues.airquality || thingyValues.airquality.data.length === 0" class="alert alert-warning">
                         <p>No data to display in selected time range.</p>
                         <p ng-if="thingyValues.airquality.from && thingyValues.airquality.to">{{ timeRange(thingyValues.airquality) }}</p>
