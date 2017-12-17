@@ -1,16 +1,40 @@
 <div id="page" class="maincontent">
 
-    <h1>Welcome, {{user.name}}<span ng-if="showSpinner"><i class="fa fa-spinner fa-spin"></i></span></h1>
+    <h1>Welcome, {{user.name}}<span ng-if="showSpinner"> <i class="fa fa-spinner fa-spin"></i></span></h1>
     <br/>
 
     <div class="row">
         <div class="col-lg-6">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Terrarium status</h3>
+                    <h3 class="panel-title">About Termon</h3>
                 </div>
                 <div class="panel-body">
-                    <p>Todo...</p>
+                    <p>Termon allows you to monitor your terrarium and get notifications for configurable threshold violations.</p>
+                    <p>To use the Termon API service you need the following things:</p>
+                    <ul>
+                        <li>
+                            A <a href="https://www.raspberrypi.org/" target="_blank" >Raspberry Pi</a> (Version 2 or 3)
+                        </li>
+                        <li>
+                            An usb Bluetooth dongle (for Pi version 2)
+                        </li>
+                        <li>
+                            One or more <a href="https://www.nordicsemi.com/eng/Products/Nordic-Thingy-52" target="_blank" >Nordic Thingy:52</a> devices
+                        </li>
+                        <li>
+                            An animal which lives in a terrarium (optional)
+                        </li>
+                    </ul>
+                    <p>
+                        You need to setup the Raspberry Pi with <a href="https://www.raspberrypi.org/downloads/raspbian/" target="_blank">Raspbian</a> and <a href="https://www.raspberrypi.org/blog/docker-comes-to-raspberry-pi/" target="_blank">install Docker</a> to run our Intermediate Gateway.
+                    </p>
+                    <p>
+                        If Docker is running on your Raspberry Pi, clone our <a href="https://github.com/ASE-thingy-blue/thingy-intermediate-blue" target="_blank">Intermediate Gateway</a> application from GitHub.
+                    </p>
+                    <p>
+                        Follow the usage guidelines in the repositories readme file to setup your thingies.
+                    </p>
                 </div>
             </div>
         </div>
@@ -18,10 +42,21 @@
         <div class="col-lg-6">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Thingy status</h3>
+                    <h3 class="panel-title">Thingy Status Overview</h3>
                 </div>
                 <div class="panel-body">
-                    <p>Todo...</p>
+                    <ul>
+                        <li ng-if="!thingies || thingies.length === 0">
+                            You have no connected Thingies yet.
+                        </li>
+                        <li ng-repeat="thingy in thingies | orderBy:'description'">
+                            <a ng-click="goToThingyDetails(thingy.terId, thingy._id)" class="fakelink">{{thingy.description}} ({{thingy.macAddress}})</a>
+                            <span ng-class="thingy.triggerLabel.clazz">{{thingy.triggerLabel.text}}</span>
+                        </li>
+                    </ul>
+                    <button class="btn btn-primary pull-right" ng-click="loadData()" ng-disabled="showSpinner">
+                        <i class="fa fa-fw fa-refresh"></i>Reload
+                    </button>
                 </div>
             </div>
         </div>
