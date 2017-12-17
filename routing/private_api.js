@@ -640,6 +640,36 @@ var createPrivateAPI = (server) => {
             }
         }
     });
+    
+    server.route({
+	method: 'PUT',
+	path: '/terrarium/{terrariumId}/thingies/{thingyId}/configuration',
+	handler: HandlerThingy.configUpdate,
+	config: {
+            tags: ['webclient', 'api'],
+            description: 'Updates the trigger configuration for a certain Thingy',
+            validate: {
+                params: {
+                    terrariumId: Joi.string()
+                        .required()
+                        .description('ID of the terrarium'),
+                    thingyId: Joi.string()
+                        .required()
+                        .description('ID of the Thingy I want to update')
+                },
+            },
+            auth: 'jwt',
+            plugins: {
+                'hapi-swagger': {
+                    responses: {
+                        200: {
+                            description: 'Success'
+                        }
+                    }
+                }
+            }
+        }
+    });
 
     server.route({
         method: 'PUT',

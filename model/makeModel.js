@@ -10,7 +10,6 @@ var init = function () {
     Mongoose.model('Carbondioxide', require('./schemas/carbondioxide'));
     Mongoose.model('TVOC', require('./schemas/tvoc'));
     Mongoose.model('Unit', require('./schemas/unit'));
-    Mongoose.model('TargetValues', require('./schemas/targetValues'));
     Mongoose.model('TargetConfiguration', require('./schemas/targetConfiguration'));
     Mongoose.model('Threshold', require('./schemas/threshold'));
     Mongoose.model('ThresholdViolation', require('./schemas/thresholdViolation'));
