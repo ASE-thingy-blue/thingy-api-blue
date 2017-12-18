@@ -4,16 +4,16 @@ let mailer = {};
 
 mailer.mailConfig = {
     sender: {
-        from: "'Termon Web Service' <termon@pillo-srv.ch>"
+        from: "{MAILFROM}"
     },
     server: {
-        host: "vm-mail.pillo-srv.ch",
+        host: "{MAILHOST}",
         port: 465,
         secure: true,
         tls: {rejectUnauthorized: false},
         auth: {
-            user: "termon@pillo-srv.ch",
-            pass: ""
+            user: "{MAILUSER}",
+            pass: "{MAILPASS}"
         }
     }
 };

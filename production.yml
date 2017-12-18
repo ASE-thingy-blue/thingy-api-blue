@@ -15,6 +15,11 @@ services:
     volumes:
      - "./logs/:/usr/src/app/logs/"
      - "/etc/pki/tls/private/:/usr/src/app/certs/"
+    environment:
+     - MAILFROM=""
+     - MAILHOST=""
+     - MAILUSER=""
+     - MAILPASS=""
   mongo:
     image: "mongo:3.4"
     command: --sslMode requireSSL --sslDisabledProtocols TLS1_0,TLS1_1 --sslCAFile /mnt/ThingyRootCA.pem --sslPEMKeyFile /mnt/ThingyDB.pem
