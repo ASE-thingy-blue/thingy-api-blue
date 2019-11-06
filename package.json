@@ -20,7 +20,7 @@
     "is-docker": "^1.1.0",
     "joi": "^13.0.1",
     "jwt-simple": "^0.5.1",
-    "mongoose": "^4.13.7",
+    "mongoose": "^5.7.8",
     "ng-toast": "^2.0.0",
     "nodemailer": "^4.4.0",
     "vision": "^4.1.1"
